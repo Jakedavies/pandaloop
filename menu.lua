@@ -1,8 +1,11 @@
 local composer = require( "composer" )
 local scene = composer.newScene()
-local widget = require("widget")
+
+local widget = require( "widget" )
+local ads = require( "ads" )
 
 local params
+
 
 local function handlePlayButtonEvent( event )
     if ( "ended" == event.phase ) then
@@ -11,9 +14,9 @@ local function handlePlayButtonEvent( event )
     end
 end
 
-local function handleTutorialButtonEvent( event )
+local function handleHelpButtonEvent( event )
     if ( "ended" == event.phase ) then
-        composer.gotoScene("tutorial", { effect = "crossFade", time = 333, isModal = true })
+        composer.gotoScene("help", { effect = "crossFade", time = 333, isModal = true })
     end
 end
 
@@ -23,6 +26,7 @@ local function handleCreditsButtonEvent( event )
         composer.gotoScene("gamecredits", { effect = "crossFade", time = 333 })
     end
 end
+
 
 --
 -- Start the composer event handlers
@@ -36,12 +40,12 @@ function scene:create( event )
     -- setup a page background, really not that important though composer
     -- crashes out if there isn't a display object in the view.
     --
-    local background = display.newRect( 0, 0, 570, 360 )
+    local background = display.newRect( 0, 0, display.contentHeight,display.contentWidth )
     background.x = display.contentCenterX
     background.y = display.contentCenterY
     sceneGroup:insert( background )
 
-    local title = display.newText("Pandaloop", 100, 32, native.systemFontBold, 32 )
+    local title = display.newText("Panda Looper", 100, 32, native.systemFontBold, 32 )
     title.x = display.contentCenterX
     title.y = 40
     title:setFillColor( 0 )
@@ -51,7 +55,7 @@ function scene:create( event )
     local playButton = widget.newButton({
         id = "button1",
         label = "Play",
-        width = 100,
+        width = display.contentHeight/3,
         height = 32,
         onEvent = handlePlayButtonEvent
     })
@@ -62,13 +66,13 @@ function scene:create( event )
     -- Create the widget
     local helpButton = widget.newButton({
         id = "button3",
-        label = "Tutorial",
+        label = "Help",
         width = 100,
-        height = 32,
+        height = display.contentHeight/3,
         onEvent = handleHelpButtonEvent
     })
     helpButton.x = display.contentCenterX
-    helpButton.y = display.contentCenterY + 30
+    helpButton.y = display.contentHeight + 30
     sceneGroup:insert( helpButton )
 
     -- Create the widget
@@ -76,12 +80,13 @@ function scene:create( event )
         id = "button4",
         label = "Credits",
         width = 100,
-        height = 32,
+        height = display.contentHeight/3,
         onEvent = handleCreditsButtonEvent
     })
     creditsButton.x = display.contentCenterX
     creditsButton.y = display.contentCenterY + 90
     sceneGroup:insert( creditsButton )
+
 end
 
 function scene:show( event )
