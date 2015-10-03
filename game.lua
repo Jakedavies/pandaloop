@@ -24,7 +24,8 @@ local function handleCheckMyCode( event )
         print(input)
         if(input == "for(int i =0; i< x; i++)\n{print(penis2);\n}") then
             print('text matches')
-            composer.gotoScene("menu", { time= 500, effect = "crossFade" })
+        else
+            print('you suck')
         end
     end
     return true
