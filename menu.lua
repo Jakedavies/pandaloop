@@ -13,7 +13,7 @@ end
 
 local function handleTutorialButtonEvent( event )
     if ( "ended" == event.phase ) then
-        composer.gotoScene("help", { effect = "crossFade", time = 333, isModal = true })
+        composer.gotoScene("tutorial", { effect = "crossFade", time = 333, isModal = true })
     end
 end
 
