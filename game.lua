@@ -21,10 +21,6 @@ local function handleCheckMyCode( event )
 
     -- Check the fucking code here 
     if event.phase == "ended" then
-        print('in onclick handler')
-        print ('correct text')
-        print(correctText)
-        print('input')
         print(input)
         if(input == "for(int i =0; i< x; i++)\n{print(penis2);\n}") then
             print('text matches')
@@ -35,13 +31,9 @@ local function handleCheckMyCode( event )
 end
 local function inputListener( event )
     if event.phase == "began" then
-        -- user begins editing textBox
-        input = event.text
     elseif event.phase == "ended" then
-       input = event.text
-    elseif event.phase == "editing" then
-        print( event.text )
 
+    elseif event.phase == "editing" then
         input = event.text
         print(input)
     end
