@@ -21,6 +21,10 @@ local function handleCheckMyCode( event )
 
     -- Check the fucking code here 
     if event.phase == "ended" then
+        print('in onclick handler')
+        print ('correct text')
+        print(correctText)
+        print('input')
         print(input)
         if(input == "for(int i =0; i< x; i++)\n{print(penis2);\n}") then
             print('text matches')
@@ -31,9 +35,13 @@ local function handleCheckMyCode( event )
 end
 local function inputListener( event )
     if event.phase == "began" then
+        -- user begins editing textBox
+        input = event.text
     elseif event.phase == "ended" then
-
+       input = event.text
     elseif event.phase == "editing" then
+        print( event.text )
+
         input = event.text
         print(input)
     end
@@ -75,7 +83,7 @@ function scene:create( event )
     sceneGroup:insert(background)
 
 
-    code = display.newText('for(int i =0; i< x; i++)\n{print(penis);\n}', 0, 0, native.systemFontBold, 14 )
+    code = display.newText('for(int i =0; i< x; i++)\n{    print(apple);\n}', 0, 0, native.systemFontBold, 14 )
     code:setFillColor( 0 )
     code.x = display.contentCenterX
     code.y = display.contentCenterY - 100
@@ -97,7 +105,7 @@ function scene:create( event )
 
 
     local textBox = native.newTextBox( display.contentCenterX, display.contentCenterY + 50, display.contentWidth, 200 )
-    textBox.text = "for(int i =0; i< x; i++)\n{print(penis);\n}"
+    textBox.text = "for(int i =0; i< x; i++)\n{print(apple);\n}"
     textBox.isEditable = true
     textBox:addEventListener( "userInput", inputListener )
     sceneGroup:insert(textBox)
