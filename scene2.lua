@@ -23,7 +23,6 @@ local function handleCheckMyCode( event )
     -- when the level was successfully beaten, the code below shows you how to call the gameover scene.
     --
 
-    -- Check the fucking code here 
     if event.phase == "ended" then
         print('in onclick handler')
         print ('correct text')
@@ -38,14 +37,8 @@ local function handleCheckMyCode( event )
     return true
 end
 local function inputListener( event )
-    if event.phase == "began" then
-        -- user begins editing textBox
-        input = event.text
-    elseif event.phase == "ended" then
-       input = event.text
     elseif event.phase == "editing" then
-        print( event.text )
-
+      print('editing');
         input = event.text
         print(input)
     end
@@ -77,7 +70,7 @@ function scene:create( event )
     -- levelText is going to be accessed from the scene:show function. It cannot be local to
     -- scene:create(). This is why it was declared at the top of the module so it can be seen 
     -- everywhere in this module
-    levelText = display.newEmbossedText('fix the code to win', 0, 0,  "/fonts/Pacifico.ttf", 35)
+    levelText = display.newEmbossedText('fix the code to win', 0, 0,  "/fonts/Pacifico.ttf", 14)
     levelText:setFillColor( 1 )
     levelText.x = display.contentCenterX
     levelText.y = display.contentCenterY-150
@@ -90,7 +83,7 @@ function scene:create( event )
     code.y = display.contentCenterY - 50
     sceneGroup:insert(code)
 
-    textBox = native.newTextField(background.x,background.y+80, 300, 150)
+    textBox = native.newTextField(background.x,background.y+80, 300, 150, "/fonts/Pacifico.ttf", 14)
     textBox.text = "This is line 1.\nAnd this is line2"
     textBox.isEditable = true
     textBox:addEventListener( "userInput", inputListener )
