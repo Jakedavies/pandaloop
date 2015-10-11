@@ -24,7 +24,7 @@ function scene:create( event )
     background.x = display.contentWidth / 2
     background.y = display.contentHeight / 2
     circleSize = display.contentHeight/4
-    fontSize = display.contentHeight/7
+    fontSize = display.contentHeight/10
 
     x = display.contentWidth / 2
     y = display.contentHeight/2
@@ -32,7 +32,7 @@ function scene:create( event )
     local circle = display.newCircle(x , y,circleSize)
     circle.strokeWidth = 50
 
-    local title = display.newText( "Panda \n Looper", x, y, "/fonts/Pacifico.ttf", fontSize )
+    local title = display.newText( "Panda Looper", x, y, "/fonts/Pacifico.ttf", fontSize )
     title:setFillColor("black")
 end
 
@@ -52,7 +52,7 @@ function scene:show( event )
       -- Called when the scene is now on screen.
       -- Insert code here to make the scene come alive.
       -- Example: start timers, begin animation, play audio, etc.
-      timer.performWithDelay( 1000, loadNext() )
+      timer.performWithDelay( 1600, loadNext() )
    end
 end
 

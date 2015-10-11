@@ -5,41 +5,11 @@ local scene = composer.newScene()
 
 local widget = require( "widget" )
 local json = require( "json" )
-local input = '';
 local correctText =  "for(int i =0; i< x; i++)\n{print(penis2);\n}"
 
 --
 -- define local functions here
 --
-local function handleCheckMyCode( event )
-    --
-    -- When you tap the "I Win" button, reset the "nextlevel" scene, then goto it.
-    --
-    -- Using a button to go to the nextlevel screen isn't realistic, but however you determine to 
-    -- when the level was successfully beaten, the code below shows you how to call the gameover scene.
-    --
-
-    -- Check the fucking code here 
-    if event.phase == "ended" then
-        print('in onclick handler')
-        print ('correct text')
-        print(correctText)
-        print('input')
-        print(input)
-        if(input == "for(int i =0; i< x; i++)\n{print(penis2);\n}") then
-            print('text matches')
-        else
-            print('you suck')
-            composer.gotoScene("cutscene", { time= 500, effect = "crossFade" })
-        end
-    end
-    return true
-end
-local function inputListener( event )
-    if event.phase == "editing" then
-        input = event.text
-    end
-end
 
 --
 -- This function gets called when composer.gotoScene() gets called an either:
@@ -76,50 +46,12 @@ function scene:create( event )
     --
     sceneGroup:insert(background)
 
-
-    code = display.newText('for(int i =0; i< x; i++)\n{    print(apple);\n}', 0, 0, native.systemFontBold, 14 )
-    code:setFillColor( 0 )
-    code.x = display.contentCenterX
-    code.y = display.contentCenterY - 100
-
-    sceneGroup:insert(code)
-
-    --
-    -- levelText is going to be accessed from the scene:show function. It cannot be local to
-    -- scene:create(). This is why it was declared at the top of the module so it can be seen 
-    -- everywhere in this module
-    levelText = display.newText('fix the code to win', 0, 0, native.systemFontBold, 16 )
+    levelText = display.newText('You Win', 0, 0, native.systemFontBold, 16 )
     levelText:setFillColor( 0 )
     levelText.x = display.contentCenterX
     levelText.y = display.contentCenterY
-    --
-    -- Insert it into the scene to be managed by Composer
-    --
-    sceneGroup:insert( levelText )
 
-
-    local textBox = native.newTextBox( display.contentCenterX, display.contentCenterY + 50, display.contentWidth, 200 )
-    textBox.text = "for(int i =0; i< x; i++)\n{print(apple);\n}"
-    textBox.isEditable = true
-    textBox:addEventListener( "userInput", inputListener )
-    sceneGroup:insert(textBox)
-    -- 
-    -- because we want to access this in multiple functions, we need to forward declare the variable and
-    -- then create the object here in scene:create()
-    --
-
-    --
-    -- these two buttons exist as a quick way to let you test
-    -- going between scenes (as well as demo widget.newButton)
-    --
-
-    local checkMyCode = widget.newButton({
-        label = "Check my code!",  
-        onEvent = handleCheckMyCode
-    })
-    sceneGroup:insert(checkMyCode)
-    checkMyCode.x = display.contentCenterX
-    checkMyCode.y = display.contentHeight - 60
+    sceneGroup:insert(levelText)
 
 end
 
@@ -156,6 +88,11 @@ end
 -- after the scene is off screen.
 function scene:hide( event )
     local sceneGroup = self.view
+    
+    if event.phase == "will" then
+
+    end
+
 end
 
 --
