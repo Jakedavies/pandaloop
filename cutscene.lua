@@ -19,6 +19,7 @@ local circleCenter
 --       scene.  It's possible (and desirable in many cases) to call this once, but 
 --       show it multiple times.
 --
+local sceneGroup
 function scene:create( event )
     --
     status = event.params.status
@@ -54,11 +55,12 @@ end
 -- This gets called twice, once before the scene is moved on screen and again once
 -- afterwards as a result of calling composer.gotoScene()
 --
+local statustext 
 function scene:show( event )
     --
     -- Make a local reference to the scene's view for scene:show()
     --
-    local sceneGroup = self.view
+    sceneGroup = self.view
 
     --
     -- event.phase == "did" happens after the scene has been transitioned on screen. 
@@ -69,22 +71,7 @@ function scene:show( event )
     -- Start up the enemy spawning engine after the levelText fades
     --
     if event.phase == "did" then
-        local statustext
-        if status == true then 
-            statustext = 'You win'
-        else
-            statustext = 'You lose'
-        end
         animation()
-
-        levelText = display.newText(statustext, 0, 0, native.systemFontBold, 16 )
-        levelText.x = display.contentCenterX
-        levelText.y = display.contentCenterY
-        levelText:setFillColor( 100 )
-        sceneGroup:insert(levelText)
-
-
-
     else -- event.phase == "will"
         -- The "will" phase happens before the scene transitionitions on screen.  This is a great
         -- place to "reset" things that might be reset, i.e. move an object back to its starting
@@ -92,6 +79,19 @@ function scene:show( event )
         -- locations. In this case, reset the score to 0.
     end
 end
+function animationDoneListener(event)
+    if status == true then 
+        statustext = 'You win'
+    else
+        statustext = 'You lose'
+    end
+    levelText = display.newText({text = statustext, 0, 0, font = native.systemFontBold, fontSize = 30, alpha = 0 })
+    levelText.x = display.contentCenterX
+    levelText.y = display.contentCenterY
+    levelText.fontSize = 20
+    levelText:setFillColor( 100 )
+    sceneGroup:insert(levelText)
+end 
 function pandaTransitionListener(event)
     rotatePanda()
 end
@@ -99,41 +99,43 @@ end
 local transitionState = 0
 local panda
 local circle
-local transitionTime = 300
+local transitionTime = 170
+local player
 function rotatePanda()
    local xpos = circleCenter.x 
    local ypos = circleCenter.y
-   if status == true and transitionTime > 100 then
+   if status == true and transitionTime > 30 then
         print(transitionState)
          if transitionState == 0 then
-             transitionTime = transitionTime - 25
+             transitionTime = transitionTime - 20
              transitionState = transitionState+1
-             transition.to( panda, { time=transitionTime, x=(xpos + 50), y=(ypos-50), onComplete=pandaTransitionListener })
+             transition.to( panda, { time=transitionTime, x=(xpos + 70), y=(ypos-70), onComplete=pandaTransitionListener })
          elseif transitionState == 1 then
              transitionState = transitionState+1
              transition.to( panda, { time=transitionTime, x=(xpos+100), y=(ypos), onComplete=pandaTransitionListener} )
          elseif transitionState == 2 then
              transitionState = transitionState+1
-             transition.to( panda, { time=transitionTime, x=(xpos+50), y=(ypos +50), onComplete=pandaTransitionListener} )
+             transition.to( panda, { time=transitionTime, x=(xpos+70), y=(ypos +70), onComplete=pandaTransitionListener} )
+             print('going to 50 50')
          elseif transitionState == 3 then 
             transitionState = transitionState+1
              transition.to( panda, { time=transitionTime, x=(xpos), y=(ypos+100), onComplete=pandaTransitionListener} )
          elseif transitionState == 4 then
              transitionState = transitionState+1
-             transition.to( panda, { time=transitionTime, x=(xpos-50), y=(ypos+50), onComplete=pandaTransitionListener} )
+             transition.to( panda, { time=transitionTime, x=(xpos-70), y=(ypos+70), onComplete=pandaTransitionListener} )
          elseif transitionState == 5 then
              transitionState = transitionState+1
              transition.to( panda, { time=transitionTime, x=(xpos-100), y=ypos, onComplete=pandaTransitionListener} )
          elseif transitionState == 6 then 
             transitionState = transitionState+1
-             transition.to( panda, { time=transitionTime, x=(xpos - 50), y=(ypos-50), onComplete=pandaTransitionListener} )
+             transition.to( panda, { time=transitionTime, x=(xpos - 70), y=(ypos-70), onComplete=pandaTransitionListener} )
         elseif transitionState == 7 then 
             transitionState = 0
             transition.to( panda, { time=transitionTime, x=(xpos), y=(ypos-100), onComplete=pandaTransitionListener} )
         end
-    elseif status == false and transitionTime > 150 then
+    elseif status == false and transitionTime > 100 then
          if transitionState == 0 then
-             transitionTime = transitionTime - 25
+             transitionTime = transitionTime - 50
              transitionState = transitionState+1
              transition.to( panda, { time=transitionTime, x=(xpos + 50), y=(ypos-50), onComplete=pandaTransitionListener })
          elseif transitionState == 1 then
@@ -178,12 +180,15 @@ function rotatePanda()
             smoke:play()
             transition.to(circle, {time = 500, alpha = 0})
             transition.to(smoke, {time=600, alpha =0})
-            transition.to(panda, {time=500, alpha =0})
+            transition.to(panda, {time=500, alpha =0, onComplete=animationDoneListener})
         else 
-
+            transition.to(circle, {time = 500, alpha = 0})
+            transition.to(player, {alpha = 0, time = 500, onComplete=animationDoneListener})
+            transition.to(panda, {x= circleCenter.x, y= circleCenter.y})
         end
     end
 end
+
 function animation()
     -- draw the circle thing
     local paint = { 0.7, 0.7, 0.7 }
@@ -194,11 +199,11 @@ function animation()
     circle.fill =fill
     circle.strokeWidth = 4
 
-    local image = display.newImage('main.png')
-    image.width = 64
-    image.height = 72
+    player = display.newImage('main.png')
+    player.width = 64
+    player.height = 72
 
-    image:translate(display.contentCenterX, display.contentCenterY - 100)
+    player:translate(display.contentCenterX, display.contentCenterY - 100)
 
     panda = display.newImage('mikos-walk.gif')
     panda:translate(circleCenter.x, circleCenter.y-100)
@@ -206,7 +211,7 @@ function animation()
     if(status == true) then
         rotatePanda(panda)
     else
-        print('test')
+        rotatePanda(panda)
     end
  end
 
