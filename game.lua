@@ -5,8 +5,9 @@ local scene = composer.newScene()
 
 local widget = require( "widget" )
 local json = require( "json" )
-local input = '';
-local correctText =  "for(int i =0; i< x; i++)\n{print(penis2);\n}"
+local input = ''
+local textBox
+local correctText =  "for(int i =0; i < 5; i++)\n{print('apple');\n}"
 
 --
 -- define local functions here
@@ -26,11 +27,13 @@ local function handleCheckMyCode( event )
         print(correctText)
         print('input')
         print(input)
-        if(input == "for(int i =0; i< x; i++)\n{print(penis2);\n}") then
+        if(input == correctText) then
+
+            composer.gotoScene("cutscene", { time= 500, effect = "crossFade", params = { status = true}})
             print('text matches')
         else
             print('you suck')
-            composer.gotoScene("cutscene", { time= 500, effect = "crossFade" })
+            
         end
     end
     return true
@@ -77,7 +80,7 @@ function scene:create( event )
     sceneGroup:insert(background)
 
 
-    code = display.newText('for(int i =0; i< x; i++)\n{    print(apple);\n}', 0, 0, native.systemFontBold, 14 )
+    code = display.newText('for(int i =0; i< x; i++)\n{print(apple);\n}', 0, 0, native.systemFontBold, 14 )
     code:setFillColor( 0 )
     code.x = display.contentCenterX
     code.y = display.contentCenterY - 100
@@ -88,7 +91,7 @@ function scene:create( event )
     -- levelText is going to be accessed from the scene:show function. It cannot be local to
     -- scene:create(). This is why it was declared at the top of the module so it can be seen 
     -- everywhere in this module
-    levelText = display.newText('fix the code to win', 0, 0, native.systemFontBold, 16 )
+    levelText = display.newText('Make apple print 5 times', 0, 0, native.systemFontBold, 16 )
     levelText:setFillColor( 0 )
     levelText.x = display.contentCenterX
     levelText.y = display.contentCenterY
@@ -98,8 +101,8 @@ function scene:create( event )
     sceneGroup:insert( levelText )
 
 
-    local textBox = native.newTextBox( display.contentCenterX, display.contentCenterY + 50, display.contentWidth, 200 )
-    textBox.text = "for(int i =0; i< x; i++)\n{print(apple);\n}"
+    textBox = native.newTextBox( display.contentCenterX, display.contentCenterY + 50, display.contentWidth, 200 )
+    textBox.text = "for(int i =0; i < ???; i++)\n{print('apple');\n}"
     textBox.isEditable = true
     textBox:addEventListener( "userInput", inputListener )
     sceneGroup:insert(textBox)
@@ -115,7 +118,16 @@ function scene:create( event )
 
     local checkMyCode = widget.newButton({
         label = "Check my code!",  
-        onEvent = handleCheckMyCode
+        onEvent = handleCheckMyCode,
+        --properties for a rounded rectangle button...
+        shape="roundedRect",
+        width = 200,
+        height = 40,
+        cornerRadius = 2,
+        -- probably fix the color on this
+        fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 0.1, 0.7, 0.4 } },
+        strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
+        strokeWidth = 4
     })
     sceneGroup:insert(checkMyCode)
     checkMyCode.x = display.contentCenterX
@@ -154,8 +166,10 @@ end
 -- This function gets called everytime you call composer.gotoScene() from this module.
 -- It will get called twice, once before we transition the scene off screen and once again 
 -- after the scene is off screen.
-function scene:hide( event )
+function scene:hide( event )    
     local sceneGroup = self.view
+    display.remove(textBox)
+    textBox = nil
 end
 
 --

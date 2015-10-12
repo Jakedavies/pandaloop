@@ -6,7 +6,8 @@ local scene = composer.newScene()
 local widget = require( "widget" )
 local json = require( "json" )
 local correctText =  "for(int i =0; i< x; i++)\n{print(penis2);\n}"
-
+local status
+local circleCenter
 --
 -- define local functions here
 --
@@ -20,6 +21,7 @@ local correctText =  "for(int i =0; i< x; i++)\n{print(penis2);\n}"
 --
 function scene:create( event )
     --
+    status = event.params.status
     -- self in this case is "scene", the scene object for this level. 
     -- Make a local copy of the scene's "view group" and call it "sceneGroup". 
     -- This is where you must insert everything (display.* objects only) that you want
@@ -40,18 +42,11 @@ function scene:create( event )
     -- so it's okay to make it "local" here
     --
     local background = display.newRect(display.contentCenterX, display.contentCenterY, display.contentWidth, display.contentHeight)
-    background:setFillColor( 0.6, 0.7, 0.3 )
+    background:setFillColor( 0.1, 0.1, 0.1 )
     --
     -- Insert it into the scene to be managed by Composer
     --
     sceneGroup:insert(background)
-
-    levelText = display.newText('You Win', 0, 0, native.systemFontBold, 16 )
-    levelText:setFillColor( 0 )
-    levelText.x = display.contentCenterX
-    levelText.y = display.contentCenterY
-
-    sceneGroup:insert(levelText)
 
 end
 
@@ -74,13 +69,148 @@ function scene:show( event )
     -- Start up the enemy spawning engine after the levelText fades
     --
     if event.phase == "did" then
+        local statustext
+        if status == true then 
+            statustext = 'You win'
+        else
+            statustext = 'You lose'
+        end
+        animation()
+
+        levelText = display.newText(statustext, 0, 0, native.systemFontBold, 16 )
+        levelText.x = display.contentCenterX
+        levelText.y = display.contentCenterY
+        levelText:setFillColor( 100 )
+        sceneGroup:insert(levelText)
+
+
+
     else -- event.phase == "will"
-        -- The "will" phase happens before the scene transitions on screen.  This is a great
+        -- The "will" phase happens before the scene transitionitions on screen.  This is a great
         -- place to "reset" things that might be reset, i.e. move an object back to its starting
         -- position. Since the scene isn't on screen yet, your users won't see things "jump" to new
         -- locations. In this case, reset the score to 0.
     end
 end
+function pandaTransitionListener(event)
+    rotatePanda()
+end
+
+local transitionState = 0
+local panda
+local circle
+local transitionTime = 300
+function rotatePanda()
+   local xpos = circleCenter.x 
+   local ypos = circleCenter.y
+   if status == true and transitionTime > 100 then
+        print(transitionState)
+         if transitionState == 0 then
+             transitionTime = transitionTime - 25
+             transitionState = transitionState+1
+             transition.to( panda, { time=transitionTime, x=(xpos + 50), y=(ypos-50), onComplete=pandaTransitionListener })
+         elseif transitionState == 1 then
+             transitionState = transitionState+1
+             transition.to( panda, { time=transitionTime, x=(xpos+100), y=(ypos), onComplete=pandaTransitionListener} )
+         elseif transitionState == 2 then
+             transitionState = transitionState+1
+             transition.to( panda, { time=transitionTime, x=(xpos+50), y=(ypos +50), onComplete=pandaTransitionListener} )
+         elseif transitionState == 3 then 
+            transitionState = transitionState+1
+             transition.to( panda, { time=transitionTime, x=(xpos), y=(ypos+100), onComplete=pandaTransitionListener} )
+         elseif transitionState == 4 then
+             transitionState = transitionState+1
+             transition.to( panda, { time=transitionTime, x=(xpos-50), y=(ypos+50), onComplete=pandaTransitionListener} )
+         elseif transitionState == 5 then
+             transitionState = transitionState+1
+             transition.to( panda, { time=transitionTime, x=(xpos-100), y=ypos, onComplete=pandaTransitionListener} )
+         elseif transitionState == 6 then 
+            transitionState = transitionState+1
+             transition.to( panda, { time=transitionTime, x=(xpos - 50), y=(ypos-50), onComplete=pandaTransitionListener} )
+        elseif transitionState == 7 then 
+            transitionState = 0
+            transition.to( panda, { time=transitionTime, x=(xpos), y=(ypos-100), onComplete=pandaTransitionListener} )
+        end
+    elseif status == false and transitionTime > 150 then
+         if transitionState == 0 then
+             transitionTime = transitionTime - 25
+             transitionState = transitionState+1
+             transition.to( panda, { time=transitionTime, x=(xpos + 50), y=(ypos-50), onComplete=pandaTransitionListener })
+         elseif transitionState == 1 then
+             transitionState = transitionState+1
+             transition.to( panda, { time=transitionTime, x=(xpos+100), y=(ypos), onComplete=pandaTransitionListener} )
+         elseif transitionState == 2 then
+             transitionState = transitionState+1
+             transition.to( panda, { time=transitionTime, x=(xpos+50), y=(ypos +50), onComplete=pandaTransitionListener} )
+         elseif transitionState == 3 then 
+            transitionState = transitionState+1
+             transition.to( panda, { time=transitionTime, x=(xpos), y=(ypos+100), onComplete=pandaTransitionListener} )
+         elseif transitionState == 4 then
+             transitionState = transitionState+1
+             transition.to( panda, { time=transitionTime, x=(xpos-50), y=(ypos+50), onComplete=pandaTransitionListener} )
+         elseif transitionState == 5 then
+             transitionState = transitionState+1
+             transition.to( panda, { time=transitionTime, x=(xpos-100), y=ypos, onComplete=pandaTransitionListener} )
+         elseif transitionState == 6 then 
+            transitionState = transitionState+1
+             transition.to( panda, { time=transitionTime, x=(xpos - 50), y=(ypos-50), onComplete=pandaTransitionListener} )
+        elseif transitionState == 7 then 
+            transitionState = 0
+            transition.to( panda, { time=transitionTime, x=(xpos), y=(ypos-100), onComplete=pandaTransitionListener} )
+        end
+    else
+        -- show smoke if you won, if not show death animation?
+        if status == true then
+            -- consecutive frames
+            local sequenceData =
+            {
+                name="smoking",
+                start=1,
+                count=15,
+                time=300,
+                loopCount = 0,   -- Optional ; default is 0 (loop indefinitely)
+            }
+            local sheetData = { width=256, height=256, numFrames=15, sheetContentWidth=1280, sheetContentHeight=768 }
+            local imageSheet = graphics.newImageSheet( "smoke5x3frames.png", sheetData )
+            local smoke = display.newSprite( imageSheet, sequenceData )
+            smoke.x=xpos
+            smoke.y=ypos
+            smoke:play()
+            transition.to(circle, {time = 500, alpha = 0})
+            transition.to(smoke, {time=600, alpha =0})
+            transition.to(panda, {time=500, alpha =0})
+        else 
+
+        end
+    end
+end
+function animation()
+    -- draw the circle thing
+    local paint = { 0.7, 0.7, 0.7 }
+    local fill = { 0.1, 0.1, 0.1 }
+    circleCenter = {x = display.contentCenterX, y = display.contentCenterY + 100}
+    circle = display.newCircle(circleCenter.x, circleCenter.y, 100)
+    circle.stroke = paint
+    circle.fill =fill
+    circle.strokeWidth = 4
+
+    local image = display.newImage('main.png')
+    image.width = 64
+    image.height = 72
+
+    image:translate(display.contentCenterX, display.contentCenterY - 100)
+
+    panda = display.newImage('mikos-walk.gif')
+    panda:translate(circleCenter.x, circleCenter.y-100)
+
+    if(status == true) then
+        rotatePanda(panda)
+    else
+        print('test')
+    end
+ end
+
+
 
 --
 -- This function gets called everytime you call composer.gotoScene() from this module.
@@ -92,7 +222,6 @@ function scene:hide( event )
     if event.phase == "will" then
 
     end
-
 end
 
 --
