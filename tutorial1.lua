@@ -64,7 +64,24 @@ function scene:create(event)
       panda = display.newImage('mikos-walk.gif')
       panda.x = display.contentCenterX - 100
       panda.y =  display.contentCenterY + 200
-      sceneGroup:insert( panda) 
+      px = display.contentCenterX-100
+      sceneGroup:insert(panda)
+      
+    local sequenceData = {
+        {
+        name="walk",                                  -- name of the animation
+        sheet=myImageSheet,                           -- the image sheet
+        start=sheetInfo:getFrameIndex("capguy/0001"), -- first frame
+        count=8,                                      -- number of frames
+        time=1000,                                    -- speed
+        loopCount=0                                   -- repeat
+        }
+    }
+
+    -- create sprite, set animation, play
+    sprite = display.newSprite( myImageSheet, sequenceData )
+    sprite:setSequence("walk")
+    sprite:play()
 
   
 end
@@ -80,15 +97,7 @@ function scene:show( event )
     --
     local sceneGroup = self.view
 
-     progressView = widget.newProgressView
-    {
-    left = display.contentCenterX - 150,
-    top = display.contentCenterY + 300,
-    width = 300,
-    height = 30,
-    isAnimated = true
-    }
-    sceneGroup:insert(progressView)
+
 
     --
     -- event.phase == "did" happens after the scene has been transitioned on screen. 
@@ -101,27 +110,6 @@ function scene:show( event )
     if event.phase == "did" then
 
     local i = 0
-
-    for i=1,10 do 
-            local j = i*.1
-            timer.performWithDelay(5000, progressView:setProgress(j))
-    end
-  
-
-    buttonBackground = display.newImage("/assets/sprites/touch.png");
-    buttonBackground.x = display.contentCenterX
-    buttonBackground.y = display.contentCenterY + 80
-    
-    button = widget.newButton()
-    button: setLabel("PLAY")
-    button: setEnabled(true)
-    button.x = display.contentCenterX
-    button.y = display.contentCenterY + 80
-    button:addEventListener("tap", loadNext)
-
-    sceneGroup:insert(buttonBackground)
-    sceneGroup:insert(button)
-
 
 
       -- Create the widget
