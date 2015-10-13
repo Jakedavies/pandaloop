@@ -7,4 +7,4 @@
 -- Your code here
 
 local composer = require( "composer" )
-composer.gotoScene( "game", { effect="crossFade", time=500 } )
+composer.gotoScene( "splash", { effect="crossFade", time=500 } )

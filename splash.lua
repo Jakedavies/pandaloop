@@ -1,94 +1,136 @@
 
 local composer = require( "composer" )
 local scene = composer.newScene()
+local widget = require( "widget" )
+local json = require( "json" )
+local input = ''
+local textBox
 
----------------------------------------------------------------------------------
--- All code outside of the listener functions will only be executed ONCE
--- unless "composer.removeScene()" is called.
----------------------------------------------------------------------------------
-
--- local forward references should go here
-
----------------------------------------------------------------------------------
-
--- "scene:create()"
-function scene:create( event )
-
-   local sceneGroup = self.view
-
-   -- Initialize the scene here.
-   -- Example: add display objects to "sceneGroup", add touch listeners, etc.
-   	local background = display.newImage( "/img/congruent_pentagon.png" )
-	background.width = display.contentWidth
-    background.height = display.contentHeight
-    background.x = display.contentWidth / 2
-    background.y = display.contentHeight / 2
-    circleSize = display.contentHeight/4
-    fontSize = display.contentHeight/10
-
-    x = display.contentWidth / 2
-    y = display.contentHeight/2
-
-    local circle = display.newCircle(x , y,circleSize)
-    circle.strokeWidth = 50
-
-    local title = display.newText( "Panda Looper", x, y, "/fonts/Pacifico.ttf", fontSize )
-    title:setFillColor("black")
-end
 
 function loadNext()
-	composer.gotoScene( "scene2", { effect="crossFade", time=900 } )
+  composer.gotoScene( "game", { effect="crossFade", time=2000} )
 end
 
--- "scene:show()"
+function sleep()
+  -- do nothing
+end
+
+function addprogress()
+  progress = progressView:getProgress() + .1
+  progressView:setProgress(progress)
+end
+
+
+--
+-- This function gets called when composer.gotoScene() gets called an either:
+--    a) the scene has never been visited before or
+--    b) you called composer.removeScene() or composer.removeHidden() from some other
+--       scene.  It's possible (and desirable in many cases) to call this once, but 
+--       show it multiple times.
+--
+function scene:create(event)
+    --
+    -- self in this case is "scene", the scene object for this level. 
+    -- Make a local copy of the scene's "view group" and call it "sceneGroup". 
+    -- This is where you must insert everything (display.* objects only) that you want
+    -- Composer to manage for you.
+    local sceneGroup = self.view
+
+    local background = display.newImage("/img/gplaypattern.png")
+    background.x = display.contentCenterX
+    background.y = display.contentCenterY
+    --
+    -- Insert it into the scene to be managed by Composer
+    --
+    sceneGroup:insert(background)
+
+    local title =  display.newText("PANDA\n  LOOP", display.contentCenterX, display.contentCenterY-50, "/fonts/Pacifico.ttf", 40)
+    title:setFillColor( 0, 0, 0 )
+    sceneGroup:insert(title)
+
+    panda = display.newImage('mikos-walk.gif')
+    
+      panda.x = display.contentCenterX
+      panda.y =  display.contentCenterY + 100
+      sceneGroup:insert( panda)  
+end
+
+
+--
+-- This gets called twice, once before the scene is moved on screen and again once
+-- afterwards as a result of calling composer.gotoScene()
+--
 function scene:show( event )
+    --
+    -- Make a local reference to the scene's view for scene:show()
+    --
+    local sceneGroup = self.view
 
-   local sceneGroup = self.view
-   local phase = event.phase
+     progressView = widget.newProgressView
+    {
+    left = display.contentCenterX - 150,
+    top = display.contentCenterY + 200,
+    width = 300,
+    height = 30,
+    isAnimated = true
+    }
+    sceneGroup:insert(progressView)
 
-   if ( phase == "will" ) then
-      -- Called when the scene is still off screen (but is about to come on screen).
-   elseif ( phase == "did" ) then
-      -- Called when the scene is now on screen.
-      -- Insert code here to make the scene come alive.
-      -- Example: start timers, begin animation, play audio, etc.
-      timer.performWithDelay( 1600, loadNext() )
-   end
+
+
+
+    --
+    -- event.phase == "did" happens after the scene has been transitioned on screen. 
+    -- Here is where you start up things that need to start happening, such as timers,
+    -- tranistions, physics, music playing, etc. 
+    -- In this case, resume physics by calling physics.start()
+    -- Fade out the levelText (i.e start a transition)
+    -- Start up the enemy spawning engine after the levelText fades
+    --
+    if event.phase == "did" then
+       timer.performWithDelay(1000, addprogress(), 9)
+
+       timer.performWithDelay(7000,loadNext())
+
+
+      -- Create the widget
+    
+    else -- event.phase == "will"
+        -- The "will" phase happens before the scene transitions on screen.  This is a great
+        -- place to "reset" things that might be reset, i.e. move an object back to its starting
+        -- position. Since the scene isn't on screen yet, your users won't see things "jump" to new
+        -- locations. In this case, reset the score to 0.
+    end
 end
 
--- "scene:hide()"
-function scene:hide( event )
-
-   local sceneGroup = self.view
-   local phase = event.phase
-
-   if ( phase == "will" ) then
-      -- Called when the scene is on screen (but is about to go off screen).
-      -- Insert code here to "pause" the scene.
-      -- Example: stop timers, stop animation, stop audio, etc.
-   elseif ( phase == "did" ) then
-      -- Called immediately after scene goes off screen.
-   end
+--
+-- This function gets called everytime you call composer.gotoScene() from this module.
+-- It will get called twice, once before we transition the scene off screen and once again 
+-- after the scene is off screen.
+function scene:hide( event )    
+    local sceneGroup = self.view
+    display.remove(textBox)
+    textBox = nil
 end
 
--- "scene:destroy()"
+--
+-- When you call composer.removeScene() from another module, composer will go through and
+-- remove anything created with display.* and inserted into the scene's view group for you. In
+-- many cases that's sufficent to remove your scene. 
+--
+-- But there may be somethings you loaded, like audio in scene:create() that won't be disposed for
+-- you. This is where you dispose of those things.
+-- In most cases there won't be much to do here.
 function scene:destroy( event )
-
-   local sceneGroup = self.view
-
-   -- Called prior to the removal of scene's view ("sceneGroup").
-   -- Insert code here to clean up the scene.
-   -- Example: remove display objects, save state, etc.
+    local sceneGroup = self.view
+    
 end
 
 ---------------------------------------------------------------------------------
-
--- Listener setup
+-- END OF YOUR IMPLEMENTATION
+---------------------------------------------------------------------------------
 scene:addEventListener( "create", scene )
 scene:addEventListener( "show", scene )
 scene:addEventListener( "hide", scene )
 scene:addEventListener( "destroy", scene )
-
----------------------------------------------------------------------------------
-
 return scene
