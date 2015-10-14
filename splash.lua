@@ -12,6 +12,11 @@ end
 function loadNext()
     composer.gotoScene( "game", { effect="crossFade", time=500 } )
 end
+function loadCredits()
+        audio.stop(1)
+
+    composer.gotoScene( "credits", { effect="crossFade", time=500 } )
+end
 --
 -- This function gets called when composer.gotoScene() gets called an either:
 --    a) the scene has never been visited before or
@@ -136,6 +141,20 @@ function scene:show( event )
 
     sceneGroup:insert(buttonBackground)
     sceneGroup:insert(button)
+    
+     buttonBackground2 = display.newImage("/assets/sprites/touch.png");
+    buttonBackground2.x = display.contentCenterX
+    buttonBackground2.y = display.contentCenterY + 120
+    
+    button2 = widget.newButton()
+    button2: setLabel("CREDITS")
+    button2: setEnabled(true)
+    button2.x = display.contentCenterX
+    button2.y = display.contentCenterY + 120
+    button2:addEventListener("tap", loadCredits)
+
+    sceneGroup:insert(buttonBackground2)
+    sceneGroup:insert(button2)
 
     --Chase the panda!
     while px < display.contentWidth +150 do
@@ -178,7 +197,7 @@ end
 -- In most cases there won't be much to do here.
 function scene:destroy( event )
     local sceneGroup = self.view
-    audio.stop(sfx)
+    audio.stop()
     
 end
 
