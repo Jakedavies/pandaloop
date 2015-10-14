@@ -43,7 +43,7 @@ function scene:create( event )
     -- These pieces of the app only need created.  We won't be accessing them any where else
     -- so it's okay to make it "local" here
     --
-    local backgroundLayer3 = display.newImage("/assets/sprites/country-platform-files/country-platform-files/layers/country-platform-back.png", display.contentHeight, display.contentWidth)
+    local backgroundLayer3 = display.newImage("assets/sprites/country-platform-files/country-platform-files/layers/country-platform-back.png", display.contentHeight, display.contentWidth)
     backgroundLayer3.x = display.contentCenterX
     backgroundLayer3.y = display.contentCenterY 
     backgroundLayer3.width = display.contentWidth
@@ -60,7 +60,12 @@ end
 -- This gets called twice, once before the scene is moved on screen and again once
 -- afterwards as a result of calling composer.gotoScene()
 --
-local statustext 
+local transitionState
+local panda
+local circle
+local transitionTime
+local player
+local levelText
 function scene:show( event )
     --
     -- Make a local reference to the scene's view for scene:show()
@@ -76,6 +81,8 @@ function scene:show( event )
     -- Start up the enemy spawning engine after the levelText fades
     --
     if event.phase == "did" then
+        transitionState = 0
+        transitionTime = 170
         animation()
     else -- event.phase == "will"
         -- The "will" phase happens before the scene transitionitions on screen.  This is a great
@@ -84,11 +91,57 @@ function scene:show( event )
         -- locations. In this case, reset the score to 0.
     end
 end
+local button1
+local button
+local button2
+local buttonBackground2
+local buttonBackground1
+local statustext
 function animationDoneListener(event)
     if status == true then 
         statustext = 'You win'
+
+        buttonBackground2 = display.newImage("assets/sprites/touch.png");
+        buttonBackground2.x = display.contentCenterX
+        buttonBackground2.y = display.contentCenterY + 80
+
+        button2 = widget.newButton()
+        button2: setLabel("Main Menu")
+        button2: setEnabled(true)
+        button2.x = display.contentCenterX
+        button2.y = display.contentCenterY + 80
+        button2:addEventListener("tap", onGoToMenuClick)
+        sceneGroup:insert(button2)
     else
+        transition.to(panda, {time=500, x= display.contentCenterX, y= display.contentCenterY - 100})
+
+        buttonBackground1 = display.newImage("assets/sprites/touch.png");
+        buttonBackground1.x = display.contentCenterX - 75
+        buttonBackground1.y = display.contentCenterY + 80
+        sceneGroup:insert(buttonBackground1)
         statustext = 'You lose'
+        button = widget.newButton()
+        button: setLabel("Try Again")
+        button: setEnabled(true)
+        button.x = display.contentCenterX - 75
+        button.y = display.contentCenterY + 80
+        button:addEventListener("tap", onGoToGameClick)
+        sceneGroup:insert(button)
+
+
+        buttonBackground2 = display.newImage("assets/sprites/touch.png");
+        buttonBackground2.x = display.contentCenterX + 75
+        buttonBackground2.y = display.contentCenterY + 80
+        sceneGroup:insert(buttonBackground2)
+        button2 = widget.newButton()
+        button2: setLabel("Main Menu")
+        button2: setEnabled(true)
+        button2.x = display.contentCenterX + 75
+        button2.y = display.contentCenterY + 80
+        button2:addEventListener("tap", onGoToMenuClick)
+        sceneGroup:insert(button2)
+
+
     end
     levelText = display.newText({text = statustext, 0, 0, font = native.systemFontBold, fontSize = 30, alpha = 0 })
     levelText.x = display.contentCenterX
@@ -96,18 +149,19 @@ function animationDoneListener(event)
     levelText.fontSize = 20
     levelText:setFillColor( 100 )
     sceneGroup:insert(levelText)
-        composer.gotoScene( "game", { effect="crossFade", time=500 } )
 
+end 
+function onGoToGameClick()
+    composer.gotoScene( "game", { effect="crossFade", time=500 } )
+end
+function onGoToMenuClick()
+    composer.gotoScene( "splash", { effect="crossFade", time=500 } )
 end 
 function pandaTransitionListener(event)
     rotatePanda()
 end
 
-local transitionState = 0
-local panda
-local circle
-local transitionTime = 170
-local player
+
 function rotatePanda()
    local xpos = circleCenter.x 
    local ypos = circleCenter.y
@@ -234,6 +288,15 @@ function scene:hide( event )
     local sceneGroup = self.view
     
     if event.phase == "will" then
+        display.remove(circle)
+        display.remove(player)
+        display.remove(panda)
+        display.remove(button1)
+        display.remove(button)
+        display.remove(button2)
+        display.remove(buttonBackground1)
+        display.remove(buttonBackground2)
+        display.remove(levelText)
 
     end
 end

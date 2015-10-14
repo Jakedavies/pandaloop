@@ -73,7 +73,7 @@ function scene:create( event )
    -- These pieces of the app only need created.  We won't be accessing them any where else
     -- so it's okay to make it "local" here
     --
-    local backgroundLayer3 = display.newImage("/assets/sprites/country-platform-files/country-platform-files/layers/country-platform-back.png", display.contentHeight, display.contentWidth)
+    local backgroundLayer3 = display.newImage("assets/sprites/country-platform-files/country-platform-files/layers/country-platform-back.png", display.contentHeight, display.contentWidth)
     backgroundLayer3.x = display.contentCenterX
     backgroundLayer3.y = display.contentCenterY 
     backgroundLayer3.width = display.contentWidth
@@ -106,11 +106,7 @@ function scene:create( event )
     sceneGroup:insert( levelText )
 
 
-    textBox = native.newTextBox( display.contentCenterX, display.contentCenterY + 50, display.contentWidth, 200 )
-    textBox.text = "for(int i =0; i < ???; i++)\n{print('apple');\n}"
-    textBox.isEditable = true
-    textBox:addEventListener( "userInput", inputListener )
-    sceneGroup:insert(textBox)
+
     -- 
     -- because we want to access this in multiple functions, we need to forward declare the variable and
     -- then create the object here in scene:create()
@@ -150,6 +146,8 @@ function scene:show( event )
     --
     local sceneGroup = self.view
 
+
+
     --
     -- event.phase == "did" happens after the scene has been transitioned on screen. 
     -- Here is where you start up things that need to start happening, such as timers,
@@ -160,6 +158,11 @@ function scene:show( event )
     --
     if event.phase == "did" then
     else -- event.phase == "will"
+        textBox = native.newTextBox( display.contentCenterX, display.contentCenterY + 50, display.contentWidth, 200 )
+        textBox.text = "for(int i =0; i < ???; i++)\n{print('apple');\n}"
+        textBox.isEditable = true
+        textBox:addEventListener( "userInput", inputListener )
+        sceneGroup:insert(textBox)
         -- The "will" phase happens before the scene transitions on screen.  This is a great
         -- place to "reset" things that might be reset, i.e. move an object back to its starting
         -- position. Since the scene isn't on screen yet, your users won't see things "jump" to new

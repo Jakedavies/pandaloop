@@ -32,17 +32,17 @@ function scene:create(event)
     -- Composer to manage for you.
     local sceneGroup = self.view
 
-    local background = display.newImage("/assets/sprites/country-platform-files/country-platform-files/layers/country-platform-tiles-example.png", display.contentHeight, display.contentWidth)
+    local background = display.newImage("assets/sprites/country-platform-files/country-platform-files/layers/country-platform-tiles-example.png", display.contentHeight, display.contentWidth)
     background.x = display.contentCenterX
-    background.y = display.contentCenterY +150
+    background.y = display.contentCenterY + 150
     
-    local backgroundLayer2 = display.newImage("/assets/sprites/country-platform-files/country-platform-files/layers/country-platform-forest.png", display.contentHeight, display.contentWidth)
+    local backgroundLayer2 = display.newImage("assets/sprites/country-platform-files/country-platform-files/layers/country-platform-forest.png", display.contentHeight, display.contentWidth)
     backgroundLayer2.x = display.contentCenterX
     backgroundLayer2.y = display.contentCenterY + 140
     backgroundLayer2.width = display.contentWidth
-    backgroundLayer2.height = display.contentHeight /3
+    backgroundLayer2.height = display.contentHeight / 3
     
-     local backgroundLayer3 = display.newImage("/assets/sprites/country-platform-files/country-platform-files/layers/country-platform-back.png", display.contentHeight, display.contentWidth)
+    local backgroundLayer3 = display.newImage("assets/sprites/country-platform-files/country-platform-files/layers/country-platform-back.png", display.contentHeight, display.contentWidth)
     backgroundLayer3.x = display.contentCenterX
     backgroundLayer3.y = display.contentCenterY 
     backgroundLayer3.width = display.contentWidth
@@ -59,12 +59,12 @@ function scene:create(event)
     sceneGroup:insert(background)
 
 
-    local title =  display.newText("PANDA\n  LOOP", display.contentCenterX, display.contentCenterY-50, "/fonts/Pacifico.ttf", 40)
+    local title =  display.newText("PANDA\n  LOOP", display.contentCenterX, display.contentCenterY-50, "fonts/Pacifico.ttf", 40)
     title:setFillColor( 1, 1, 1 )
     sceneGroup:insert(title)
 
 
-      knight = display.newImage('/assets/sprites/knight.png')
+      knight = display.newImage('assets/sprites/knight.png')
       knight.x = display.contentCenterX -500
       knight.y =  display.contentCenterY + 200
       knight.height = 90
@@ -117,7 +117,7 @@ function scene:show( event )
     -- Start up the enemy spawning engine after the levelText fades
     --
     if event.phase == "did" then
-        sfx = audio.loadSound( "/assets/music/relax_background1.ogg" )
+        sfx = audio.loadSound( "assets/music/relax_background1.ogg" )
         audio.play(sfx)
 
     local i = 0
@@ -128,7 +128,7 @@ function scene:show( event )
     end
   
 
-    buttonBackground = display.newImage("/assets/sprites/touch.png");
+    buttonBackground = display.newImage("assets/sprites/touch.png");
     buttonBackground.x = display.contentCenterX
     buttonBackground.y = display.contentCenterY + 80
     
@@ -142,7 +142,7 @@ function scene:show( event )
     sceneGroup:insert(buttonBackground)
     sceneGroup:insert(button)
     
-     buttonBackground2 = display.newImage("/assets/sprites/touch.png");
+    buttonBackground2 = display.newImage("assets/sprites/touch.png");
     buttonBackground2.x = display.contentCenterX
     buttonBackground2.y = display.contentCenterY + 120
     
