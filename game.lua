@@ -70,19 +70,23 @@ function scene:create( event )
     --
     
     --
-    -- These pieces of the app only need created.  We won't be accessing them any where else
+   -- These pieces of the app only need created.  We won't be accessing them any where else
     -- so it's okay to make it "local" here
     --
-    local background = display.newRect(display.contentCenterX, display.contentCenterY, display.contentWidth, display.contentHeight)
-    background:setFillColor( 0.1, 0.1, 0.1 )
+    local backgroundLayer3 = display.newImage("/assets/sprites/country-platform-files/country-platform-files/layers/country-platform-back.png", display.contentHeight, display.contentWidth)
+    backgroundLayer3.x = display.contentCenterX
+    backgroundLayer3.y = display.contentCenterY 
+    backgroundLayer3.width = display.contentWidth
+    backgroundLayer3.height = display.contentHeight
+    
     --
     -- Insert it into the scene to be managed by Composer
     --
-    sceneGroup:insert(background)
+    sceneGroup:insert(backgroundLayer3)
 
 
     code = display.newText('for(int i =0; i< x; i++)\n{print(apple);\n}', 0, 0, native.systemFontBold, 14 )
-    code:setFillColor( 100 )
+    code:setFillColor(0)
     code.x = display.contentCenterX
     code.y = display.contentCenterY - 100
 
@@ -126,8 +130,8 @@ function scene:create( event )
         height = 40,
         cornerRadius = 2,
         -- probably fix the color on this
-        fillColor = { default={ 1, 0, 0, 1 }, over={ 1, 1, 1, 1 } },
-        strokeColor = { default={ 1, 0.4, 0, 1 }, over={ 0.8, 0.8, 1, 1 } },
+        fillColor = { default={ 1, 1, 1, 1 }, over={ 1, 1, 1, 1 } },
+        strokeColor = { default={ 0, 0, 0, 0 }, over={ 0.8, 0.8, 1, 1 } },
         strokeWidth = 4
     })
     sceneGroup:insert(checkMyCode)

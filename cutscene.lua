@@ -8,6 +8,7 @@ local json = require( "json" )
 local correctText =  "for(int i =0; i< x; i++)\n{print(penis2);\n}"
 local status
 local circleCenter
+
 --
 -- define local functions here
 --
@@ -42,12 +43,16 @@ function scene:create( event )
     -- These pieces of the app only need created.  We won't be accessing them any where else
     -- so it's okay to make it "local" here
     --
-    local background = display.newRect(display.contentCenterX, display.contentCenterY, display.contentWidth, display.contentHeight)
-    background:setFillColor( 0.1, 0.1, 0.1 )
+    local backgroundLayer3 = display.newImage("/assets/sprites/country-platform-files/country-platform-files/layers/country-platform-back.png", display.contentHeight, display.contentWidth)
+    backgroundLayer3.x = display.contentCenterX
+    backgroundLayer3.y = display.contentCenterY 
+    backgroundLayer3.width = display.contentWidth
+    backgroundLayer3.height = display.contentHeight
+    
     --
     -- Insert it into the scene to be managed by Composer
     --
-    sceneGroup:insert(background)
+    sceneGroup:insert(backgroundLayer3)
 
 end
 
@@ -91,6 +96,8 @@ function animationDoneListener(event)
     levelText.fontSize = 20
     levelText:setFillColor( 100 )
     sceneGroup:insert(levelText)
+        composer.gotoScene( "game", { effect="crossFade", time=500 } )
+
 end 
 function pandaTransitionListener(event)
     rotatePanda()
@@ -192,11 +199,11 @@ end
 function animation()
     -- draw the circle thing
     local paint = { 0.7, 0.7, 0.7 }
-    local fill = { 0.1, 0.1, 0.1 }
+    local fill = { 0, 0, 0 }
     circleCenter = {x = display.contentCenterX, y = display.contentCenterY + 100}
     circle = display.newCircle(circleCenter.x, circleCenter.y, 100)
     circle.stroke = paint
-    circle.fill =fill
+    circle.fill = none
     circle.strokeWidth = 4
 
     player = display.newImage('main.png')
@@ -214,6 +221,8 @@ function animation()
         rotatePanda(panda)
     end
  end
+
+
 
 
 

@@ -5,9 +5,6 @@ local widget = require( "widget" )
 local json = require( "json" )
 local input = ''
 local textBox
-
-
-
 function loadProgress(j)
     progressView:setProgress(j)
 end
@@ -61,10 +58,26 @@ function scene:create(event)
     title:setFillColor( 1, 1, 1 )
     sceneGroup:insert(title)
 
+
+      knight = display.newImage('/assets/sprites/knight.png')
+      knight.x = display.contentCenterX -500
+      knight.y =  display.contentCenterY + 200
+      knight.height = 90
+      knight.width = 50
+      knight.xScale = -1 
+      kx = knight.x
+      sceneGroup:insert(knight) 
+      
       panda = display.newImage('mikos-walk.gif')
       panda.x = display.contentCenterX - 100
-      panda.y =  display.contentCenterY + 200
+      panda.y =  display.contentCenterY + 200 
+      px = panda.x
       sceneGroup:insert( panda) 
+      
+     
+      
+                  
+   
 
   
 end
@@ -99,6 +112,8 @@ function scene:show( event )
     -- Start up the enemy spawning engine after the levelText fades
     --
     if event.phase == "did" then
+        sfx = audio.loadSound( "/assets/music/relax_background1.ogg" )
+        audio.play(sfx)
 
     local i = 0
 
@@ -122,7 +137,16 @@ function scene:show( event )
     sceneGroup:insert(buttonBackground)
     sceneGroup:insert(button)
 
+    --Chase the panda!
+    while px < display.contentWidth +150 do
+            px = px + 1
+            transition.to( panda, { time=5000, x=(px), y=(panda.y)}) 
+            kx = kx + 1
+            transition.to( knight, { time=5000, x=(kx), y=(knight.y)})
+    end
 
+    
+ 
 
       -- Create the widget
     
@@ -154,6 +178,7 @@ end
 -- In most cases there won't be much to do here.
 function scene:destroy( event )
     local sceneGroup = self.view
+    audio.stop(sfx)
     
 end
 
