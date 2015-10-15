@@ -104,6 +104,7 @@ function scene:show( event )
     authors:setFillColor(0, 0, 0 )
     sceneGroup:insert(authors)
     
+    
     physics.pause()
     physics.addBody(knight)
     physics.addBody(authors)
@@ -111,6 +112,7 @@ function scene:show( event )
     timer.performWithDelay( 3000, pausePhysics)
     timer.performWithDelay(2000, pausePhysics)
     
+ 
  
   -- Create the widget
     

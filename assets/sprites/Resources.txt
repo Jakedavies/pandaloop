@@ -1,2 +1,3 @@
 http://opengameart.org/content/panda-character-32x32
 http://opengameart.org/content/country-side-platform-tiles
+http://opengameart.org/content/wizard-lizard
