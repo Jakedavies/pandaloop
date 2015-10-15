@@ -48,6 +48,10 @@ function scene:create(event)
     backgroundLayer3.y = display.contentCenterY + 50
     backgroundLayer3.width = display.contentWidth
     backgroundLayer3.height = display.contentHeight
+    
+    local background = display.newImage("/assets/sprites/country-platform-files/country-platform-files/layers/country-platform-tiles-example.png", display.contentHeight, display.contentWidth)
+    background.x = display.contentCenterX 
+    background.y = display.contentCenterY +200
 
 
 
@@ -57,6 +61,8 @@ function scene:create(event)
     --
     sceneGroup:insert(backgroundLayer3)
     sceneGroup:insert(backgroundLayer2)
+        sceneGroup:insert(background)
+
  
 
     speech = display.newImage('/assets/sprites/comic-2.png')
@@ -67,9 +73,7 @@ function scene:create(event)
       speech.width = 290
       speechx= speech.x
       sceneGroup:insert(speech) 
-local background = display.newImage("/assets/sprites/country-platform-files/country-platform-files/layers/country-platform-tiles-example.png", display.contentHeight, display.contentWidth)
-    background.x = display.contentCenterX 
-    background.y = display.contentCenterY +200
+
     
     buttonBackground = display.newImage("/assets/sprites/touch.png");
     buttonBackground.x = display.contentCenterX 
@@ -149,6 +153,9 @@ function scene:hide( event )
     local sceneGroup = self.view
     display.remove(textBox)
     textBox = nil
+      sceneGroup:remove(backgroundLayer2)
+    sceneGroup:remove(background)
+    sceneGroup:remove(backgroundLayer3)
 end
 
 --
@@ -161,6 +168,9 @@ end
 -- In most cases there won't be much to do here.
 function scene:destroy( event )
     local sceneGroup = self.view
+    sceneGroup:remove(backgroundLayer2)
+    sceneGroup:remove(background)
+    sceneGroup:remove(backgroundLayer3)
     
 end
 

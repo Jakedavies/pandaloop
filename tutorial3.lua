@@ -16,11 +16,11 @@ function sleep()
     --donothing
 end
 function loadNext()
-    composer.gotoScene( "gamePrescene", { effect="crossFade", time=500 } )
+    composer.gotoScene( "game", { effect="crossFade", time=500 } )
 end
 function loadNo()
-    composer.gotoScene( "forTutorial", { effect="crossFade", time=500 } )
-end
+    --composer.gotoScene( "forTutorial", { effect="crossFade", time=500 } )
+end 
 --
 -- This function gets called when composer.gotoScene() gets called an either:
 --    a) the scene has never been visited before or
@@ -38,7 +38,10 @@ function scene:create(event)
     
 
     
-
+        local background = display.newImage("/assets/sprites/country-platform-files/country-platform-files/layers/country-platform-tiles-example.png", display.contentHeight, display.contentWidth)
+        background.x = display.contentCenterX 
+        background.y = display.contentCenterY +200
+        sceneGroup:insert(background)
     
     local backgroundLayer2 = display.newImage("/assets/sprites/country-platform-files/country-platform-files/layers/country-platform-forest.png", display.contentHeight, display.contentWidth)
     backgroundLayer2.x = display.contentCenterX
@@ -70,9 +73,8 @@ function scene:create(event)
       speech.width = 290
       speechx= speech.x
       sceneGroup:insert(speech) 
-local background = display.newImage("/assets/sprites/country-platform-files/country-platform-files/layers/country-platform-tiles-example.png", display.contentHeight, display.contentWidth)
-    background.x = display.contentCenterX 
-    background.y = display.contentCenterY +200
+        
+
     
      buttonBackground = display.newImage("/assets/sprites/touch.png");
     buttonBackground.x = display.contentCenterX - 50
@@ -167,6 +169,9 @@ function scene:hide( event )
     local sceneGroup = self.view
     display.remove(textBox)
     textBox = nil
+    sceneGroup:remove(backgroundLayer2)
+    sceneGroup:remove(background)
+    sceneGroup:remove(backgroundLayer3)
 end
 
 --
@@ -179,6 +184,7 @@ end
 -- In most cases there won't be much to do here.
 function scene:destroy( event )
     local sceneGroup = self.view
+  
     
 end
 

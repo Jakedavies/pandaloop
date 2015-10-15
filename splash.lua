@@ -174,6 +174,7 @@ function scene:show( event )
         -- place to "reset" things that might be reset, i.e. move an object back to its starting
         -- position. Since the scene isn't on screen yet, your users won't see things "jump" to new
         -- locations. In this case, reset the score to 0.
+        audio.stop(1)
     end
 end
 
@@ -185,6 +186,9 @@ function scene:hide( event )
     local sceneGroup = self.view
     display.remove(textBox)
     textBox = nil
+      sceneGroup:remove(backgroundLayer2)
+    sceneGroup:remove(background)
+    sceneGroup:remove(backgroundLayer3)
 end
 
 --
@@ -198,7 +202,9 @@ end
 function scene:destroy( event )
     local sceneGroup = self.view
     audio.stop()
-    
+    sceneGroup:remove(backgroundLayer2)
+    sceneGroup:remove(background)
+    sceneGroup:remove(backgroundLayer3) 
 end
 
 ---------------------------------------------------------------------------------

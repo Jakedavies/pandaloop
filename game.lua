@@ -77,7 +77,8 @@ function scene:create( event )
     backgroundLayer3.x = display.contentCenterX
     backgroundLayer3.y = display.contentCenterY
     backgroundLayer3.width = display.contentWidth
-    backgroundLayer3.height = display.contentHeight
+    backgroundLayer3.height = display.contentHeight + 200
+    backgroundLayer3:toFront()
 
     --
     -- Insert it into the scene to be managed by Composer

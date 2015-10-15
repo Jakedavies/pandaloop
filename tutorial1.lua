@@ -142,6 +142,9 @@ end
 -- In most cases there won't be much to do here.
 function scene:destroy( event )
     local sceneGroup = self.view
+    sceneGroup:remove(backgroundLayer3)
+    sceneGroup:remove(backgroundLayer2)
+    sceneGroup:remove(background)
     
 end
 
