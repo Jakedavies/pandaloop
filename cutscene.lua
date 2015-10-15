@@ -17,15 +17,15 @@ local circleCenter
 -- This function gets called when composer.gotoScene() gets called an either:
 --    a) the scene has never been visited before or
 --    b) you called composer.removeScene() or composer.removeHidden() from some other
---       scene.  It's possible (and desirable in many cases) to call this once, but 
+--       scene.  It's possible (and desirable in many cases) to call this once, but
 --       show it multiple times.
 --
 local sceneGroup
 function scene:create( event )
     --
     status = event.params.status
-    -- self in this case is "scene", the scene object for this level. 
-    -- Make a local copy of the scene's "view group" and call it "sceneGroup". 
+    -- self in this case is "scene", the scene object for this level.
+    -- Make a local copy of the scene's "view group" and call it "sceneGroup".
     -- This is where you must insert everything (display.* objects only) that you want
     -- Composer to manage for you.
     local sceneGroup = self.view
@@ -38,17 +38,17 @@ function scene:create( event )
     --
     -- create your objects here
     --
-    
+
     --
     -- These pieces of the app only need created.  We won't be accessing them any where else
     -- so it's okay to make it "local" here
     --
     local backgroundLayer3 = display.newImage("assets/sprites/country-platform-files/country-platform-files/layers/country-platform-back.png", display.contentHeight, display.contentWidth)
     backgroundLayer3.x = display.contentCenterX
-    backgroundLayer3.y = display.contentCenterY 
+    backgroundLayer3.y = display.contentCenterY
     backgroundLayer3.width = display.contentWidth
     backgroundLayer3.height = display.contentHeight
-    
+
     --
     -- Insert it into the scene to be managed by Composer
     --
@@ -73,9 +73,9 @@ function scene:show( event )
     sceneGroup = self.view
 
     --
-    -- event.phase == "did" happens after the scene has been transitioned on screen. 
+    -- event.phase == "did" happens after the scene has been transitioned on screen.
     -- Here is where you start up things that need to start happening, such as timers,
-    -- tranistions, physics, music playing, etc. 
+    -- tranistions, physics, music playing, etc.
     -- In this case, resume physics by calling physics.start()
     -- Fade out the levelText (i.e start a transition)
     -- Start up the enemy spawning engine after the levelText fades
@@ -98,12 +98,13 @@ local buttonBackground2
 local buttonBackground1
 local statustext
 function animationDoneListener(event)
-    if status == true then 
+    if status == true then
         statustext = 'You win'
 
         buttonBackground2 = display.newImage("assets/sprites/touch.png");
         buttonBackground2.x = display.contentCenterX
         buttonBackground2.y = display.contentCenterY + 80
+        sceneGroup:insert(buttonBackground2)
 
         button2 = widget.newButton()
         button2: setLabel("Main Menu")
@@ -114,6 +115,7 @@ function animationDoneListener(event)
         sceneGroup:insert(button2)
     else
         transition.to(panda, {time=500, x= display.contentCenterX, y= display.contentCenterY - 100})
+        transition.to(blood, {time=500, x= display.contentCenterX, y= display.contentCenterY - 100, alpha = 1})
 
         buttonBackground1 = display.newImage("assets/sprites/touch.png");
         buttonBackground1.x = display.contentCenterX - 75
@@ -150,20 +152,20 @@ function animationDoneListener(event)
     levelText:setFillColor( 100 )
     sceneGroup:insert(levelText)
 
-end 
+end
 function onGoToGameClick()
     composer.gotoScene( "game", { effect="crossFade", time=500 } )
 end
 function onGoToMenuClick()
     composer.gotoScene( "splash", { effect="crossFade", time=500 } )
-end 
+end
 function pandaTransitionListener(event)
     rotatePanda()
 end
 
 
 function rotatePanda()
-   local xpos = circleCenter.x 
+   local xpos = circleCenter.x
    local ypos = circleCenter.y
    if status == true and transitionTime > 30 then
         print(transitionState)
@@ -178,7 +180,7 @@ function rotatePanda()
              transitionState = transitionState+1
              transition.to( panda, { time=transitionTime, x=(xpos+70), y=(ypos +70), onComplete=pandaTransitionListener} )
              print('going to 50 50')
-         elseif transitionState == 3 then 
+         elseif transitionState == 3 then
             transitionState = transitionState+1
              transition.to( panda, { time=transitionTime, x=(xpos), y=(ypos+100), onComplete=pandaTransitionListener} )
          elseif transitionState == 4 then
@@ -187,10 +189,10 @@ function rotatePanda()
          elseif transitionState == 5 then
              transitionState = transitionState+1
              transition.to( panda, { time=transitionTime, x=(xpos-100), y=ypos, onComplete=pandaTransitionListener} )
-         elseif transitionState == 6 then 
+         elseif transitionState == 6 then
             transitionState = transitionState+1
              transition.to( panda, { time=transitionTime, x=(xpos - 70), y=(ypos-70), onComplete=pandaTransitionListener} )
-        elseif transitionState == 7 then 
+        elseif transitionState == 7 then
             transitionState = 0
             transition.to( panda, { time=transitionTime, x=(xpos), y=(ypos-100), onComplete=pandaTransitionListener} )
         end
@@ -205,7 +207,7 @@ function rotatePanda()
          elseif transitionState == 2 then
              transitionState = transitionState+1
              transition.to( panda, { time=transitionTime, x=(xpos+50), y=(ypos +50), onComplete=pandaTransitionListener} )
-         elseif transitionState == 3 then 
+         elseif transitionState == 3 then
             transitionState = transitionState+1
              transition.to( panda, { time=transitionTime, x=(xpos), y=(ypos+100), onComplete=pandaTransitionListener} )
          elseif transitionState == 4 then
@@ -214,10 +216,10 @@ function rotatePanda()
          elseif transitionState == 5 then
              transitionState = transitionState+1
              transition.to( panda, { time=transitionTime, x=(xpos-100), y=ypos, onComplete=pandaTransitionListener} )
-         elseif transitionState == 6 then 
+         elseif transitionState == 6 then
             transitionState = transitionState+1
              transition.to( panda, { time=transitionTime, x=(xpos - 50), y=(ypos-50), onComplete=pandaTransitionListener} )
-        elseif transitionState == 7 then 
+        elseif transitionState == 7 then
             transitionState = 0
             transition.to( panda, { time=transitionTime, x=(xpos), y=(ypos-100), onComplete=pandaTransitionListener} )
         end
@@ -242,14 +244,13 @@ function rotatePanda()
             transition.to(circle, {time = 500, alpha = 0})
             transition.to(smoke, {time=600, alpha =0})
             transition.to(panda, {time=500, alpha =0, onComplete=animationDoneListener})
-        else 
+        else
             transition.to(circle, {time = 500, alpha = 0})
             transition.to(player, {alpha = 0, time = 500, onComplete=animationDoneListener})
             transition.to(panda, {x= circleCenter.x, y= circleCenter.y})
         end
     end
 end
-
 function animation()
     -- draw the circle thing
     local paint = { 0.7, 0.7, 0.7 }
@@ -260,9 +261,22 @@ function animation()
     circle.fill = none
     circle.strokeWidth = 4
 
-    player = display.newImage('main.png')
-    player.width = 64
-    player.height = 72
+    local sequenceData =
+    {
+        name="smoking",
+        start=1,
+        count=15,
+        time=300,
+        loopCount = 0,   -- Optional ; default is 0 (loop indefinitely)
+    }
+    local sheetData = { width=500, height=510, numFrames=6, sheetContentWidth=3700, sheetContentHeight=510 }
+    local imageSheet = graphics.newImageSheet( "blood.png", sheetData )
+
+    player = display.newImage('assets/sprites/knight.png')
+    player.height = 90
+    player.width = 50
+    player.xScale = -1 
+
 
     player:translate(display.contentCenterX, display.contentCenterY - 100)
 
@@ -282,11 +296,11 @@ function animation()
 
 --
 -- This function gets called everytime you call composer.gotoScene() from this module.
--- It will get called twice, once before we transition the scene off screen and once again 
+-- It will get called twice, once before we transition the scene off screen and once again
 -- after the scene is off screen.
 function scene:hide( event )
     local sceneGroup = self.view
-    
+
     if event.phase == "will" then
         display.remove(circle)
         display.remove(player)
@@ -304,14 +318,14 @@ end
 --
 -- When you call composer.removeScene() from another module, composer will go through and
 -- remove anything created with display.* and inserted into the scene's view group for you. In
--- many cases that's sufficent to remove your scene. 
+-- many cases that's sufficent to remove your scene.
 --
 -- But there may be somethings you loaded, like audio in scene:create() that won't be disposed for
 -- you. This is where you dispose of those things.
 -- In most cases there won't be much to do here.
 function scene:destroy( event )
     local sceneGroup = self.view
-    
+
 end
 
 ---------------------------------------------------------------------------------
