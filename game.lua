@@ -201,6 +201,7 @@ function scene:show( event )
         -- place to "reset" things that might be reset, i.e. move an object back to its starting
         -- position. Since the scene isn't on screen yet, your users won't see things "jump" to new
         -- locations. In this case, reset the score to 0.
+        
     end
 end
 

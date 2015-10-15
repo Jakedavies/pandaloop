@@ -140,8 +140,7 @@ function scene:show( event )
     --
     if event.phase == "did" then
     
-    sfx = audio.loadSound( "/assets/music/CausticChip16.ogg" )
-    audio.play(sfx)
+
 
     local message =  display.newText("For centuries, there have been those who \n seek to capture the great panda.\n Do you have what it takes? ", display.contentCenterX, display.contentCenterY + 50,  native.systemFontBold, 12)
     message:setFillColor(0, 0, 0 )
@@ -156,7 +155,6 @@ function scene:show( event )
         -- place to "reset" things that might be reset, i.e. move an object back to its starting
         -- position. Since the scene isn't on screen yet, your users won't see things "jump" to new
         -- locations. In this case, reset the score to 0.
-                audio.stop(1)
 
     end
 end

@@ -16,7 +16,7 @@ function sleep()
     --donothing
 end
 function loadNext()
-    composer.gotoScene( "game", { effect="crossFade", time=500 } )
+    composer.gotoScene( "MCCheck", { effect="crossFade", time=500 } )
 end
 function loadNo()
     --composer.gotoScene( "forTutorial", { effect="crossFade", time=500 } )
@@ -40,7 +40,7 @@ function scene:create(event)
     
         local background = display.newImage("/assets/sprites/country-platform-files/country-platform-files/layers/country-platform-tiles-example.png", display.contentHeight, display.contentWidth)
         background.x = display.contentCenterX 
-        background.y = display.contentCenterY +200
+        background.y = display.contentCenterY + 200
         sceneGroup:insert(background)
     
     local backgroundLayer2 = display.newImage("/assets/sprites/country-platform-files/country-platform-files/layers/country-platform-forest.png", display.contentHeight, display.contentWidth)
@@ -144,7 +144,7 @@ function scene:show( event )
     --
     if event.phase == "did" then
 
-    local message =  display.newText("You, do know about for loops right? \n ....... ", display.contentCenterX + 5, display.contentCenterY + 40,  native.systemFontBold, 10)
+    local message =  display.newText("You, do know about for loops right? \n ....... \n Because you look like you don't... ", display.contentCenterX + 5, display.contentCenterY + 40,  native.systemFontBold, 10)
     message:setFillColor(0, 0, 0 )
     sceneGroup:insert(message)
     
