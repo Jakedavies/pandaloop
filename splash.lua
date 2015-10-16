@@ -12,6 +12,9 @@ end
 function loadNext()
     composer.gotoScene( "tutorial", { effect="crossFade", time=500 } )
 end
+function loadTutorial()
+    composer.gotoScene( "loopTutorial", { effect="crossFade", time=500 } )
+end
 function loadCredits()
         audio.stop(1)
 
@@ -155,6 +158,20 @@ function scene:show( event )
 
     sceneGroup:insert(buttonBackground2)
     sceneGroup:insert(button2)
+    
+    buttonBackground3 = display.newImage("assets/sprites/touch.png");
+    buttonBackground3.x = display.contentCenterX
+    buttonBackground3.y = display.contentCenterY + 160
+    
+    button3 = widget.newButton()
+    button3: setLabel("TUTORIAL")
+    button3: setEnabled(true)
+    button3.x = display.contentCenterX
+    button3.y = display.contentCenterY + 160
+    button3:addEventListener("tap", loadTutorial)
+    
+     sceneGroup:insert(buttonBackground3)
+    sceneGroup:insert(button3)
 
     --Chase the panda!
     while px < display.contentWidth +150 do

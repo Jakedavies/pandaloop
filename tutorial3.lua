@@ -19,7 +19,7 @@ function loadNext()
     composer.gotoScene( "MCCheck", { effect="crossFade", time=500 } )
 end
 function loadNo()
-    --composer.gotoScene( "forTutorial", { effect="crossFade", time=500 } )
+    composer.gotoScene( "loopTutorial", { effect="crossFade", time=500 } )
 end 
 --
 -- This function gets called when composer.gotoScene() gets called an either:
@@ -106,8 +106,6 @@ function scene:create(event)
     sceneGroup:insert(button2)
       
 
-     
-
 
       knight = display.newImage('/assets/sprites/wizard_0.png')
       knight.x = display.contentCenterX - 100
@@ -144,7 +142,7 @@ function scene:show( event )
     --
     if event.phase == "did" then
 
-    local message =  display.newText("You, do know about for loops right? \n ....... \n Because you look like you don't... ", display.contentCenterX + 5, display.contentCenterY + 40,  native.systemFontBold, 10)
+    local message =  display.newText("You, do know about for loops right?  \n Because it seems like you don't... ", display.contentCenterX + 5, display.contentCenterY + 40,  native.systemFontBold, 10)
     message:setFillColor(0, 0, 0 )
     sceneGroup:insert(message)
     
