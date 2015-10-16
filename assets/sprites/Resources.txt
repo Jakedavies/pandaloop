@@ -2,5 +2,11 @@ Mikos Panda
 	--GPL V3 http://www.gnu.org/licenses/gpl-3.0.html
 http://opengameart.org/content/wizard-lizard 
 	--http://creativecommons.org/licenses/by-sa/3.0/
+Touch
+http://creativecommons.org/licenses/by-sa/3.0/
+Changes: Removed text and made simple blank button. 
+Author: Arnaud de Saint Méloir
+
+
 
 
