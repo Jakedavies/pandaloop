@@ -1,4 +1,6 @@
-http://opengameart.org/content/panda-character-32x32
-http://opengameart.org/content/country-side-platform-tiles
-http://opengameart.org/content/wizard-lizard
-http://opengameart.org/content/colossal-boss-battle-theme
+Mikos Panda
+	--GPL V3 http://www.gnu.org/licenses/gpl-3.0.html
+http://opengameart.org/content/wizard-lizard 
+	--http://creativecommons.org/licenses/by-sa/3.0/
+
+

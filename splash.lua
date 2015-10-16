@@ -82,6 +82,7 @@ function scene:create(event)
       px = panda.x
       sceneGroup:insert( panda) 
       
+      native.showAlert( "Education" , "This game uses user data to improve how it teaches. If you use this app, you consent to the use of this data. If you do not consent. Please close this app and uninstall it. " )
      
       
                   
