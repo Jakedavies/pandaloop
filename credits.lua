@@ -104,10 +104,10 @@ function scene:show( event )
     authors:setFillColor(0, 0, 0 )
     sceneGroup:insert(authors)
 
-    display.newText("Assets", display.contentCenterX, display.contentCenterY-20, "/fonts/Pacifico.ttf", 20)
-    display.newText("Button Texture. Author: Arnaud de Saint Mloir \n \t Modifications: Removed Text", display.contentCenterX, display.contentCenterY, "/fonts/Pacifico.ttf", 12)
-    display.newText("Knight and Wizard. \n \t Author:  Stacy ( laetissima - opengameart.com)", display.contentCenterX, display.contentCenterY+15, "/fonts/Pacifico.ttf", 12)
-    display.newText("Credit Music. Author: Jan123 - opengameart.com", display.contentCenterX, display.contentCenterY+30, "/fonts/Pacifico.ttf", 12)
+    display.newText("Assets", display.contentCenterX, display.contentCenterY+20, "/fonts/Pacifico.ttf", 20)
+    display.newText("Button Texture. Author: Arnaud de Saint Mloir \n \t Modifications: Removed Text", display.contentCenterX, display.contentCenterY+50, "/fonts/Pacifico.ttf", 12)
+    display.newText("Knight and Wizard. \n \t Author:  Stacy ( laetissima - opengameart.com)", display.contentCenterX, display.contentCenterY+80, "/fonts/Pacifico.ttf", 12)
+    display.newText("Credit Music. Author: Jan123 - opengameart.com", display.contentCenterX, display.contentCenterY+100, "/fonts/Pacifico.ttf", 12)
   -- Create the widget
 
     else -- event.phase == "will"
