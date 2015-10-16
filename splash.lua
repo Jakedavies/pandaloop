@@ -24,9 +24,30 @@ end
 -- This function gets called when composer.gotoScene() gets called an either:
 --    a) the scene has never been visited before or
 --    b) you called composer.removeScene() or composer.removeHidden() from some other
---       scene.  It's possible (and desirable in many cases) to call this once, but 
+--       scene.  It's possible (and desirable in many cases) to call this once, but
 --       show it multiple times.
 --
+
+function consent()
+  print('saving consent')
+    -- Path for the file to write
+  local path = system.pathForFile( "consented.txt", system.DocumentsDirectory )
+
+  -- Open the file handle
+  local file, errorString = io.open( path, "w" )
+
+  if not file then
+      -- Error occurred; output the cause
+      print( "File error: " .. errorString )
+  else
+    print("writing file")
+    -- Write data to file
+    file:write( "true" )
+    -- Close the file handle
+    io.close( file )
+  end
+
+end
 function scene:create(event)
     --
     -- self in this case is "scene", the scene object for this level.
@@ -82,12 +103,32 @@ function scene:create(event)
       px = panda.x
       sceneGroup:insert( panda)
 
-      
-      native.showAlert( "Education" , "This game uses user data to improve how it teaches. If you use this app, you consent to the use of this data. If you do not consent. Please close this app and uninstall it. " )
-   
+      local path = system.pathForFile( "consented.txt", system.DocumentsDirectory )
 
-  
+      -- Open the file handle
+      local file, errorString = io.open( path, "r" )
+
+      if not file then
+          -- Error occurred; output the cause
+          print( "File error: " .. errorString )
+          native.showAlert( "Education" , "This game uses user data to improve how it teaches. If you use this app, you consent to the use of this data. If you do not consent. Please close this app and uninstall it. ", {"Great"}, consent)
+      else
+          -- Read data from file
+          local contents = file:read( "*a" )
+          -- Output the file contents
+          if contents == "true" then
+            -- Close the file handle
+
+            io.close( file )
+          else
+            io.close(file)
+            native.showAlert( "Education" , "This game uses user data to improve how it teaches. If you use this app, you consent to the use of this data. If you do not consent. Please close this app and uninstall it. ",{"Great"}, consent)
+          end
+      end
+      file = nil
 end
+
+
 
 
 --
