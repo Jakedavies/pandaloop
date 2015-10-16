@@ -28,36 +28,36 @@ function loadTutorial3()
 end
 function loadNo()
     --composer.gotoScene( "forTutorial", { effect="crossFade", time=500 } )
-end 
+end
 --
 -- This function gets called when composer.gotoScene() gets called an either:
 --    a) the scene has never been visited before or
 --    b) you called composer.removeScene() or composer.removeHidden() from some other
---       scene.  It's possible (and desirable in many cases) to call this once, but 
+--       scene.  It's possible (and desirable in many cases) to call this once, but
 --       show it multiple times.
 --
 function scene:create(event)
     --
-    -- self in this case is "scene", the scene object for this level. 
-    -- Make a local copy of the scene's "view group" and call it "sceneGroup". 
+    -- self in this case is "scene", the scene object for this level.
+    -- Make a local copy of the scene's "view group" and call it "sceneGroup".
     -- This is where you must insert everything (display.* objects only) that you want
     -- Composer to manage for you.
     local sceneGroup = self.view
-    
 
-    
-        local background = display.newImage("/assets/sprites/country-platform-files/country-platform-files/layers/country-platform-tiles-example.png", display.contentHeight, display.contentWidth)
-        background.x = display.contentCenterX 
+
+
+        local background = display.newImage("assets/sprites/country-platform-files/country-platform-files/layers/country-platform-tiles-example.png", display.contentHeight, display.contentWidth)
+        background.x = display.contentCenterX
         background.y = display.contentCenterY +200
         sceneGroup:insert(background)
-    
-    local backgroundLayer2 = display.newImage("/assets/sprites/country-platform-files/country-platform-files/layers/country-platform-forest.png", display.contentHeight, display.contentWidth)
+
+    local backgroundLayer2 = display.newImage("assets/sprites/country-platform-files/country-platform-files/layers/country-platform-forest.png", display.contentHeight, display.contentWidth)
     backgroundLayer2.x = display.contentCenterX
     backgroundLayer2.y = display.contentCenterY + 200
     backgroundLayer2.width = display.contentWidth
     backgroundLayer2.height = display.contentHeight /3
     
-     local backgroundLayer3 = display.newImage("/assets/sprites/country-platform-files/country-platform-files/layers/country-platform-back.png", display.contentHeight, display.contentWidth)
+     local backgroundLayer3 = display.newImage("assets/sprites/country-platform-files/country-platform-files/layers/country-platform-back.png", display.contentHeight, display.contentWidth)
     backgroundLayer3.x = display.contentCenterX
     backgroundLayer3.y = display.contentCenterY + 50
     backgroundLayer3.width = display.contentWidth
@@ -71,77 +71,77 @@ function scene:create(event)
     --
     sceneGroup:insert(backgroundLayer3)
     sceneGroup:insert(backgroundLayer2)
- 
 
-    speech = display.newImage('/assets/sprites/comic-2.png')
-      speech.x = display.contentCenterX 
+
+    speech = display.newImage('assets/sprites/comic-2.png')
+      speech.x = display.contentCenterX
       speech.xScale = -1
       speech.y =  display.contentCenterY + 130
       speech.height = 100
       speech.width = 290
       speechx= speech.x
-      sceneGroup:insert(speech) 
-        
+      sceneGroup:insert(speech)
 
-    
-     buttonBackground = display.newImage("/assets/sprites/touch.png");
-    buttonBackground.x = display.contentCenterX 
+
+
+     buttonBackground = display.newImage("assets/sprites/touch.png");
+    buttonBackground.x = display.contentCenterX
     buttonBackground.y = display.contentCenterY - 180
     buttonBackground.width = display.contentWidth
     buttonBackground.height = 180
 
-    
+
     button = widget.newButton()
     button: setLabel("for(int i = 0; i < 9001; i ++){ \n ItsOverNineThousannnd(); \n DateTime t = getTime(); \n} \n dinnerReservations(t);")
     button: setEnabled(true)
     button.x = display.contentCenterX
     button.y = display.contentCenterY - 180
-    
-     buttonBackground2 = display.newImage("/assets/sprites/touch.png");
-    buttonBackground2.x = display.contentCenterX 
+
+     buttonBackground2 = display.newImage("assets/sprites/touch.png");
+    buttonBackground2.x = display.contentCenterX
     buttonBackground2.y = display.contentCenterY - 80
     buttonBackground2.width = display.contentWidth
     buttonBackground2.height = 50
-    
+
     button2 = widget.newButton()
     button2: setLabel("Nothing. That code is perfect.")
     button2: setEnabled(true)
     button2.x = display.contentCenterX
     button2.y = display.contentCenterY - 80
     button2:addEventListener("tap", loadTutorial3)
-    
-    buttonBackground3 = display.newImage("/assets/sprites/touch.png");
-    buttonBackground3.x = display.contentCenterX 
+
+    buttonBackground3 = display.newImage("assets/sprites/touch.png");
+    buttonBackground3.x = display.contentCenterX
     buttonBackground3.y = display.contentCenterY - 35
     buttonBackground3.width = display.contentWidth
     buttonBackground3.height = 50
-    
+
     button3 = widget.newButton()
     button3: setLabel("Scope Issue;")
     button3: setEnabled(true)
     button3.x = display.contentCenterX
     button3.y = display.contentCenterY - 35
     button3:addEventListener("tap", loadNextMC)
-    
-    buttonBackground4 = display.newImage("/assets/sprites/touch.png");
-    buttonBackground4.x = display.contentCenterX 
+
+    buttonBackground4 = display.newImage("assets/sprites/touch.png");
+    buttonBackground4.x = display.contentCenterX
     buttonBackground4.y = display.contentCenterY +10
     buttonBackground4.width = display.contentWidth
     buttonBackground4.height = 50
-    
+
     button4 = widget.newButton()
     button4: setLabel(" i ++")
     button4: setEnabled(true)
     button4.x = display.contentCenterX
     button4.y = display.contentCenterY + 10
     button4:addEventListener("tap", loadTutorial3)
-    
-    buttonBackground5 = display.newImage("/assets/sprites/touch.png");
-    buttonBackground5.x = display.contentCenterX 
+
+    buttonBackground5 = display.newImage("assets/sprites/touch.png");
+    buttonBackground5.x = display.contentCenterX
     buttonBackground5.y = display.contentCenterY + 55
     buttonBackground5.width = display.contentWidth
     buttonBackground5.height = 50
-    
+
     button5 = widget.newButton()
     button5: setLabel("It can not be over nine thousand.")
     button5: setEnabled(true)
@@ -159,20 +159,20 @@ function scene:create(event)
     sceneGroup:insert(button4)
      sceneGroup:insert(buttonBackground5)
     sceneGroup:insert(button5)
-    
-      
 
-     
-      knight = display.newImage('/assets/sprites/wizard_0.png')
+
+
+
+      knight = display.newImage('assets/sprites/wizard_0.png')
       knight.x = display.contentCenterX - 100
       knight.y =  display.contentCenterY + 210
       knight.height = 130
       knight.width = 100
-      knight.xScale = -1 
+      knight.xScale = -1
       kx = knight.x
       knight:toFront()
-      sceneGroup:insert(knight) 
-      
+      sceneGroup:insert(knight)
+
 
 end
 
@@ -189,9 +189,9 @@ function scene:show( event )
 
 
     --
-    -- event.phase == "did" happens after the scene has been transitioned on screen. 
+    -- event.phase == "did" happens after the scene has been transitioned on screen.
     -- Here is where you start up things that need to start happening, such as timers,
-    -- tranistions, physics, music playing, etc. 
+    -- tranistions, physics, music playing, etc.
     -- In this case, resume physics by calling physics.start()
     -- Fade out the levelText (i.e start a transition)
     -- Start up the enemy spawning engine after the levelText fades
@@ -201,11 +201,11 @@ function scene:show( event )
     local message =  display.newText(" Okay, one more question before I can hand it in... \n I mean show you where the panda is... \n what is wrong in this code.. ", display.contentCenterX + 5, display.contentCenterY + 115,  native.systemFontBold, 10)
     message:setFillColor(0, 0, 0 )
     sceneGroup:insert(message)
-    
- 
+
+
 
   -- Create the widget
-    
+
     else -- event.phase == "will"
         -- The "will" phase happens before the scene transitions on screen.  This is a great
         -- place to "reset" things that might be reset, i.e. move an object back to its starting
@@ -217,9 +217,9 @@ end
 
 --
 -- This function gets called everytime you call composer.gotoScene() from this module.
--- It will get called twice, once before we transition the scene off screen and once again 
+-- It will get called twice, once before we transition the scene off screen and once again
 -- after the scene is off screen.
-function scene:hide( event )    
+function scene:hide( event )
     local sceneGroup = self.view
     display.remove(textBox)
     textBox = nil
@@ -231,15 +231,15 @@ end
 --
 -- When you call composer.removeScene() from another module, composer will go through and
 -- remove anything created with display.* and inserted into the scene's view group for you. In
--- many cases that's sufficent to remove your scene. 
+-- many cases that's sufficent to remove your scene.
 --
 -- But there may be somethings you loaded, like audio in scene:create() that won't be disposed for
 -- you. This is where you dispose of those things.
 -- In most cases there won't be much to do here.
 function scene:destroy( event )
     local sceneGroup = self.view
-  
-    
+
+
 end
 
 ---------------------------------------------------------------------------------
@@ -250,11 +250,3 @@ scene:addEventListener( "show", scene )
 scene:addEventListener( "hide", scene )
 scene:addEventListener( "destroy", scene )
 return scene
-
-
-
-
-
-
-
-
