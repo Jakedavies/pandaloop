@@ -121,6 +121,7 @@ function animationDoneListener(event)
         buttonBackground1.x = display.contentCenterX - 75
         buttonBackground1.y = display.contentCenterY + 80
         sceneGroup:insert(buttonBackground1)
+
         statustext = 'You lose'
         button = widget.newButton()
         button: setLabel("Try Again")
@@ -129,6 +130,7 @@ function animationDoneListener(event)
         button.y = display.contentCenterY + 80
         button:addEventListener("tap", onGoToGameClick)
         sceneGroup:insert(button)
+
 
 
         buttonBackground2 = display.newImage("assets/sprites/touch.png");
@@ -143,6 +145,19 @@ function animationDoneListener(event)
         button2:addEventListener("tap", onGoToMenuClick)
         sceneGroup:insert(button2)
 
+        tip = display.newText({text = "Tip: Dont forget the difference between ", 0, 0, font = native.systemFont, fontSize = 16, alpha = 0 })
+        tip.x = display.contentCenterX
+        tip.y = display.contentCenterY + 120
+        tip.fontSize = 15
+        tip:setFillColor( 100 )
+        sceneGroup:insert(tip)
+
+        tip2 = display.newText({text = "<= and < when using a for loop", 0, 0, font = native.systemFont, fontSize = 16, alpha = 0 })
+        tip2.x = display.contentCenterX
+        tip2.y = display.contentCenterY + 135
+        tip2.fontSize = 15
+        tip2:setFillColor( 100 )
+        sceneGroup:insert(tip2)
 
     end
     levelText = display.newText({text = statustext, 0, 0, font = native.systemFontBold, fontSize = 30, alpha = 0 })
@@ -275,7 +290,7 @@ function animation()
     player = display.newImage('assets/sprites/knight.png')
     player.height = 90
     player.width = 50
-    player.xScale = -1 
+    player.xScale = -1
 
 
     player:translate(display.contentCenterX, display.contentCenterY - 100)

@@ -7,7 +7,7 @@ local widget = require( "widget" )
 local json = require( "json" )
 local input = ''
 local textBox
-local correctText =  "8999"
+local correctText =  "9000"
 
 --
 -- define local functions here
@@ -176,7 +176,7 @@ function scene:show( event )
 
         code3 = display.newText('for(int i = 0; i < ', 0, 0, native.systemFontBold, 14 )
         code3:setFillColor(1)
-        code3.x = display.contentCenterX - 50
+        code3.x = display.contentCenterX - 60
         code3.y = display.contentCenterY -  50
 
 
@@ -201,7 +201,7 @@ function scene:show( event )
         -- place to "reset" things that might be reset, i.e. move an object back to its starting
         -- position. Since the scene isn't on screen yet, your users won't see things "jump" to new
         -- locations. In this case, reset the score to 0.
-        
+
     end
 end
 

@@ -56,7 +56,7 @@ function scene:create(event)
     backgroundLayer2.y = display.contentCenterY + 200
     backgroundLayer2.width = display.contentWidth
     backgroundLayer2.height = display.contentHeight /3
-    
+
      local backgroundLayer3 = display.newImage("assets/sprites/country-platform-files/country-platform-files/layers/country-platform-back.png", display.contentHeight, display.contentWidth)
     backgroundLayer3.x = display.contentCenterX
     backgroundLayer3.y = display.contentCenterY + 50
