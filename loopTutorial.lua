@@ -171,7 +171,6 @@ function scene:show( event )
     message:setFillColor(0, 0, 0 )
     sceneGroup:insert(message)
 
-    timer.performWithDelay(60000, loadNext )
 
 
 
