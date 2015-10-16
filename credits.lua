@@ -98,16 +98,22 @@ function scene:show( event )
     sfx = audio.loadSound( "assets/music/CausticChip16.ogg" )
     audio.play(sfx)
 
-    physics.start()
-    physics.setGravity(0.1)
     local authors =  display.newText("Authors: \n Nolan Koriath\n Jake Davies", display.contentCenterX, display.contentCenterY-50, "/fonts/Pacifico.ttf", 30)
     authors:setFillColor(0, 0, 0 )
     sceneGroup:insert(authors)
 
-    display.newText("Assets", display.contentCenterX, display.contentCenterY+20, "/fonts/Pacifico.ttf", 20)
-    display.newText("Button Texture. Author: Arnaud de Saint Mloir \n \t Modifications: Removed Text", display.contentCenterX, display.contentCenterY+50, "/fonts/Pacifico.ttf", 12)
-    display.newText("Knight and Wizard. \n \t Author:  Stacy ( laetissima - opengameart.com)", display.contentCenterX, display.contentCenterY+80, "/fonts/Pacifico.ttf", 12)
-    display.newText("Credit Music. Author: Jan123 - opengameart.com", display.contentCenterX, display.contentCenterY+100, "/fonts/Pacifico.ttf", 12)
+    local t1 = display.newText("Assets", display.contentCenterX, display.contentCenterY+40, "/fonts/Pacifico.ttf", 20)
+    local t2 =display.newText("Button Texture. Author: Arnaud de Saint Mloir \n \t Modifications: Removed Text", display.contentCenterX, display.contentCenterY+70, "/fonts/Pacifico.ttf", 12)
+    local t3 = display.newText("Knight and Wizard. \n \t Author:  Stacy ( laetissima - opengameart.com)", display.contentCenterX, display.contentCenterY+130, "/fonts/Pacifico.ttf", 12)
+    local t4 =display.newText("Credit Music. Author: Jan123 - opengameart.com", display.contentCenterX, display.contentCenterY+170, "/fonts/Pacifico.ttf", 12)
+    t1:setFillColor(0, 0, 0 )
+    t2:setFillColor(0, 0, 0 )
+    t3:setFillColor(0, 0, 0 )
+    t4:setFillColor(0, 0, 0 )
+    sceneGroup:insert(t1)
+    sceneGroup:insert(t2)
+    sceneGroup:insert(t3)
+    sceneGroup:insert(t4)
   -- Create the widget
 
     else -- event.phase == "will"
