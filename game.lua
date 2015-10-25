@@ -11,11 +11,13 @@ local correctText =  "9"
 
 -- INIT PARSE
 local parse = require( "mod_parse" )
+_G.PARSE_APP_ID = "fQfHOZk9Oq6zcfWfGw9Zas2pL732QTK3omHwIl6k"
+_G.PARSE_KEY = "L4gA4fCoEytFXsQtjHrlaZrSnrXeyomA0ibdKNXv"
 parse:init( { appId = PARSE_APP_ID, apiKey = PARSE_KEY } )
+parse.showStatus = true
+parse.showJSON = true
 
-local function startedQuestion ()
-  parse:logEvent( "Share", { ["screen"] = "splash" } )
-end
+
 
 --
 -- define local functions here
@@ -30,19 +32,16 @@ local function handleCheckMyCode( event )
 
     -- Check the fucking code here
     if event.phase == "ended" then
-        print('in onclick handler')
-        print ('correct text')
-        print(correctText)
-        print('input')
-        print(input)
 
+        print("Question answered event")
         if(math.floor(input) == math.floor(correctText)) then
+            parse:logEvent( "Question Answered", {["question_number"] = "1", ["correct"] = true})
             composer.gotoScene("cutscene", { time= 500, effect = "crossFade", params = { status = true}})
             print('text matches')
         else
+            parse:logEvent( "Question Answered", {["question_number" ] = "1", ["correct"] = false})
             composer.gotoScene("cutscene", { time= 500, effect = "crossFade", params = { status = false}})
             print('you suck')
-
         end
     end
     return true
@@ -87,6 +86,7 @@ function scene:create( event )
     backgroundLayer3.width = display.contentWidth
     backgroundLayer3.height = display.contentHeight + 200
     backgroundLayer3:toFront()
+
 
     --
     -- Insert it into the scene to be managed by Composer
@@ -195,11 +195,15 @@ function scene:show( event )
         code6:setFillColor(1)
         code6.x = display.contentCenterX - 90
         code6.y = display.contentCenterY - 10
+
         -- The "will" phase happens before the scene transitions on screen.  This is a great
         -- place to "reset" things that might be reset, i.e. move an object back to its starting
         -- position. Since the scene isn't on screen yet, your users won't see things "jump" to new
         -- locations. In this case, reset the score to 0.
 
+
+        print("question start event")
+        parse:logEvent( "Question", { ["number"] = "1" })
     end
 end
 
@@ -231,7 +235,6 @@ end
 -- In most cases there won't be much to do here.
 function scene:destroy( event )
     local sceneGroup = self.view
-
 end
 
 ---------------------------------------------------------------------------------
