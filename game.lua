@@ -7,7 +7,15 @@ local widget = require( "widget" )
 local json = require( "json" )
 local input = ''
 local textBox
-local correctText =  "9000"
+local correctText =  "9"
+
+-- INIT PARSE
+local parse = require( "mod_parse" )
+parse:init( { appId = PARSE_APP_ID, apiKey = PARSE_KEY } )
+
+local function startedQuestion ()
+  parse:logEvent( "Share", { ["screen"] = "splash" } )
+end
 
 --
 -- define local functions here
@@ -27,8 +35,8 @@ local function handleCheckMyCode( event )
         print(correctText)
         print('input')
         print(input)
-        if(input == correctText) then
 
+        if(math.floor(input) == math.floor(correctText)) then
             composer.gotoScene("cutscene", { time= 500, effect = "crossFade", params = { status = true}})
             print('text matches')
         else
@@ -59,7 +67,7 @@ function scene:create( event )
     -- This is where you must insert everything (display.* objects only) that you want
     -- Composer to manage for you.
     local sceneGroup = self.view
-
+    correctText = tostring(math.random(1000)+8999)
     --
     -- make a copy of the current level value out of our
     -- non-Global app wide storage table.
@@ -84,12 +92,6 @@ function scene:create( event )
     -- Insert it into the scene to be managed by Composer
     --
     sceneGroup:insert(backgroundLayer3)
-
-
-
-
-
-
     --
     -- because we want to access this in multiple functions, we need to forward declare the variable and
     -- then create the object here in scene:create()
@@ -124,12 +126,11 @@ end
 -- afterwards as a result of calling composer.gotoScene()
 --
 function scene:show( event )
+
     --
     -- Make a local reference to the scene's view for scene:show()
     --
     local sceneGroup = self.view
-
-
 
     --
     -- event.phase == "did" happens after the scene has been transitioned on screen.
@@ -164,7 +165,7 @@ function scene:show( event )
         code7.x = display.contentCenterX
         code7.y = display.contentCenterY -  140
 
-        code = display.newText(' the confusePanda function 9000 times ', 0, 0, native.systemFontBold, 14 )
+        code = display.newText(' the confusePanda function ' .. correctText ..' times ', 0, 0, native.systemFontBold, 14 )
         code:setFillColor(1)
         code.x = display.contentCenterX
         code.y = display.contentCenterY -  120
@@ -179,13 +180,10 @@ function scene:show( event )
         code3.x = display.contentCenterX - 60
         code3.y = display.contentCenterY -  50
 
-
         code4 = display.newText('; i++){', 0, 0, native.systemFontBold, 14 )
         code4:setFillColor(1)
         code4.x = display.contentCenterX + 30
         code4.y = display.contentCenterY - 50
-
-
 
         code5 = display.newText('confusePanda()', 0, 0, native.systemFontBold, 14 )
         code5:setFillColor(1)
