@@ -17,12 +17,16 @@ local questions = {}
 local session
 local questionsStartTime = {}
 local sessionStart
+local attempts = {}
 -- called when the question is
 function loggin.questionStarted(qid)
-	parse:createObject( "question", { ["session"] = session, ["qid"] = qid, ["complete"] = false}, function(event)
+	parse:createObject( "question", { ["session"] = session, ["qid"] = qid, ["answered"] = false}, function(event)
 		if not event.error then
 			questions[qid] = event.response.objectId
 			questionsStartTime[qid] = system.getTimer()
+			if(attempts[qid] == nil) then
+				attempts[qid] = 0;
+			end
 		else
 			print("error starting question")
 		end
@@ -32,7 +36,8 @@ end
 -- called when the question is completed
 function loggin.questionAnswered(qid, correct)
 	if(questions[qid] ~= nil) then
-		parse:updateObject("question", questions[qid], {["correct"] = correct, ["complete"] = true, ["time_taken"] = (system.getTimer() - questionsStartTime[qid])})
+		attempts[qid]= attempts[qid]+ 1
+		parse:updateObject("question", questions[qid], {["attempt"] = attempts[qid], ["correct"] = correct, ["answered"] = true, ["time_taken"] = (system.getTimer() - questionsStartTime[qid])})
 		-- reset the question
 		questions[qid] = nil
 	end
