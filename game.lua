@@ -10,12 +10,7 @@ local textBox
 local correctText =  "9"
 
 -- INIT PARSE
-local parse = require( "mod_parse" )
-_G.PARSE_APP_ID = "fQfHOZk9Oq6zcfWfGw9Zas2pL732QTK3omHwIl6k"
-_G.PARSE_KEY = "L4gA4fCoEytFXsQtjHrlaZrSnrXeyomA0ibdKNXv"
-parse:init( { appId = PARSE_APP_ID, apiKey = PARSE_KEY } )
-parse.showStatus = true
-parse.showJSON = true
+local logging = require("logging")
 
 
 
@@ -32,14 +27,13 @@ local function handleCheckMyCode( event )
 
     -- Check the fucking code here
     if event.phase == "ended" then
-
         print("Question answered event")
-        if(math.floor(input) == math.floor(correctText)) then
-            parse:logEvent( "Question Answered", {["question_number"] = "1", ["correct"] = true})
+        if(input == correctText) then
+            logging.questionAnswered(1, true)
             composer.gotoScene("cutscene", { time= 500, effect = "crossFade", params = { status = true}})
             print('text matches')
         else
-            parse:logEvent( "Question Answered", {["question_number" ] = "1", ["correct"] = false})
+            logging.questionAnswered(1, false)
             composer.gotoScene("cutscene", { time= 500, effect = "crossFade", params = { status = false}})
             print('you suck')
         end
@@ -203,7 +197,7 @@ function scene:show( event )
 
 
         print("question start event")
-        parse:logEvent( "Question", { ["number"] = "1" })
+        logging.questionStarted(1)
     end
 end
 
