@@ -10,4 +10,4 @@ parse.showJSON = true
 print("open app event")
 parse:appOpened()
 
-composer.gotoScene( "game", { effect="crossFade", time=500 } )
+composer.gotoScene( "splash", { effect="crossFade", time=500 } )
