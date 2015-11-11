@@ -42,6 +42,15 @@ function scene:create(event)
     b.width = display.contentWidth
     b.height = display.contentHeight
 
+
+    function b:touch(event)
+      if event.phase == "began" then
+        print('update character position')
+        transition.moveTo(player, {x=event.x})
+      end
+    end
+    b:addEventListener("touch", b)
+
     physics.start()
     sceneGroup:insert(b)
 end
@@ -50,23 +59,30 @@ end
 -- This gets called twice, once before the scene is moved on screen and again once
 -- afterwards as a result of calling composer.gotoScene()
 --
+function timerListener(event)
+  createFallingWord()
+  timer.performWithDelay(wordSpawnDelay, timerListener)
+end
 function scene:show( event )
     local sceneGroup = self.view
 
+    if(event.phase == "will") then
     player = display.newImage('assets/sprites/knight.png')
     player.height = 90
     player.width = 50
     player.xScale = -1
     player.y = display.contentHeight - player.height/2
     player.x = display.contentCenterX
+
+
+    wordSpawnDelay = 1000
     physics.addBody( player, "static", { density = 1.0, friction = 0.3, bounce = 0.2 } )
     -- spawns words at a set interval
-    local function timerListener(event)
-      createFallingWord()
-      timer.performWithDelay(1000, timerListener)
+
+    timer.performWithDelay(wordSpawnDelay, timerListener)
     end
-    timer.performWithDelay(1000, timerListener)
 end
+
 --
 -- This function gets called everytime you call composer.gotoScene() from this module.
 -- It will get called twice, once before we transition the scene off screen and once again
@@ -109,7 +125,9 @@ end
 
 function createFallingWord()
   local randomWord = wordBank[math.random(1, #wordBank)]
-  local newFallingWord = display.newRect(display.contentCenterX, 0 , 10, 10)
+  local width = display.contentWidth
+  local randomx = math.random(1, width)
+  local newFallingWord = display.newText( randomWord, randomx, 0, #randomWord *10,16)
   local body = physics.addBody(newFallingWord, {density=0.9, friction =0.3, bounce=0.0})
   newFallingWord.word = randomWord
 
