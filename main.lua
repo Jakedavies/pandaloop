@@ -1,4 +1,3 @@
-require "CiderDebugger";
 local composer = require( "composer" )
 local logging = require( "logging" )
 

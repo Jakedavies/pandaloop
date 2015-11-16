@@ -6,7 +6,7 @@ Question.__index = Question
  
  --Instantiate to empty we will manually set everything as we need it
  function Question:new()
-    local o = {_question = "", _answers = {}, _correctAnswer = "", _errorTypes = {}, _speech= '', _buttons = {}}
+    local o = {_question = "", _answers = {}, _correctAnswer = "", _errorTypes = {}, _speech= '', _buttons = {}, _speechTutorial = nil}
     setmetatable(o, self)
     return o
 end
@@ -66,13 +66,32 @@ end
 
 
 function Question:getAssetsAll()
-    local assets =  {self._buttons[1]:getAssetBackground(), self._buttons[1]:getAssetForeground(), self._buttons[2]:getAssetBackground(), self._buttons[2]:getAssetForeground(),self._buttons[3]:getAssetBackground(), self._buttons[3]:getAssetForeground(),self._buttons[4]:getAssetBackground(), self._buttons[4]:getAssetForeground()}
+
+    local assets = {}
+
+    for i, asset in pairs(self._buttons) do
+        table.insert(assets, self._buttons[i]:getAssetBackground())
+        table.insert(assets, self._buttons[i]:getAssetForeground())
+    end
     table.insert(assets,self._speech:getAssetSpeech())
     table.insert(assets,self._speech:getAssetMessage())
+
+    if not self._speechTutorial then
+        table.insert(assets,self._speechTutorial:getAssetSpeech())
+        table.insert(assets,self._speechTutorial:getAssetMessage())
+    end
+
     return assets
 end
 
 
 function Question:addBtn(btn)
     table.insert(self._buttons,btn)
+end
+
+function Question:setSpeechTutorial(speechTut)
+    self._speechTutorial = speechTut
+end
+function Question:getSpeechTutorial()
+    return self._speechTutorial
 end

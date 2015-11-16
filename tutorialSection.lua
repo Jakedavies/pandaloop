@@ -49,56 +49,59 @@ function scene:create(event)
     knight = MainCharacter:new()
     knight:setX(display.contentCenterX - 100)
     knight:setY(display.contentCenterY + 210)
-    knight:setWidthHeight(130,100)
+    knight:setWidthHeight(80,80)
     knight:toFront()
     sceneGroup:insert(knight:getAsset())
 
 
+    --Question 1 Section
+
     local q1 = Question:new()
-    local s1 = Speech:new()
+    local s1 = Speech:new(false)
 
     s1:setX(display.contentCenterX)
-    s1:setY(display.contentCenterY - 180)
-    s1:setHeight(100)
+    s1:setY(display.contentCenterY - 150)
+    s1:setHeight(120)
     s1:setWidth(display.contentWidth)
     s1:setMessage("for(int i = 0; i < 9001; i ++){ \n    doWizardStuff(); \n}")
+    s1:setFontSize(15)
     q1:setSpeech(s1)
+
+    local sTutorial = Speech:new(true)
+    sTutorial:setX(display.contentCenterX+30)
+    sTutorial:setY(display.contentCenterY+150)
+    sTutorial:setHeight(100)
+    sTutorial:setHeight(100)
+    sTutorial:setWidth(display.contentWidth-display.contentWidth/4)
+    sTutorial:setMessage("Alright, well for loops are a great way \n to repeat a section of code a specific number of times. \n They are a crucial part of control flow. \n The top of your screen shows a for loop! ")
+    q1:setSpeechTutorial(sTutorial)
+
+
+    local buttonWidth = display.contentWidth - display.contentWidth/4
 
     local btn1 = Button:new()
     btn1:setX(display.contentCenterX)
-    btn1:setY(display.contentCenterY - 40)
-    btn1:setLabel("That looks cool")
-    btn1:setWidth(250)
+    btn1:setY(display.contentCenterY - 20)
+    btn1:setLabel("That looks scary...")
+    btn1:setWidth(buttonWidth)
     btn1:setIndex(1)
     q1:addBtn(btn1)
 
     local btn2 = Button:new()
     btn2:setX(display.contentCenterX)
-    btn2:setY(display.contentCenterY)
-    btn2:setLabel("That looks scary...")
-    btn2:setWidth(250)
+    btn2:setY(display.contentCenterY + 20)
+    btn2:setLabel("Very cool!")
+    btn2:setWidth(buttonWidth)
     btn2:setIndex(2)
     q1:addBtn(btn2)
-
-    local btn3 = Button:new()
-    btn3:setX(display.contentCenterX)
-    btn3:setY(display.contentCenterY + 30)
-    btn3:setLabel("That looks super scary...")
-    btn3:setWidth(250)
-    btn3:setIndex(2)
-    q1:addBtn(btn3)
-
-    local btn4 = Button:new()
-    btn4:setX(display.contentCenterX)
-    btn4:setY(display.contentCenterY + 60)
-    btn4:setLabel("That looks really scary...")
-    btn4:setWidth(250)
-    btn4:setIndex(2)
-    q1:addBtn(btn4)
+    
+    --Question 2 Section
 
    for i, asset in pairs(q1:getAssetsAll()) do
         sceneGroup:insert(asset)
    end
+
+   
 
 
 end
@@ -125,9 +128,6 @@ function scene:show( event )
     --
     if event.phase == "did" then
 
-    local message =  display.newText(" Alright, well for loops are a great way \n to repeat a section of code a specific number of times. \n They are a crucial part of control flow. \n The top of your screen shows a for loop!  ", display.contentCenterX + 5, display.contentCenterY + 115,  native.systemFontBold, 10)
-    message:setFillColor(0, 0, 0 )
-    sceneGroup:insert(message)
 
 
 

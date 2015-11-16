@@ -1,13 +1,19 @@
 local widget = require( "widget" )
 
-
 --Question Object
 Speech = {}
 Speech.__index = Speech
  
  --Instantiate to empty we will manually set everything as we need it
- function Speech:new()
- 	  local speech = display.newImage('assets/sprites/comic-2.png')
+ --If it is a tutorial then we use a speech buble otherwise just a background image
+ function Speech:new(tutorial)
+ 	local speech 
+ 	  if not tutorial then 
+ 	  	  speech = display.newImage('assets/sprites/touch.png')
+  	  else
+		  speech = display.newImage('assets/sprites/comic-2.png')
+	  end
+
       speech.x = display.contentCenterX
       speech.xScale = -1
       speech.y =  display.contentCenterY
@@ -15,7 +21,13 @@ Speech.__index = Speech
       speech.width = 290
       speechx= speech.x
 
-    local message =  display.newText("NO MESSAGE SET", display.contentCenterX + 5, display.contentCenterY + 115,  native.systemFontBold, 10)
+      --Tutorials have more text so we need a smaller font.
+      local fontSize = 15 
+      if tutorial == true then
+      	fontSize = 9
+  	  end
+
+    local message =  display.newText("NO MESSAGE SET", display.contentCenterX + 5, display.contentCenterY + 115,  native.systemFontBold, fontSize)
     message:setFillColor(0, 0, 0 )
 
     local o = {_speech = speech, _message = message}
@@ -35,9 +47,11 @@ end
 
 function Speech:setX(x)
 	self._speech.x = x
+	self._message.x = x + 10
 end
 function Speech:setY(y)
-	self._speech.y = y
+	self._speech.y = y 
+	self._message.y = y 
 end
 function Speech:getX()
 	return self._speech.x
@@ -63,8 +77,11 @@ function Speech:setMessage(message)
 	self._message.text = message
 end
 function Speech:setMessageX(x)
-	self._message.x = x
+	self._message.x = x 
 end
 function Speech:setMessageY(y)
 	self._message.y = y
+end
+function Speech:setFontSize(size)
+	self._message = display.newText(self._message.text, self._message.x, self._message.y,  native.systemFontBold, size)
 end
