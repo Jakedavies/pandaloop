@@ -1,4 +1,4 @@
-
+require "CiderDebugger";
 local composer = require( "composer" )
 local logging = require( "logging" )
 
@@ -17,4 +17,4 @@ end
 
 Runtime:addEventListener( "system", onSystemEvent )
 
-composer.gotoScene( "apple_scene", { effect="crossFade", time=500 } )
+composer.gotoScene( "tutorialSection", { effect="crossFade", time=500 } )

@@ -5,9 +5,13 @@ local widget = require( "widget" )
 local json = require( "json" )
 local input = ''
 local textBox
-function loadProgress(j)
-    progressView:setProgress(j)
-end
+
+require('question')
+require('backgrounds')
+require('mainCharacter')
+require('button')
+require('speech')
+
 
 local isPaused = true
 
@@ -37,109 +41,64 @@ function scene:create(event)
     -- Composer to manage for you.
     local sceneGroup = self.view
 
+    backgrounds = Backgrounds:new()
+    sceneGroup:insert(backgrounds:getLayer1())
+    sceneGroup:insert(backgrounds:getLayer2())
+    sceneGroup:insert(backgrounds:getLayer3())
+
+    knight = MainCharacter:new()
+    knight:setX(display.contentCenterX - 100)
+    knight:setY(display.contentCenterY + 210)
+    knight:setWidthHeight(130,100)
+    knight:toFront()
+    sceneGroup:insert(knight:getAsset())
 
 
-    local background = display.newImage("assets/sprites/country-platform-files/country-platform-files/layers/country-platform-tiles-example.png", display.contentHeight, display.contentWidth)
-    background.x = display.contentCenterX
-    background.y = display.contentCenterY +200
-    sceneGroup:insert(background)
+    local q1 = Question:new()
+    local s1 = Speech:new()
 
-    local backgroundLayer2 = display.newImage("assets/sprites/country-platform-files/country-platform-files/layers/country-platform-forest.png", display.contentHeight, display.contentWidth)
-    backgroundLayer2.x = display.contentCenterX
-    backgroundLayer2.y = display.contentCenterY + 200
-    backgroundLayer2.width = display.contentWidth
-    backgroundLayer2.height = display.contentHeight /3
+    s1:setX(display.contentCenterX)
+    s1:setY(display.contentCenterY - 180)
+    s1:setHeight(100)
+    s1:setWidth(display.contentWidth)
+    s1:setMessage("for(int i = 0; i < 9001; i ++){ \n    doWizardStuff(); \n}")
+    q1:setSpeech(s1)
 
-     local backgroundLayer3 = display.newImage("assets/sprites/country-platform-files/country-platform-files/layers/country-platform-back.png", display.contentHeight, display.contentWidth)
-    backgroundLayer3.x = display.contentCenterX
-    backgroundLayer3.y = display.contentCenterY + 50
-    backgroundLayer3.width = display.contentWidth
-    backgroundLayer3.height = display.contentHeight +500
+    local btn1 = Button:new()
+    btn1:setX(display.contentCenterX)
+    btn1:setY(display.contentCenterY - 40)
+    btn1:setLabel("That looks cool")
+    btn1:setWidth(250)
+    btn1:setIndex(1)
+    q1:addBtn(btn1)
 
+    local btn2 = Button:new()
+    btn2:setX(display.contentCenterX)
+    btn2:setY(display.contentCenterY)
+    btn2:setLabel("That looks scary...")
+    btn2:setWidth(250)
+    btn2:setIndex(2)
+    q1:addBtn(btn2)
 
+    local btn3 = Button:new()
+    btn3:setX(display.contentCenterX)
+    btn3:setY(display.contentCenterY + 30)
+    btn3:setLabel("That looks super scary...")
+    btn3:setWidth(250)
+    btn3:setIndex(2)
+    q1:addBtn(btn3)
 
+    local btn4 = Button:new()
+    btn4:setX(display.contentCenterX)
+    btn4:setY(display.contentCenterY + 60)
+    btn4:setLabel("That looks really scary...")
+    btn4:setWidth(250)
+    btn4:setIndex(2)
+    q1:addBtn(btn4)
 
-    --
-    -- Insert it into the scene to be managed by Composer
-    --
-    sceneGroup:insert(backgroundLayer3)
-    sceneGroup:insert(backgroundLayer2)
-
-
-    speech = display.newImage('assets/sprites/comic-2.png')
-      speech.x = display.contentCenterX
-      speech.xScale = -1
-      speech.y =  display.contentCenterY + 130
-      speech.height = 100
-      speech.width = 290
-      speechx= speech.x
-      sceneGroup:insert(speech)
-
-
-
-
-
-      knight = display.newImage('assets/sprites/wizard_0.png')
-      knight.x = display.contentCenterX - 100
-      knight.y =  display.contentCenterY + 210
-      knight.height = 130
-      knight.width = 100
-      knight.xScale = -1
-      kx = knight.x
-      knight:toFront()
-      sceneGroup:insert(knight)
-
-    buttonBackground = display.newImage("assets/sprites/touch.png");
-    buttonBackground.x = display.contentCenterX
-    buttonBackground.y = display.contentCenterY - 180
-    buttonBackground.width = display.contentWidth
-    buttonBackground.height = 180
-
-
-    button = widget.newButton()
-    button: setLabel("for(int i = 0; i < 9001; i ++){ \n    doWizardStuff(); \n}")
-    button: setEnabled(true)
-    button.x = display.contentCenterX
-    button.y = display.contentCenterY - 180
-
-
-
-    buttonBackground3 = display.newImage("assets/sprites/touch.png");
-    buttonBackground3.x = display.contentCenterX
-    buttonBackground3.y = display.contentCenterY - 35
-    buttonBackground3.width = display.contentWidth
-    buttonBackground3.height = 50
-
-    button3 = widget.newButton()
-    button3: setLabel("That looks scary...")
-    button3: setEnabled(true)
-    button3.x = display.contentCenterX
-    button3.y = display.contentCenterY - 35
-    button3:addEventListener("tap", loadNext)
-
-    buttonBackground4 = display.newImage("assets/sprites/touch.png");
-    buttonBackground4.x = display.contentCenterX
-    buttonBackground4.y = display.contentCenterY +10
-    buttonBackground4.width = display.contentWidth
-    buttonBackground4.height = 50
-
-    button4 = widget.newButton()
-    button4: setLabel("Okay, how does it work?")
-    button4: setEnabled(true)
-    button4.x = display.contentCenterX
-    button4.y = display.contentCenterY + 10
-    button4:addEventListener("tap", loadNext)
-
-
-
-    sceneGroup:insert(buttonBackground)
-    sceneGroup:insert(button)
-
-    sceneGroup:insert(buttonBackground3)
-    sceneGroup:insert(button3)
-    sceneGroup:insert(buttonBackground4)
-    sceneGroup:insert(button4)
-
+   for i, asset in pairs(q1:getAssetsAll()) do
+        sceneGroup:insert(asset)
+   end
 
 
 end

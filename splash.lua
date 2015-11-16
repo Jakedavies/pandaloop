@@ -5,10 +5,16 @@ local widget = require( "widget" )
 local json = require( "json" )
 local input = ''
 local textBox
-function loadProgress(j)
-    progressView:setProgress(j)
-end
 
+require("backgrounds")
+local background = Backgrounds:new()
+
+require("mainCharacter")
+local mainCharacter = MainCharacter:new()
+
+require("button")
+
+ 
 function loadNext()
     composer.gotoScene( "tutorial", { effect="crossFade", time=500 } )
 end
@@ -17,7 +23,6 @@ function loadTutorial()
 end
 function loadCredits()
         audio.stop(1)
-
     composer.gotoScene( "credits", { effect="crossFade", time=500 } )
 end
 --
@@ -46,62 +51,28 @@ function consent()
     -- Close the file handle
     io.close( file )
   end
-
 end
 function scene:create(event)
-    --
-    -- self in this case is "scene", the scene object for this level.
-    -- Make a local copy of the scene's "view group" and call it "sceneGroup".
-    -- This is where you must insert everything (display.* objects only) that you want
-    -- Composer to manage for you.
+    
+    --require backgroud assets
     local sceneGroup = self.view
 
-    local background = display.newImage("assets/sprites/country-platform-files/country-platform-files/layers/country-platform-tiles-example.png", display.contentHeight, display.contentWidth)
-    background.x = display.contentCenterX
-    background.y = display.contentCenterY + 150
-
-    local backgroundLayer2 = display.newImage("assets/sprites/country-platform-files/country-platform-files/layers/country-platform-forest.png", display.contentHeight, display.contentWidth)
-    backgroundLayer2.x = display.contentCenterX
-    backgroundLayer2.y = display.contentCenterY + 140
-    backgroundLayer2.width = display.contentWidth
-    backgroundLayer2.height = display.contentHeight / 3
-
-    local backgroundLayer3 = display.newImage("assets/sprites/country-platform-files/country-platform-files/layers/country-platform-back.png", display.contentHeight, display.contentWidth)
-    backgroundLayer3.x = display.contentCenterX
-    backgroundLayer3.y = display.contentCenterY
-    backgroundLayer3.width = display.contentWidth
-    backgroundLayer3.height = display.contentHeight
-
-
-
-
-    --
-    -- Insert it into the scene to be managed by Composer
-    --
-    sceneGroup:insert(backgroundLayer3)
-    sceneGroup:insert(backgroundLayer2)
-    sceneGroup:insert(background)
-
+    -- Order is important on these
+    sceneGroup:insert(background:getLayer3())
+    sceneGroup:insert(background:getLayer2())
+    sceneGroup:insert(background:getLayer1())
 
     local title =  display.newText("PANDA\n  LOOP", display.contentCenterX, display.contentCenterY-50, "fonts/Pacifico.ttf", 40)
     title:setFillColor( 1, 1, 1 )
     sceneGroup:insert(title)
+    sceneGroup:insert(mainCharacter:getAsset())
 
-
-      knight = display.newImage('assets/sprites/knight.png')
-      knight.x = display.contentCenterX -500
-      knight.y =  display.contentCenterY + 200
-      knight.height = 90
-      knight.width = 50
-      knight.xScale = -1
-      kx = knight.x
-      sceneGroup:insert(knight)
-
-      panda = display.newImage('mikos-walk.gif')
-      panda.x = display.contentCenterX - 100
-      panda.y =  display.contentCenterY + 200
-      px = panda.x
-      sceneGroup:insert( panda)
+    villian = MainCharacter:new()
+    villian:setAsset('mikos-walk.gif')
+    villian:setX(display.contentCenterX - 100)
+    villian:setY(display.contentCenterY + 200)
+    px = villian:getX()
+    sceneGroup:insert(villian:getAsset())
 
       local path = system.pathForFile( "consented.txt", system.DocumentsDirectory )
 
@@ -128,9 +99,6 @@ function scene:create(event)
       file = nil
 end
 
-
-
-
 --
 -- This gets called twice, once before the scene is moved on screen and again once
 -- afterwards as a result of calling composer.gotoScene()
@@ -140,16 +108,6 @@ function scene:show( event )
     -- Make a local reference to the scene's view for scene:show()
     --
     local sceneGroup = self.view
-
-     progressView = widget.newProgressView
-    {
-    left = display.contentCenterX - 150,
-    top = display.contentCenterY + 300,
-    width = 300,
-    height = 30,
-    isAnimated = true
-    }
-    sceneGroup:insert(progressView)
 
     --
     -- event.phase == "did" happens after the scene has been transitioned on screen.
@@ -162,75 +120,43 @@ function scene:show( event )
     if event.phase == "did" then
         sfx = audio.loadSound( "assets/music/relax_background1.ogg" )
         audio.play(sfx)
-
     local i = 0
 
-    for i=1,10 do
-            local j = i*.1
-            timer.performWithDelay(5000, progressView:setProgress(j))
-    end
+    --We will leave this section alone, just because it's only bad once ;)
+    btn1 = Button:new()
+    btn1:setX(display.contentCenterX)
+    btn1:setY(display.contentCenterY + 80)
+    btn1:setLabel("PLAY")
+    btn1:getAssetForeground():addEventListener("tap", loadNext)
+    sceneGroup:insert(btn1:getAssetBackground())
+    sceneGroup:insert(btn1:getAssetForeground())
+
+    btn2 = Button:new()
+    btn2:setX(display.contentCenterX)
+    btn2:setY(display.contentCenterY + 120)
+    btn2:setLabel("CREDITS")
+    btn2:getAssetForeground():addEventListener("tap", loadCredits)
+    sceneGroup:insert(btn2:getAssetBackground())
+    sceneGroup:insert(btn2:getAssetForeground())
 
 
-    buttonBackground = display.newImage("assets/sprites/touch.png");
-    buttonBackground.x = display.contentCenterX
-    buttonBackground.y = display.contentCenterY + 80
-
-    button = widget.newButton()
-    button: setLabel("PLAY")
-    button: setEnabled(true)
-    button.x = display.contentCenterX
-    button.y = display.contentCenterY + 80
-    button:addEventListener("tap", loadNext)
-
-    sceneGroup:insert(buttonBackground)
-    sceneGroup:insert(button)
-
-    buttonBackground2 = display.newImage("assets/sprites/touch.png");
-    buttonBackground2.x = display.contentCenterX
-    buttonBackground2.y = display.contentCenterY + 120
-
-    button2 = widget.newButton()
-    button2: setLabel("CREDITS")
-    button2: setEnabled(true)
-    button2.x = display.contentCenterX
-    button2.y = display.contentCenterY + 120
-    button2:addEventListener("tap", loadCredits)
-
-    sceneGroup:insert(buttonBackground2)
-    sceneGroup:insert(button2)
-
-    buttonBackground3 = display.newImage("assets/sprites/touch.png");
-    buttonBackground3.x = display.contentCenterX
-    buttonBackground3.y = display.contentCenterY + 160
-
-    button3 = widget.newButton()
-    button3: setLabel("TUTORIAL")
-    button3: setEnabled(true)
-    button3.x = display.contentCenterX
-    button3.y = display.contentCenterY + 160
-    button3:addEventListener("tap", loadTutorial)
-
-     sceneGroup:insert(buttonBackground3)
-    sceneGroup:insert(button3)
+    btn3 = Button:new()
+    btn3:setX(display.contentCenterX)
+    btn3:setY(display.contentCenterY + 160)
+    btn3:setLabel("TUTORIAL")
+    btn3:getAssetForeground():addEventListener("tap", loadTutorial)
+    sceneGroup:insert(btn3:getAssetBackground())
+    sceneGroup:insert(btn3:getAssetForeground())
 
     --Chase the panda!
     while px < display.contentWidth +150 do
             px = px + 1
-            transition.to( panda, { time=5000, x=(px), y=(panda.y)})
+            transition.to( villian:getAsset(), { time=5000, x=(px), y=(villian:getY())})
             kx = kx + 1
-            transition.to( knight, { time=5000, x=(kx), y=(knight.y)})
+            transition.to( mainCharacter:getAsset(), { time=5000, x=(kx), y=(mainCharacter:getY())})
     end
 
-
-
-
-      -- Create the widget
-
-    else -- event.phase == "will"
-        -- The "will" phase happens before the scene transitions on screen.  This is a great
-        -- place to "reset" things that might be reset, i.e. move an object back to its starting
-        -- position. Since the scene isn't on screen yet, your users won't see things "jump" to new
-        -- locations. In this case, reset the score to 0.
+    else 
         audio.stop(1)
     end
 end
@@ -243,9 +169,6 @@ function scene:hide( event )
     local sceneGroup = self.view
     display.remove(textBox)
     textBox = nil
-      sceneGroup:remove(backgroundLayer2)
-    sceneGroup:remove(background)
-    sceneGroup:remove(backgroundLayer3)
 end
 
 --
@@ -259,9 +182,9 @@ end
 function scene:destroy( event )
     local sceneGroup = self.view
     audio.stop()
-    sceneGroup:remove(backgroundLayer2)
-    sceneGroup:remove(background)
-    sceneGroup:remove(backgroundLayer3)
+    sceneGroup:remove(background:getLayer2())
+    sceneGroup:remove(background:getLayer3())
+    sceneGroup:remove(background:getLayer1())
 end
 
 ---------------------------------------------------------------------------------
