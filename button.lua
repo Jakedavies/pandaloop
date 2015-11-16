@@ -16,7 +16,7 @@ Button.__index = Button
 	 button: setEnabled(true)
 	 button.x = display.contentCenterX
 	 button.y = display.contentCenterY
-    local o = {_assetBackground = buttonBackground, _assetForeground = button, _index}
+    local o = {_assetBackground = buttonBackground, _assetForeground = button, _index, _label}
     setmetatable(o, self)
     return o
 end
@@ -59,5 +59,9 @@ function Button:setY(y)
 end
 function Button:setLabel(label)
 	self._assetForeground: setLabel(label)
+	self._label = label
+end
+function Button:getLabel()
+	return self._label
 end
 

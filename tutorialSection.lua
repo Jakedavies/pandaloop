@@ -11,6 +11,7 @@ require('backgrounds')
 require('mainCharacter')
 require('button')
 require('speech')
+require('QuestionManager')
 
 
 local isPaused = true
@@ -46,12 +47,15 @@ function scene:create(event)
     sceneGroup:insert(backgrounds:getLayer2())
     sceneGroup:insert(backgrounds:getLayer3())
 
-    knight = MainCharacter:new()
-    knight:setX(display.contentCenterX - 100)
-    knight:setY(display.contentCenterY + 210)
-    knight:setWidthHeight(80,80)
-    knight:toFront()
-    sceneGroup:insert(knight:getAsset())
+    tutorialSpeaker = MainCharacter:new()
+    tutorialSpeaker:setAsset('assets/sprites/wizard_0.png')
+    tutorialSpeaker:setX(display.contentCenterX - 100)
+    tutorialSpeaker:setY(display.contentCenterY + 210)
+    tutorialSpeaker:setWidthHeight(80,80)
+    tutorialSpeaker:toFront()
+    sceneGroup:insert(tutorialSpeaker:getAsset())
+
+    local buttonWidth = display.contentWidth - display.contentWidth/4
 
 
     --Question 1 Section
@@ -59,12 +63,11 @@ function scene:create(event)
     local q1 = Question:new()
     local s1 = Speech:new(false)
 
+    s1:setMessage("for(int i = 0; i < 9001; i ++){ \n    doWizardStuff(); \n}")
     s1:setX(display.contentCenterX)
     s1:setY(display.contentCenterY - 150)
     s1:setHeight(120)
     s1:setWidth(display.contentWidth)
-    s1:setMessage("for(int i = 0; i < 9001; i ++){ \n    doWizardStuff(); \n}")
-    s1:setFontSize(15)
     q1:setSpeech(s1)
 
     local sTutorial = Speech:new(true)
@@ -77,31 +80,53 @@ function scene:create(event)
     q1:setSpeechTutorial(sTutorial)
 
 
-    local buttonWidth = display.contentWidth - display.contentWidth/4
 
-    local btn1 = Button:new()
-    btn1:setX(display.contentCenterX)
-    btn1:setY(display.contentCenterY - 20)
-    btn1:setLabel("That looks scary...")
-    btn1:setWidth(buttonWidth)
-    btn1:setIndex(1)
-    q1:addBtn(btn1)
+    local btn1Q1 = Button:new()
+    btn1Q1:setX(display.contentCenterX)
+    btn1Q1:setY(display.contentCenterY - 20)
+    btn1Q1:setLabel("That looks scary...")
+    btn1Q1:setWidth(buttonWidth)
+    btn1Q1:setIndex(1)
+    q1:addBtn(btn1Q1)
 
-    local btn2 = Button:new()
-    btn2:setX(display.contentCenterX)
-    btn2:setY(display.contentCenterY + 20)
-    btn2:setLabel("Very cool!")
-    btn2:setWidth(buttonWidth)
-    btn2:setIndex(2)
-    q1:addBtn(btn2)
-    
+    local btn2Q1 = Button:new()
+    btn2Q1:setX(display.contentCenterX)
+    btn2Q1:setY(display.contentCenterY + 20)
+    btn2Q1:setLabel("Very cool!")
+    btn2Q1:setWidth(buttonWidth)
+    btn2Q1:setIndex(2)
+    q1:addBtn(btn2Q1)
+
     --Question 2 Section
+    local q2 = Question:new()
+    local s2Q2 = Speech:new(false)
 
-   for i, asset in pairs(q1:getAssetsAll()) do
-        sceneGroup:insert(asset)
-   end
+    s2Q2:setX(display.contentCenterX)
+    s2Q2:setY(display.contentCenterY - 150)
+    s2Q2:setHeight(120)
+    s2Q2:setWidth(display.contentWidth)
+    s2Q2:setMessage("Test Test")
+    q2:setSpeech(s2Q2)
 
-   
+    local sTutorialQ2 = Speech:new(true)
+    sTutorialQ2:setX(display.contentCenterX+30)
+    sTutorialQ2:setY(display.contentCenterY+150)
+    sTutorialQ2:setHeight(100)
+    sTutorialQ2:setHeight(100)
+    sTutorialQ2:setWidth(display.contentWidth-display.contentWidth/4)
+    sTutorialQ2:setMessage("#2")
+    q2:setSpeechTutorial(sTutorialQ2)
+
+    local btn1Q2 = Button:new()
+    btn1Q2:setX(display.contentCenterX)
+    btn1Q2:setY(display.contentCenterY - 20)
+    btn1Q2:setLabel("#1")
+    btn1Q2:setWidth(buttonWidth)
+    btn1Q2:setIndex(1)
+    q2:addBtn(btn1Q2)
+
+        
+
 
 
 end

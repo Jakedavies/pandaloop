@@ -27,8 +27,8 @@ Speech.__index = Speech
       	fontSize = 9
   	  end
 
-    local message =  display.newText("NO MESSAGE SET", display.contentCenterX + 5, display.contentCenterY + 115,  native.systemFontBold, fontSize)
-    message:setFillColor(0, 0, 0 )
+   local message =  display.newText("None", display.contentCenterX, display.contentCenterY, native.systemFont, fontSize)
+    message:setFillColor( 0, 0, 0)
 
     local o = {_speech = speech, _message = message}
     setmetatable(o, self)
@@ -81,7 +81,4 @@ function Speech:setMessageX(x)
 end
 function Speech:setMessageY(y)
 	self._message.y = y
-end
-function Speech:setFontSize(size)
-	self._message = display.newText(self._message.text, self._message.x, self._message.y,  native.systemFontBold, size)
 end

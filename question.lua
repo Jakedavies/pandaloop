@@ -1,5 +1,6 @@
 --Hacky OOP because lua is silly.
 
+require( "widget" )
 --Question Object
 Question = {}
 Question.__index = Question
@@ -11,17 +12,6 @@ Question.__index = Question
     return o
 end
 
-function Question:checkAnswer(button)
-    local correctness = false
-    if self._correctAnswer == self._answers[button:getIndex()] then
-        correctness = true
-        end
-    return correctness
-end
-
-function Question:setButtons(buttons)
-    self._buttons = buttons
-end
 function Question:getButtons()
     return self._buttons
 end
@@ -47,7 +37,7 @@ function Question: getAnswers()
     return answers
 end
 function Question: setCorrect(correct)
-      self._correctAnswer = correct
+      self._correctAnswer = correct:getLabel()
 end
 function Question: getCorrect()
     return self._correctAnswer
@@ -63,6 +53,15 @@ function Question:checkAnswer(attempt)
     return self._correctAnswer == attempt
 end
 
+function Question:getCorrectIndex()
+    local correct = 0
+     for i, asset in pairs(self._answers) do
+        if asset == self._correctAnswer then 
+            correct = i 
+        end
+    end
+    return correct
+end
 
 
 function Question:getAssetsAll()
@@ -73,10 +72,11 @@ function Question:getAssetsAll()
         table.insert(assets, self._buttons[i]:getAssetBackground())
         table.insert(assets, self._buttons[i]:getAssetForeground())
     end
-    table.insert(assets,self._speech:getAssetSpeech())
-    table.insert(assets,self._speech:getAssetMessage())
 
-    if not self._speechTutorial then
+    table.insert(assets, self._speech:getAssetSpeech())
+    table.insert(assets, self._speech:getAssetMessage())
+
+    if self._speechTutorial then
         table.insert(assets,self._speechTutorial:getAssetSpeech())
         table.insert(assets,self._speechTutorial:getAssetMessage())
     end
@@ -86,7 +86,8 @@ end
 
 
 function Question:addBtn(btn)
-    table.insert(self._buttons,btn)
+    table.insert(self._buttons,btn)   
+    table.insert(self._answers, btn:getLabel()) 
 end
 
 function Question:setSpeechTutorial(speechTut)
