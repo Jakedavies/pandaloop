@@ -6,34 +6,28 @@ local json = require( "json" )
 local input = ''
 local backgroundLayers = {}
 local textBox
-local wordBank = {
-  'for(',
-  'int',
-  'i = %int%;',
-  'int i = 0;',
-  '){',
-  'stopApplesFromFalling();',
-  '};'
-}
-local correctWordOrder = {
-  'for(',
-  'int',
-  'i = %int%;',
-  'int i = 0;',
-  '){',
-  'stopApplesFromFalling();',
-  '};'
-}
-
+local levels = require("levels")
+local lives = 3
+local lives_display
 local sentenceManager = require('sentence_manager')
-sentenceManager.init(correctWordOrder)
-
+local wordBank
 function scene:create(event)
     --
     -- self in this case is "scene", the scene object for this level.
     -- Make a local copy of the scene's "view group" and call it "sceneGroup".
     -- This is where you must insert everything (display.* objects only) that you want
     -- Composer to manage for you.
+
+    local correctWordOrder
+    if(event.params and event.params.level) then
+      correctWordOrder = levels[level]["correctWordOrder"]
+      wordBank = levels[level]["wordBank"]
+    else
+      correctWordOrder = levels[1]['correctWordOrder']
+      wordBank = levels[1]["wordBank"]
+    end
+    sentenceManager.init(correctWordOrder)
+
     local sceneGroup = self.view
 
     local b = display.newImage("assets/sprites/country-platform-files/country-platform-files/layers/country-platform-back.png", display.contentHeight, display.contentWidth)
@@ -75,6 +69,9 @@ function scene:show( event )
     player.x = display.contentCenterX
 
 
+    lives_display = display.newText(lives, display.contentWidth - 10, 10, native.systemFont, 16)
+    sceneGroup:insert(lives_display)
+
     wordSpawnDelay = 1000
     physics.addBody( player, "static", { density = 1.0, friction = 0.3, bounce = 0.2 } )
     -- spawns words at a set interval
@@ -90,7 +87,9 @@ end
 function scene:hide( event )
     local sceneGroup = self.view
 end
-
+function updateLives()
+  lives_display.text = lives
+end
 --
 -- When you call composer.removeScene() from another module, composer will go through and
 -- remove anything created with display.* and inserted into the scene's view group for you. In
@@ -113,13 +112,16 @@ function wordCollisionListener(self, event)
     print(self.word .. 'was caught')
     if(sentenceManager.tryAddWord(self.word)) then
       -- update the senctence displayed
-      if(sentenceManager.finished) then
+      if(sentenceManager.finished()) then
         -- end the game here
         -- the user has won
       end
     else
       -- subtract a life
+      lives = lives -1
+      updateLives();
     end
+    self:removeSelf()
   end
 end
 

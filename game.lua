@@ -42,6 +42,7 @@ local function handleCheckMyCode( event )
 end
 local function inputListener( event )
     if event.phase == "editing" then
+    sceneGroup.insert(player)  
         input = event.text
     end
 end
@@ -60,7 +61,7 @@ function scene:create( event )
     -- This is where you must insert everything (display.* objects only) that you want
     -- Composer to manage for you.
     local sceneGroup = self.view
-    correctText = tostring(math.random(1000)+8000)
+    correctText = tostring(math.random(1000)+8999)
     --
     -- make a copy of the current level value out of our
     -- non-Global app wide storage table.
@@ -207,7 +208,6 @@ end
 -- after the scene is off screen.
 function scene:hide( event )
     local sceneGroup = self.view
-    composer.removeHidden( false )
     display.remove(textBox)
     display.remove(code)
     display.remove(code2)
@@ -218,7 +218,6 @@ function scene:hide( event )
     display.remove(square)
     display.remove(code7)
     display.remove(square2)
-
 end
 
 --
