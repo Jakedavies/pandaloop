@@ -4,6 +4,7 @@ local widget = require( "widget" )
 local json = require( "json" )
 local input = ''
 local textBox
+local logging = require("logging")
 
 --
 -- This function gets called when composer.gotoScene() gets called an either:
@@ -13,7 +14,7 @@ local textBox
 --       show it multiple times.
 --
 
-function consent()
+function createUser()
   print('saving consent')
     -- Path for the file to write
   local path = system.pathForFile( "consented.txt", system.DocumentsDirectory )
@@ -25,6 +26,9 @@ function consent()
       -- Error occurred; output the cause
       print( "File error: " .. errorString )
   else
+    -- here we must get a user id and then write them to the file
+    -- also set the loggin user id, and advance the scene
+    -- be sure to submit the user with the user name
     print("writing file")
     -- Write data to file
     file:write( "true" )
@@ -35,6 +39,28 @@ function consent()
 end
 
 function scene:create(event)
+
+  local path = system.pathForFile( "user_id.txt", system.DocumentsDirectory )
+
+  -- Open the file handle
+  local file, errorString = io.open( path, "r" )
+
+  if not file then
+      -- Error occurred; output the cause
+      print( "File error: " .. errorString )
+  else
+      -- Read data from file
+      local contents = file:read( "*a" )
+      -- Output the file contents
+      if contents ~= "" then
+        -- Close the file handle
+        logging.setUser(contents)
+        composer.gotoScene('splash', {effect="crossFade", time=500})
+        io.close( file )
+      else
+        io.close(file)
+      end
+  end
   local sceneGroup = self.view
 end
 
@@ -46,6 +72,8 @@ end
 local function submit()
   print("advance the step")
 
+  createUser();
+  local path = system.pathForFile( "user_id.txt", system.DocumentsDirectory )
   composer.gotoScene( "splash", { effect="crossFade", time=500 } )
 end
 
