@@ -17,4 +17,4 @@ end
 
 Runtime:addEventListener( "system", onSystemEvent )
 
-composer.gotoScene( "apple_scene", { effect="crossFade", time=500 } )
+composer.gotoScene( "new_user", { effect="crossFade", time=500 } )
