@@ -19,7 +19,8 @@ local circleCenter
 --    b) you called composer.removeScene() or composer.removeHidden() from some other
 --       scene.  It's possible (and desirable in many cases) to call this once, but
 --       show it multiple times.
---
+    sceneGroup.insert(player)
+-
 local sceneGroup
 function scene:create( event )
     --

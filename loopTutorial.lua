@@ -11,7 +11,6 @@ end
 
 local isPaused = true
 
-
 function sleep()
     --donothing
 end
@@ -40,10 +39,10 @@ function scene:create(event)
 
 
 
-        local background = display.newImage("assets/sprites/country-platform-files/country-platform-files/layers/country-platform-tiles-example.png", display.contentHeight, display.contentWidth)
-        background.x = display.contentCenterX
-        background.y = display.contentCenterY +200
-        sceneGroup:insert(background)
+    local background = display.newImage("assets/sprites/country-platform-files/country-platform-files/layers/country-platform-tiles-example.png", display.contentHeight, display.contentWidth)
+    background.x = display.contentCenterX
+    background.y = display.contentCenterY +200
+    sceneGroup:insert(background)
 
     local backgroundLayer2 = display.newImage("assets/sprites/country-platform-files/country-platform-files/layers/country-platform-forest.png", display.contentHeight, display.contentWidth)
     backgroundLayer2.x = display.contentCenterX
