@@ -12,8 +12,6 @@ local correctText =  "9"
 -- INIT PARSE
 local logging = require("logging")
 
-
-
 --
 -- define local functions here
 --
@@ -42,7 +40,7 @@ local function handleCheckMyCode( event )
 end
 local function inputListener( event )
     if event.phase == "editing" then
-    sceneGroup.insert(player)  
+    sceneGroup.insert(player)
         input = event.text
     end
 end

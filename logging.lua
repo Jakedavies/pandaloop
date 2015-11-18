@@ -19,7 +19,35 @@ local session
 local questionsStartTime = {}
 local sessionStart
 local attempts = {}
+local credits
 -- called when the question is
+function loggin.createUser(name, save)
+	parse:createObject("user", { ["credits"] = 100, ["name"] = name }, function(event)
+		if not event.error then
+			local uid = event.response.objectId
+			user_id = uid
+			save("user.txt", user_id)
+		else
+			print("error starting question")
+		end
+	end
+	)
+end
+function loggin.getUserId()
+	return user_id
+end
+
+function loggin.addCredits(num)
+	--optimistic update, do not use this in production
+	credits = credits + num
+	parse:updateObject("user", user_id, { ["credits"] = credits})
+end
+function loggin.removeCredits(num)
+	--optimistic update, do not use this in production
+	credits = credits - num
+	parse:updateObject("user", user_id, { ["credits"] = credits})
+end
+
 function loggin.setUser(id)
 	user_id = id
 end

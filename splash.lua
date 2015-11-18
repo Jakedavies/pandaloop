@@ -5,6 +5,7 @@ local widget = require( "widget" )
 local json = require( "json" )
 local input = ''
 local textBox
+local logging = require('logging')
 
 require("backgrounds")
 local background = Backgrounds:new()
@@ -14,7 +15,7 @@ local mainCharacter = MainCharacter:new()
 
 require("button")
 
- 
+
 function loadNext()
     composer.gotoScene( "tutorial", { effect="crossFade", time=500 } )
 end
@@ -53,9 +54,11 @@ function consent()
   end
 end
 function scene:create(event)
-    
+
     --require backgroud assets
     local sceneGroup = self.view
+
+    print(logging.getUserId())
 
     -- Order is important on these
     sceneGroup:insert(background:getLayer3())
@@ -156,7 +159,7 @@ function scene:show( event )
             transition.to( mainCharacter:getAsset(), { time=5000, x=(kx), y=(mainCharacter:getY())})
     end
 
-    else 
+    else
         audio.stop(1)
     end
 end
