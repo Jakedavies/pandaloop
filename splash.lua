@@ -27,6 +27,10 @@ function loadCredits()
         audio.stop(1)
     composer.gotoScene( "credits", { effect="crossFade", time=500 } )
 end
+function loadStore()
+  audio.stop(1)
+  composer.gotoScene( "shop", { effect="crossFade", time=500})
+end
 --
 -- This function gets called when composer.gotoScene() gets called an either:
 --    a) the scene has never been visited before or
@@ -163,7 +167,7 @@ function scene:show( event )
     btn4:setX(display.contentCenterX)
     btn4:setY(display.contentCenterY + 180)
     btn4:setLabel("STORE")
-    btn4:getAssetForeground():addEventListener("tap", loadTutorial)
+    btn4:getAssetForeground():addEventListener("tap", loadStore)
     sceneGroup:insert(btn4:getAssetBackground())
     sceneGroup:insert(btn4:getAssetForeground())
     --Chase the panda!

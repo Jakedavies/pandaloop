@@ -4,7 +4,7 @@ local widget = require( "widget" )
 --Question Object
 Button = {}
 Button.__index = Button
- 
+
  --Instantiate to empty we will manually set everything as we need it
  function Button:new()
  	local buttonBackground = display.newImage("assets/sprites/touch.png")
@@ -12,8 +12,8 @@ Button.__index = Button
 	buttonBackground.y = display.contentCenterY
 
 	 local button = widget.newButton()
-	 button: setLabel("HOLDER")
-	 button: setEnabled(true)
+	 button:setLabel("HOLDER")
+	 button:setEnabled(true)
 	 button.x = display.contentCenterX
 	 button.y = display.contentCenterY
     local o = {_assetBackground = buttonBackground, _assetForeground = button, _index, _label}
@@ -30,6 +30,9 @@ function Button:setIndex(index)
 end
 function Button:getIndex()
     return self._index
+end
+function Button:shrinkX()
+  self._assetBackground.xScale = 0.5
 end
 
 function Button:setAssetBackground(asseturl)
@@ -64,4 +67,3 @@ end
 function Button:getLabel()
 	return self._label
 end
-
