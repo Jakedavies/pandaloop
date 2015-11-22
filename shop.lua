@@ -5,6 +5,7 @@ local json = require( "json" )
 local files = require("files")
 local logging = require("logging")
 require("mainCharacter")
+require("CreditWidget")
 
 function scene:create(event)
   local sceneGroup = self.view
@@ -20,6 +21,13 @@ function scene:show( event )
     if event.phase == "did" then  -- Create the widget
 
     else -- event.phase == "will"
+
+      widget = CreditWidget:new(logging.getCredits())
+      widget:play()
+      sceneGroup:insert(widget:getAsset())
+      sceneGroup:insert(widget:getNumber())
+
+
       local m1 = MainCharacter:new();
       m1:setAsset('assets/sprites/characters/green_unicorn.png')
       m1:setX(display.contentCenterX - 90)
