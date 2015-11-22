@@ -36,7 +36,13 @@ end
 function loggin.getUserId()
 	return user_id
 end
-
+function loggin.getCredits()
+	if(credits ~= nil) then
+		return credits
+	else
+		return 0
+	end
+end
 function loggin.addCredits(num)
 	--optimistic update, do not use this in production
 	credits = credits + num
@@ -50,6 +56,17 @@ end
 
 function loggin.setUser(id)
 	user_id = id
+	syncUser()
+end
+function syncUser()
+	parse:getObject("user", user_id, function(event)
+		if not event.error then
+			credits = event.response.credits
+		else
+			print('errrrrrr')
+		end
+	end
+	)
 end
 function loggin.questionStarted(qid)
 	parse:createObject( "question", { ["session"] = session, ["qid"] = qid, ["answered"] = false}, function(event)

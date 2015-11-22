@@ -14,6 +14,7 @@ require("mainCharacter")
 local mainCharacter = MainCharacter:new()
 
 require("button")
+require("creditWidget")
 
 
 function loadNext()
@@ -125,10 +126,16 @@ function scene:show( event )
         audio.play(sfx)
     local i = 0
 
+
+    widget = CreditWidget:new(logging.getCredits())
+    widget:play()
+    sceneGroup:insert(widget:getAsset())
+    sceneGroup:insert(widget:getNumber())
+
     --We will leave this section alone, just because it's only bad once ;)
     btn1 = Button:new()
     btn1:setX(display.contentCenterX)
-    btn1:setY(display.contentCenterY + 80)
+    btn1:setY(display.contentCenterY + 60)
     btn1:setLabel("PLAY")
     btn1:getAssetForeground():addEventListener("tap", loadNext)
     sceneGroup:insert(btn1:getAssetBackground())
@@ -136,7 +143,7 @@ function scene:show( event )
 
     btn2 = Button:new()
     btn2:setX(display.contentCenterX)
-    btn2:setY(display.contentCenterY + 120)
+    btn2:setY(display.contentCenterY + 100)
     btn2:setLabel("CREDITS")
     btn2:getAssetForeground():addEventListener("tap", loadCredits)
     sceneGroup:insert(btn2:getAssetBackground())
@@ -145,12 +152,20 @@ function scene:show( event )
 
     btn3 = Button:new()
     btn3:setX(display.contentCenterX)
-    btn3:setY(display.contentCenterY + 160)
+    btn3:setY(display.contentCenterY + 140)
     btn3:setLabel("TUTORIAL")
     btn3:getAssetForeground():addEventListener("tap", loadTutorial)
     sceneGroup:insert(btn3:getAssetBackground())
     sceneGroup:insert(btn3:getAssetForeground())
 
+
+    btn4 = Button:new()
+    btn4:setX(display.contentCenterX)
+    btn4:setY(display.contentCenterY + 180)
+    btn4:setLabel("STORE")
+    btn4:getAssetForeground():addEventListener("tap", loadTutorial)
+    sceneGroup:insert(btn4:getAssetBackground())
+    sceneGroup:insert(btn4:getAssetForeground())
     --Chase the panda!
     while px < display.contentWidth +150 do
             px = px + 1
