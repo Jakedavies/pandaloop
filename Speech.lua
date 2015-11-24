@@ -22,12 +22,22 @@ Speech.__index = Speech
       speechx= speech.x
 
       --Tutorials have more text so we need a smaller font.
-      local fontSize = 12
+      local fontSize = 14
       if tutorial == true then
-      	fontSize = 9
+      	fontSize = 12
   	  end
 
-   local message =  display.newText("None", display.contentCenterX, display.contentCenterY, native.systemFont, fontSize)
+	local options = {
+	   text = "None",
+	   x = display.contentCenterX,
+	   y = display.contentCenterY,
+	   fontSize = fontSize,
+	   width = 200,
+	   height = 0,
+	   align = "left"
+	}
+
+   local message =  display.newText(options)
     message:setFillColor( 0, 0, 0)
 
     local o = {_speech = speech, _message = message}
@@ -47,11 +57,11 @@ end
 
 function Speech:setX(x)
 	self._speech.x = x
-	self._message.x = x + 10
+	self._message.x = x 
 end
 function Speech:setY(y)
 	self._speech.y = y 
-	self._message.y = y 
+	self._message.y = y - 12
 end
 function Speech:getX()
 	return self._speech.x
