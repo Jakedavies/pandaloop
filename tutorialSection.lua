@@ -37,7 +37,7 @@ function loadNo()
 end
 
 function list(event)
-    if event.phase == "began" then 
+    if event.phase == "ended" then 
         checkAnswer(event.target.button.index, event.target.button.question, event.target.button.sceneGroup)
     end
 end
@@ -52,10 +52,13 @@ end
 function removeAllAssets(question, sceneGroup)
     for i, assets in pairs(question:getAssetsAll()) do
             sceneGroup:remove(assets)
+            assets = nil
     end
     for i, buttons in pairs(question:getButtons()) do
             buttons:getAssetForeground():removeEventListener("touch", list)
+            buttons = nil
     end
+    question = nil
 end 
 
 function checkAnswer(Index, Question, sceneGroup)
@@ -68,7 +71,6 @@ function checkAnswer(Index, Question, sceneGroup)
         QuestionIndex = QuestionIndex + 1
         loadQuestion(sceneGroup)
     else
-        native.showPopup(Questions[QuestionIndex][5][Index])
         print(Questions[QuestionIndex][5][Index])
     end
 end
