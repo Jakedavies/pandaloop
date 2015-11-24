@@ -37,7 +37,7 @@ function Question: getAnswers()
     return answers
 end
 function Question: setCorrect(correct)
-      self._correctAnswer = correct:getLabel()
+      self._correctAnswer = correct
 end
 function Question: getCorrect()
     return self._correctAnswer
@@ -54,13 +54,7 @@ function Question:checkAnswer(attempt)
 end
 
 function Question:getCorrectIndex()
-    local correct = 0
-     for i, asset in pairs(self._answers) do
-        if asset == self._correctAnswer then 
-            correct = i 
-        end
-    end
-    return correct
+    return self._correctAnswer           
 end
 
 

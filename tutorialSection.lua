@@ -5,28 +5,236 @@ local widget = require( "widget" )
 local json = require( "json" )
 local input = ''
 local textBox
+local QuestionIndex = 1
+        local buttonWidth = display.contentWidth - display.contentWidth/4
+
 
 require('question')
 require('backgrounds')
 require('mainCharacter')
 require('button')
 require('speech')
-require('QuestionManager')
+
+--Questions 
+
+        --The Final Question must be an empty one. 
+        local Questions = {
+            "for(int i = 0; i < 9001; i ++){ \n    doWizardStuff(); \n}",
+            "This is the second Question!",
+            "Third Question Attempt",
+            ""
+        }
+        local QuestionsPrompts = {
+            "Alright, well for loops are a great way \n to repeat a section of code a specific number of times. \n They are a crucial part of control flow. \n The top of your screen shows a for loop!"  ,
+            "This one has a tutorial",
+            "Tutorial",
+            "Question 4",
+            ""
+        
+        }
+        local QuestionAnswers = {
+            {
+                "That looks scary...",
+                "Very cool!",
+                "Nice Job!",
+            },
+            {
+                "a",
+                "b",
+                "c",
+                "d"
+            },
+            {
+                "a",
+                "b",
+                "c",
+                "d"
+            },
+            {
+                "a",
+                "c",
+                "e",
+                "f"
+            },{
+                "x",
+                "g",
+                "TEST",
+                "Fuck Lua"
+            }
+
+        }
+        --We will just use 0 to denote tutorial questions. That is, questions that do not need an answer.
+        local correctAnswers = {
+            {0},
+            {3},
+            {3},
+            {4}
+        }
+
+
+--FXNS
 
 
 local isPaused = true
+
 
 function sleep()
     --donothing
 end
 function loadNext()
     audio.stop(1)
-    composer.gotoScene( "loopTutorial2", { effect="crossFade", time=500 } )
+    composer.gotoScene( "splash", { effect="crossFade", time=500 } )
 end
 
 function loadNo()
     --composer.gotoScene( "forTutorial", { effect="crossFade", time=500 } )
 end
+
+function list(event)
+    if event.phase == "began" then 
+        checkAnswer(event.target.button.index, event.target.button.question, event.target.button.sceneGroup)
+    end
+end
+
+function addEventListeners(question)
+    for i, button in pairs(question:getButtons()) do
+        button.question = question
+        button.sceneGroup = question.sceneGroup
+        button:getAssetForeground():addEventListener("touch", list)
+    end
+end
+function removeAllAssets(question, sceneGroup)
+            for i, assets in pairs(question:getAssetsAll()) do
+                    sceneGroup:remove(assets)
+            end
+            for i, buttons in pairs(question:getButtons()) do
+                    buttons:getAssetForeground():removeEventListener("touch", list)
+            end
+end 
+
+function checkAnswer(Index, Question, sceneGroup)
+    print("YOU CLICKED: " ..Index)
+    print("CORRECT CLICK: " ..correctAnswers[QuestionIndex][1])
+    if Index == correctAnswers[QuestionIndex][1] then
+        removeAllAssets(Question,sceneGroup)
+        QuestionIndex = QuestionIndex + 1
+        loadQuestion(sceneGroup)
+        print("cleek")
+
+    elseif 0 == correctAnswers[QuestionIndex][1] then
+        print("TUT")
+        removeAllAssets(Question,sceneGroup)
+        QuestionIndex = QuestionIndex + 1
+        loadQuestion(sceneGroup)
+    end
+
+end
+       
+         function loadQuestion(sceneGroup)
+
+
+            local q1 = Question:new()
+            local s1 = Speech:new(false)
+
+            print("QIND: " ..QuestionIndex)
+            s1:setMessage(Questions[QuestionIndex])
+            print(Questions[QuestionIndex])
+            s1:setX(display.contentCenterX)
+            s1:setY(display.contentCenterY - 150)
+            s1:setHeight(120)
+            s1:setWidth(display.contentWidth)
+            q1:setSpeech(s1)
+            sceneGroup:insert(s1:getAssetSpeech())
+            sceneGroup:insert(s1:getAssetMessage())
+
+            if(QuestionsPrompts[QuestionIndex]) then
+                local sTutorial = Speech:new(true)
+                sTutorial:setX(display.contentCenterX+30)
+                sTutorial:setY(display.contentCenterY+150)
+                sTutorial:setHeight(100)
+                sTutorial:setHeight(100)
+                sTutorial:setWidth(display.contentWidth-display.contentWidth/4)
+                sTutorial:setMessage(QuestionsPrompts[QuestionIndex])
+                q1:setSpeechTutorial(sTutorial)
+                sceneGroup:insert(sTutorial:getAssetSpeech())
+                sceneGroup:insert(sTutorial:getAssetMessage())
+            end
+
+
+            
+              if QuestionAnswers[QuestionIndex][1] then
+                local btn1Q1 = Button:new()
+                btn1Q1:setX(display.contentCenterX)
+                btn1Q1:setY(display.contentCenterY - 40)
+                btn1Q1:setLabel(QuestionAnswers[QuestionIndex][1])
+                btn1Q1:setWidth(buttonWidth)
+                btn1Q1:setIndex(1)
+                btn1Q1.index = 1
+                q1.sceneGroup = sceneGroup
+                q1:addBtn(btn1Q1)
+                addEventListeners(q1)
+                sceneGroup:insert(btn1Q1:getAssetBackground())
+                sceneGroup:insert(btn1Q1:getAssetForeground())
+                if correctAnswers[QuestionIndex] == 1 then 
+                    q1:setCorrect(1)
+                end
+            end
+            if QuestionAnswers[QuestionIndex][2] then
+                local btn1Q1 = Button:new()
+                btn1Q1:setX(display.contentCenterX)
+                btn1Q1:setY(display.contentCenterY)
+                btn1Q1:setLabel(QuestionAnswers[QuestionIndex][2])
+                btn1Q1:setWidth(buttonWidth)
+                btn1Q1:setIndex(2)
+                btn1Q1.index = 2
+                q1.sceneGroup = sceneGroup
+                q1:addBtn(btn1Q1)
+                addEventListeners(q1)
+                sceneGroup:insert(btn1Q1:getAssetBackground())
+                sceneGroup:insert(btn1Q1:getAssetForeground())
+                if correctAnswers[QuestionIndex] == 2 then 
+                    q1:setCorrect(2)
+                end
+            end
+            if QuestionAnswers[QuestionIndex][3] then
+                local btn1Q1 = Button:new()
+                btn1Q1:setX(display.contentCenterX)
+                btn1Q1:setY(display.contentCenterY + 40)
+                btn1Q1:setLabel(QuestionAnswers[QuestionIndex][3])
+                btn1Q1:setWidth(buttonWidth)
+                btn1Q1:setIndex(3)
+                btn1Q1.index = 3
+                q1:addBtn(btn1Q1)
+                q1.sceneGroup = sceneGroup
+                addEventListeners(q1)
+                sceneGroup:insert(btn1Q1:getAssetBackground())
+                sceneGroup:insert(btn1Q1:getAssetForeground())
+                if correctAnswers[QuestionIndex] == 3 then 
+                    q1:setCorrect(3)
+                end
+            end
+            if QuestionAnswers[QuestionIndex][4] then
+                local btn1Q1 = Button:new()
+                btn1Q1:setX(display.contentCenterX)
+                btn1Q1:setY(display.contentCenterY + 80)
+                btn1Q1:setLabel(QuestionAnswers[QuestionIndex][4])
+                btn1Q1:setWidth(buttonWidth)
+                btn1Q1:setIndex(4)
+                btn1Q1.index = 4
+                q1:addBtn(btn1Q1)
+                q1.sceneGroup = sceneGroup
+                addEventListeners(q1)
+                sceneGroup:insert(btn1Q1:getAssetBackground())
+                sceneGroup:insert(btn1Q1:getAssetForeground())
+                if correctAnswers[QuestionIndex] == 4 then 
+                    q1:setCorrect(4)
+                end
+            
+            end
+
+        end
+
+
 --
 -- This function gets called when composer.gotoScene() gets called an either:
 --    a) the scene has never been visited before or
@@ -55,80 +263,6 @@ function scene:create(event)
     tutorialSpeaker:toFront()
     sceneGroup:insert(tutorialSpeaker:getAsset())
 
-    local buttonWidth = display.contentWidth - display.contentWidth/4
-
-
-    --Question 1 Section
-
-    local q1 = Question:new()
-    local s1 = Speech:new(false)
-
-    s1:setMessage("for(int i = 0; i < 9001; i ++){ \n    doWizardStuff(); \n}")
-    s1:setX(display.contentCenterX)
-    s1:setY(display.contentCenterY - 150)
-    s1:setHeight(120)
-    s1:setWidth(display.contentWidth)
-    q1:setSpeech(s1)
-
-    local sTutorial = Speech:new(true)
-    sTutorial:setX(display.contentCenterX+30)
-    sTutorial:setY(display.contentCenterY+150)
-    sTutorial:setHeight(100)
-    sTutorial:setHeight(100)
-    sTutorial:setWidth(display.contentWidth-display.contentWidth/4)
-    sTutorial:setMessage("Alright, well for loops are a great way \n to repeat a section of code a specific number of times. \n They are a crucial part of control flow. \n The top of your screen shows a for loop! ")
-    q1:setSpeechTutorial(sTutorial)
-
-
-
-    local btn1Q1 = Button:new()
-    btn1Q1:setX(display.contentCenterX)
-    btn1Q1:setY(display.contentCenterY - 20)
-    btn1Q1:setLabel("That looks scary...")
-    btn1Q1:setWidth(buttonWidth)
-    btn1Q1:setIndex(1)
-    q1:addBtn(btn1Q1)
-
-    local btn2Q1 = Button:new()
-    btn2Q1:setX(display.contentCenterX)
-    btn2Q1:setY(display.contentCenterY + 20)
-    btn2Q1:setLabel("Very cool!")
-    btn2Q1:setWidth(buttonWidth)
-    btn2Q1:setIndex(2)
-    q1:addBtn(btn2Q1)
-
-    --Question 2 Section
-    local q2 = Question:new()
-    local s2Q2 = Speech:new(false)
-
-    s2Q2:setX(display.contentCenterX)
-    s2Q2:setY(display.contentCenterY - 150)
-    s2Q2:setHeight(120)
-    s2Q2:setWidth(display.contentWidth)
-    s2Q2:setMessage("Test Test")
-    q2:setSpeech(s2Q2)
-
-    local sTutorialQ2 = Speech:new(true)
-    sTutorialQ2:setX(display.contentCenterX+30)
-    sTutorialQ2:setY(display.contentCenterY+150)
-    sTutorialQ2:setHeight(100)
-    sTutorialQ2:setHeight(100)
-    sTutorialQ2:setWidth(display.contentWidth-display.contentWidth/4)
-    sTutorialQ2:setMessage("#2")
-    q2:setSpeechTutorial(sTutorialQ2)
-
-    local btn1Q2 = Button:new()
-    btn1Q2:setX(display.contentCenterX)
-    btn1Q2:setY(display.contentCenterY - 20)
-    btn1Q2:setLabel("#1")
-    btn1Q2:setWidth(buttonWidth)
-    btn1Q2:setIndex(1)
-    q2:addBtn(btn1Q2)
-
-        
-
-
-
 end
 
 --
@@ -141,8 +275,6 @@ function scene:show( event )
     --
     local sceneGroup = self.view
 
-
-
     --
     -- event.phase == "did" happens after the scene has been transitioned on screen.
     -- Here is where you start up things that need to start happening, such as timers,
@@ -153,12 +285,8 @@ function scene:show( event )
     --
     if event.phase == "did" then
 
-
-
-
-
-  -- Create the widget
-
+    loadQuestion(sceneGroup)
+        
     else -- event.phase == "will"
         -- The "will" phase happens before the scene transitions on screen.  This is a great
         -- place to "reset" things that might be reset, i.e. move an object back to its starting

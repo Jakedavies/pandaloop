@@ -39,6 +39,7 @@ function Button:getAssetBackground()
 	return self._assetBackground
 end
 function Button:getAssetForeground()
+	self._assetForeground.button = self
 	return self._assetForeground
 end
 

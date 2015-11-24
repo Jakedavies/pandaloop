@@ -22,7 +22,7 @@ Speech.__index = Speech
       speechx= speech.x
 
       --Tutorials have more text so we need a smaller font.
-      local fontSize = 15 
+      local fontSize = 12
       if tutorial == true then
       	fontSize = 9
   	  end
