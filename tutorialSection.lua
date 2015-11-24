@@ -6,7 +6,7 @@ local json = require( "json" )
 local input = ''
 local textBox
 local QuestionIndex = 1
-        local buttonWidth = display.contentWidth - display.contentWidth/4
+local buttonWidth = display.contentWidth - display.contentWidth/25
 
 
 require('question')
@@ -14,63 +14,10 @@ require('backgrounds')
 require('mainCharacter')
 require('button')
 require('speech')
-
---Questions 
-
-        --The Final Question must be an empty one. 
-        local Questions = {
-            "for(int i = 0; i < 9001; i ++){ \n   doWizardStuff(); \n}",
-            "This is the second Question!",
-            "Third Question Attempt",
-            ""
-        }
-        local QuestionsPrompts = {
-            "Alright, well for loops are a great way to repeat a section of code a specific number of times. They are a crucial part of control flow. The top of your screen shows a for loop!"  ,
-            "This one has a tutorial",
-            "Tutorial",
-            "Question 4",
-        
-        }
-        local QuestionAnswers = {
-            {
-                "That looks scary...",
-                "Very cool!",
-                "Nice Job!",
-            },
-            {
-                "a",
-                "b",
-                "c",
-                "d"
-            },
-            {
-                "a",
-                "b",
-                "c",
-                "d"
-            },
-            {
-                "a",
-                "c",
-                "e",
-                "f"
-            },{
-                "x",
-                "g",
-                "TEST",
-                "Fuck Lua"
-            }
-
-        }
-        --We will just use 0 to denote tutorial questions. That is, questions that do not need an answer.
-        local correctAnswers = {
-            {0},
-            {3},
-            {3},
-            {4}
-        }
+require('QuestionBank')
 
 
+      
 --FXNS
 
 
@@ -112,14 +59,17 @@ function removeAllAssets(question, sceneGroup)
 end 
 
 function checkAnswer(Index, Question, sceneGroup)
-    if Index == correctAnswers[QuestionIndex][1] then
+    if Index == Questions[QuestionIndex][4][1] then
         removeAllAssets(Question,sceneGroup)
         QuestionIndex = QuestionIndex + 1
         loadQuestion(sceneGroup)
-    elseif 0 == correctAnswers[QuestionIndex][1] then
+    elseif 0 == Questions[QuestionIndex][4][1] then
         removeAllAssets(Question,sceneGroup)
         QuestionIndex = QuestionIndex + 1
         loadQuestion(sceneGroup)
+    else
+        native.showPopup(Questions[QuestionIndex][5][Index])
+        print(Questions[QuestionIndex][5][Index])
     end
 end
        
@@ -129,7 +79,7 @@ end
             local q1 = Question:new()
             local s1 = Speech:new(false)
 
-            s1:setMessage(Questions[QuestionIndex])
+            s1:setMessage(Questions[QuestionIndex][1])
             s1:setX(display.contentCenterX)
             s1:setY(display.contentCenterY - 190)
             s1:setHeight(120)
@@ -138,13 +88,13 @@ end
             sceneGroup:insert(s1:getAssetSpeech())
             sceneGroup:insert(s1:getAssetMessage())
 
-            if(QuestionsPrompts[QuestionIndex]) then
+            if(Questions[QuestionIndex][2]) then
                 local sTutorial = Speech:new(true)
                 sTutorial:setX(display.contentCenterX)
                 sTutorial:setY(display.contentCenterY+120)
                 sTutorial:setHeight(150)
                 sTutorial:setWidth(display.contentWidth-display.contentWidth/4)
-                sTutorial:setMessage(QuestionsPrompts[QuestionIndex])
+                sTutorial:setMessage(Questions[QuestionIndex][2])
                 q1:setSpeechTutorial(sTutorial)
                 sceneGroup:insert(sTutorial:getAssetSpeech())
                 sceneGroup:insert(sTutorial:getAssetMessage())
@@ -153,11 +103,11 @@ end
             --Add the buttons
             local positions = {-100, -60, -20, 20}
             for i = 1, 4 do
-                if QuestionAnswers[QuestionIndex][i] then
+                if Questions[QuestionIndex][3][i] then
                     local btn1Q1 = Button:new()
                     btn1Q1:setX(display.contentCenterX)
                     btn1Q1:setY(display.contentCenterY + positions[i])
-                    btn1Q1:setLabel(QuestionAnswers[QuestionIndex][i])
+                    btn1Q1:setLabel(Questions[QuestionIndex][3][i])
                     btn1Q1:setWidth(buttonWidth)
                     btn1Q1:setIndex(i)
                     btn1Q1.index = i
@@ -166,7 +116,7 @@ end
                     addEventListeners(q1)
                     sceneGroup:insert(btn1Q1:getAssetBackground())
                     sceneGroup:insert(btn1Q1:getAssetForeground())
-                    if correctAnswers[QuestionIndex] == i then 
+                    if Questions[QuestionIndex][4] == i then 
                         q1:setCorrect(i)
                     end
                 end

@@ -61,7 +61,7 @@ function Speech:setX(x)
 end
 function Speech:setY(y)
 	self._speech.y = y 
-	self._message.y = y - 12
+	self._message.y = y - 11
 end
 function Speech:getX()
 	return self._speech.x
