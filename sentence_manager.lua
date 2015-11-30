@@ -18,7 +18,7 @@ function manager.tryAddWord(word)
 end
 -- returns true if all the words have been complted
 function manager.finished()
-  return currentWordNumber > #expectedWords
+  return currentWordNumber > #expected
 end
 
 return manager

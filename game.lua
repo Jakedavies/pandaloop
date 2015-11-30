@@ -12,8 +12,6 @@ local correctText =  "9"
 -- INIT PARSE
 local logging = require("logging")
 
-
-
 --
 -- define local functions here
 --
@@ -42,6 +40,7 @@ local function handleCheckMyCode( event )
 end
 local function inputListener( event )
     if event.phase == "editing" then
+    sceneGroup.insert(player)
         input = event.text
     end
 end
@@ -60,7 +59,7 @@ function scene:create( event )
     -- This is where you must insert everything (display.* objects only) that you want
     -- Composer to manage for you.
     local sceneGroup = self.view
-    correctText = tostring(math.random(1000)+8000)
+    correctText = tostring(math.random(1000)+8999)
     --
     -- make a copy of the current level value out of our
     -- non-Global app wide storage table.
@@ -201,18 +200,17 @@ end
 -- after the scene is off screen.
 function scene:hide( event )
     local sceneGroup = self.view
-    
-    sceneGroup:remove(code)
-    sceneGroup:remove(code2)
-    sceneGroup:remove(code3)
-    sceneGroup:remove(code4)
-    sceneGroup:remove(code5)
-    sceneGroup:remove(code6)
-    sceneGroup:remove(square)
-    sceneGroup:remove(code7)
-    sceneGroup:remove(square2)
-    sceneGroup:remove(checkMyCode)
-    sceneGroup:remove(textBox)
+
+    display.remove(textBox)
+    display.remove(code)
+    display.remove(code2)
+    display.remove(code3)
+    display.remove(code4)
+    display.remove(code5)
+    display.remove(code6)
+    display.remove(square)
+    display.remove(code7)
+    display.remove(square2)
 
 end
 

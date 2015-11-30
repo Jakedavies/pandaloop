@@ -4,7 +4,7 @@
 --Question Object
 MainCharacter = {}
 MainCharacter.__index = MainCharacter
- 
+
  --Instantiate to empty we will manually set everything as we need it
  function MainCharacter:new()
       local knight = display.newImage('assets/sprites/knight.png')
@@ -48,7 +48,10 @@ end
 function MainCharacter:invert()
     self._asset.xScale = -1
 end
+function MainCharacter:shrink(factor)
+  self._asset.xScale = factor
+  self._asset.yScale = factor
+end
 function MainCharacter:toFront()
   self._asset:toFront();
 end
-

@@ -5,6 +5,7 @@ local widget = require( "widget" )
 local json = require( "json" )
 local input = ''
 local textBox
+local logging = require('logging')
 
 require("backgrounds")
 local background = Backgrounds:new()
@@ -13,8 +14,9 @@ require("mainCharacter")
 local mainCharacter = MainCharacter:new()
 
 require("button")
+require("creditWidget")
 
- 
+
 function loadNext()
     composer.gotoScene( "game", { effect="crossFade", time=500 } )
 end
@@ -24,6 +26,10 @@ end
 function loadCredits()
         audio.stop(1)
     composer.gotoScene( "credits", { effect="crossFade", time=500 } )
+end
+function loadStore()
+  audio.stop(1)
+  composer.gotoScene( "shop", { effect="crossFade", time=500})
 end
 --
 -- This function gets called when composer.gotoScene() gets called an either:
@@ -53,11 +59,13 @@ function consent()
   end
 end
 function scene:create(event)
-    
+
     --require backgroud assets
     local sceneGroup = self.view
     
 
+
+    print(logging.getUserId())
 
     -- Order is important on these
     sceneGroup:insert(background:getLayer3())
@@ -124,10 +132,16 @@ function scene:show( event )
         audio.play(sfx)
     local i = 0
 
+
+    widget = CreditWidget:new(logging.getCredits())
+    widget:play()
+    sceneGroup:insert(widget:getAsset())
+    sceneGroup:insert(widget:getNumber())
+
     --We will leave this section alone, just because it's only bad once ;)
     btn1 = Button:new()
     btn1:setX(display.contentCenterX)
-    btn1:setY(display.contentCenterY + 80)
+    btn1:setY(display.contentCenterY + 60)
     btn1:setLabel("PLAY")
     btn1:getAssetForeground():addEventListener("tap", loadNext)
     sceneGroup:insert(btn1:getAssetBackground())
@@ -135,7 +149,7 @@ function scene:show( event )
 
     btn2 = Button:new()
     btn2:setX(display.contentCenterX)
-    btn2:setY(display.contentCenterY + 120)
+    btn2:setY(display.contentCenterY + 100)
     btn2:setLabel("CREDITS")
     btn2:getAssetForeground():addEventListener("tap", loadCredits)
     sceneGroup:insert(btn2:getAssetBackground())
@@ -144,12 +158,20 @@ function scene:show( event )
 
     btn3 = Button:new()
     btn3:setX(display.contentCenterX)
-    btn3:setY(display.contentCenterY + 160)
+    btn3:setY(display.contentCenterY + 140)
     btn3:setLabel("TUTORIAL")
     btn3:getAssetForeground():addEventListener("tap", loadTutorial)
     sceneGroup:insert(btn3:getAssetBackground())
     sceneGroup:insert(btn3:getAssetForeground())
 
+
+    btn4 = Button:new()
+    btn4:setX(display.contentCenterX)
+    btn4:setY(display.contentCenterY + 180)
+    btn4:setLabel("STORE")
+    btn4:getAssetForeground():addEventListener("tap", loadStore)
+    sceneGroup:insert(btn4:getAssetBackground())
+    sceneGroup:insert(btn4:getAssetForeground())
     --Chase the panda!
     while px < display.contentWidth +150 do
             px = px + 1
@@ -158,7 +180,7 @@ function scene:show( event )
             transition.to( mainCharacter:getAsset(), { time=5000, x=(kx), y=(mainCharacter:getY())})
     end
 
-    else 
+    else
         audio.stop(1)
     end
 end
