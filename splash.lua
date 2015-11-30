@@ -16,10 +16,10 @@ require("button")
 
  
 function loadNext()
-    composer.gotoScene( "tutorial", { effect="crossFade", time=500 } )
+    composer.gotoScene( "game", { effect="crossFade", time=500 } )
 end
 function loadTutorial()
-    composer.gotoScene( "loopTutorial", { effect="crossFade", time=500 } )
+    composer.gotoScene( "tutorialSection", { effect="crossFade", time=500 } )
 end
 function loadCredits()
         audio.stop(1)
@@ -56,6 +56,8 @@ function scene:create(event)
     
     --require backgroud assets
     local sceneGroup = self.view
+    
+
 
     -- Order is important on these
     sceneGroup:insert(background:getLayer3())
@@ -182,9 +184,7 @@ end
 function scene:destroy( event )
     local sceneGroup = self.view
     audio.stop()
-    sceneGroup:remove(background:getLayer2())
-    sceneGroup:remove(background:getLayer3())
-    sceneGroup:remove(background:getLayer1())
+
 end
 
 ---------------------------------------------------------------------------------

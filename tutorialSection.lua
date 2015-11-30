@@ -6,7 +6,7 @@ local json = require( "json" )
 local input = ''
 local textBox
 local QuestionIndex = 1
-local buttonWidth = display.contentWidth - display.contentWidth/25
+local buttonWidth = display.contentWidth + 50
 
 
 require('question')
@@ -19,8 +19,7 @@ require('QuestionBank')
 
       
 --FXNS
-
-
+local backgrounds = Backgrounds:new()
 local isPaused = true
 
 
@@ -29,7 +28,7 @@ function sleep()
 end
 function loadNext()
     audio.stop(1)
-    composer.gotoScene( "splash", { effect="crossFade", time=500 } )
+    composer.gotoScene( "game", { effect="crossFade", time=500 } )
 end
 
 function loadNo()
@@ -37,7 +36,7 @@ function loadNo()
 end
 
 function list(event)
-    if event.phase == "ended" then 
+    if event.phase == "began" then 
         checkAnswer(event.target.button.index, event.target.button.question, event.target.button.sceneGroup)
     end
 end
@@ -61,21 +60,31 @@ function removeAllAssets(question, sceneGroup)
     question = nil
 end 
 
+allowCheck = false
 function checkAnswer(Index, Question, sceneGroup)
-    if Index == Questions[QuestionIndex][4][1] then
-        removeAllAssets(Question,sceneGroup)
-        QuestionIndex = QuestionIndex + 1
-        loadQuestion(sceneGroup)
-    elseif 0 == Questions[QuestionIndex][4][1] then
-        removeAllAssets(Question,sceneGroup)
-        QuestionIndex = QuestionIndex + 1
-        loadQuestion(sceneGroup)
+    if(allowCheck) then
+        if Index == Questions[QuestionIndex][4][1] then
+            removeAllAssets(Question,sceneGroup)
+            QuestionIndex = QuestionIndex + 1
+            loadQuestion(sceneGroup)
+            allowCheck = false
+        elseif 0 == Questions[QuestionIndex][4][1] then
+            removeAllAssets(Question,sceneGroup)
+            QuestionIndex = QuestionIndex + 1
+            loadQuestion(sceneGroup)
+            allowCheck = false
+        else
+            native.showAlert("Information",Questions[QuestionIndex][5][Index] )
+            print(Questions[QuestionIndex][5][Index])
+        end
     else
-        print(Questions[QuestionIndex][5][Index])
+        print("attempted to double fire")
     end
 end
        
     function loadQuestion(sceneGroup)
+    
+        timer.performWithDelay(1200, function () allowCheck = true end)
 
         if Questions[QuestionIndex] then
             local q1 = Question:new()
@@ -84,8 +93,8 @@ end
             s1:setMessage(Questions[QuestionIndex][1])
             s1:setX(display.contentCenterX)
             s1:setY(display.contentCenterY - 190)
-            s1:setHeight(120)
-            s1:setWidth(display.contentWidth)
+            s1:setHeight(140)
+            s1:setWidth(display.contentWidth + 15)
             q1:setSpeech(s1)
             sceneGroup:insert(s1:getAssetSpeech())
             sceneGroup:insert(s1:getAssetMessage())
@@ -118,9 +127,6 @@ end
                     addEventListeners(q1)
                     sceneGroup:insert(btn1Q1:getAssetBackground())
                     sceneGroup:insert(btn1Q1:getAssetForeground())
-                    if Questions[QuestionIndex][4] == i then 
-                        q1:setCorrect(i)
-                    end
                 end
 
             end
@@ -143,9 +149,8 @@ function scene:create(event)
     -- Make a local copy of the scene's "view group" and call it "sceneGroup".
     -- This is where you must insert everything (display.* objects only) that you want
     -- Composer to manage for you.
-    local sceneGroup = self.view
+    sceneGroup = self.view
 
-    backgrounds = Backgrounds:new()
     sceneGroup:insert(backgrounds:getLayer1())
     sceneGroup:insert(backgrounds:getLayer2())
     sceneGroup:insert(backgrounds:getLayer3())
@@ -196,12 +201,6 @@ end
 -- It will get called twice, once before we transition the scene off screen and once again
 -- after the scene is off screen.
 function scene:hide( event )
-    local sceneGroup = self.view
-    display.remove(textBox)
-    textBox = nil
-    sceneGroup:remove(backgroundLayer2)
-    sceneGroup:remove(background)
-    sceneGroup:remove(backgroundLayer3)
 end
 
 --

@@ -4,12 +4,15 @@ local widget = require( "widget" )
 Speech = {}
 Speech.__index = Speech
  
- --Instantiate to empty we will manually set everything as we need it
+
  --If it is a tutorial then we use a speech buble otherwise just a background image
  function Speech:new(tutorial)
+ 
+ 	speechwidth = 200
  	local speech 
  	  if not tutorial then 
  	  	  speech = display.newImage('assets/sprites/touch.png')
+		  speechwidth = 300
   	  else
 		  speech = display.newImage('assets/sprites/comic-2.png')
 	  end
@@ -20,27 +23,28 @@ Speech.__index = Speech
       speech.height = 100
       speech.width = 290
       speechx= speech.x
+	  speech.anchorX = 0.5
 
       --Tutorials have more text so we need a smaller font.
       local fontSize = 14
       if tutorial == true then
       	fontSize = 12
   	  end
-
+		
 	local options = {
 	   text = "None",
 	   x = display.contentCenterX,
 	   y = display.contentCenterY,
 	   fontSize = fontSize,
-	   width = 200,
+	   width = speechwidth,
 	   height = 0,
-	   align = "left"
+	   align = "center"
 	}
 
    local message =  display.newText(options)
     message:setFillColor( 0, 0, 0)
 
-    local o = {_speech = speech, _message = message}
+    local o = {_speech = speech, _message = message, _tutorial = tutorial}
     setmetatable(o, self)
     return o
 end
@@ -60,8 +64,14 @@ function Speech:setX(x)
 	self._message.x = x 
 end
 function Speech:setY(y)
+	offset = -15
+	
+	if not self._tutorial then
+		offset = 1
+	end
+
 	self._speech.y = y 
-	self._message.y = y - 11
+	self._message.y = y + offset
 end
 function Speech:getX()
 	return self._speech.x

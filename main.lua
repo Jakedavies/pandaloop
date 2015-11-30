@@ -16,4 +16,4 @@ end
 
 Runtime:addEventListener( "system", onSystemEvent )
 
-composer.gotoScene( "tutorialSection", { effect="crossFade", time=500 } )
+composer.gotoScene( "splash", { effect="crossFade", time=500 } )
