@@ -1,4 +1,3 @@
-
 local composer = require( "composer" )
 local scene = composer.newScene()
 local widget = require( "widget" )
@@ -28,7 +27,7 @@ function sleep()
 end
 function loadNext()
     audio.stop(1)
-    composer.gotoScene( "game", { effect="crossFade", time=500 } )
+    composer.gotoScene( "apple_scene", { effect="crossFade", time=500 } )
 end
 
 function loadNo()
@@ -149,7 +148,7 @@ function scene:create(event)
     -- Make a local copy of the scene's "view group" and call it "sceneGroup".
     -- This is where you must insert everything (display.* objects only) that you want
     -- Composer to manage for you.
-    sceneGroup = self.view
+    local sceneGroup = self.view
 
     sceneGroup:insert(backgrounds:getLayer1())
     sceneGroup:insert(backgrounds:getLayer2())

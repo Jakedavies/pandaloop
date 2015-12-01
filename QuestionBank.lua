@@ -35,12 +35,14 @@ Questions = {
         false,
         false,
         "Yes. Tell me more..",
+        false
 
      },
      --Correct Answer? 0 For Tutorial
      {3},
      --Question Feedback
      {
+        false,
         false,
         false,
         false
@@ -58,7 +60,8 @@ Questions = {
      {
         false,
         "Very cool unknown wizard",
-        "This is boring"
+        "This is boring",
+        false
      },
      --Correct Answer? 0 For Tutorial
      {2},
@@ -206,6 +209,8 @@ Questions = {
      {
         false,
         "Let's do this!",
+        false,
+        false,
      },
      --Correct Answer? 0 For Tutorial
      {0},
