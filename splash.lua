@@ -18,7 +18,7 @@ require("creditWidget")
 
 
 function loadNext()
-    composer.gotoScene( "tutorial", { effect="crossFade", time=500 } )
+    composer.gotoScene( "apple_scene", { effect="crossFade", time=500 } )
 end
 function loadTutorial()
     composer.gotoScene( "loopTutorial", { effect="crossFade", time=500 } )

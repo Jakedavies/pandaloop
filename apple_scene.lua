@@ -11,6 +11,7 @@ local lives = 3
 local lives_display
 local sentenceManager = require('sentence_manager')
 local wordBank
+local logging = require('logging')
 function scene:create(event)
     --
     -- self in this case is "scene", the scene object for this level.
@@ -61,7 +62,7 @@ function scene:show( event )
     local sceneGroup = self.view
 
     if(event.phase == "will") then
-    player = display.newImage('assets/sprites/knight.png')
+    player = display.newImage(logging.getActive())
     player.height = 90
     player.width = 50
     player.xScale = -1

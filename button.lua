@@ -32,7 +32,8 @@ function Button:getIndex()
     return self._index
 end
 function Button:shrinkX()
-  self._assetBackground.xScale = 0.5
+  self._assetBackground.width = self._assetBackground.width/2
+  self._assetForeground.width = self._assetForeground.width/2
 end
 
 function Button:setAssetBackground(asseturl)
