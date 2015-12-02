@@ -1,32 +1,140 @@
-
 local composer = require( "composer" )
 local scene = composer.newScene()
 local widget = require( "widget" )
 local json = require( "json" )
 local input = ''
 local textBox
+local QuestionIndex = 1
+local buttonWidth = display.contentWidth + 50
+
 
 require('question')
 require('backgrounds')
 require('mainCharacter')
 require('button')
 require('speech')
-require('QuestionManager')
+require('QuestionBank')
 
 
+      
+--FXNS
+local backgrounds = Backgrounds:new()
 local isPaused = true
+
 
 function sleep()
     --donothing
 end
 function loadNext()
     audio.stop(1)
-    composer.gotoScene( "loopTutorial2", { effect="crossFade", time=500 } )
+    composer.gotoScene( "apple_scene", { effect="crossFade", time=500 } )
 end
 
 function loadNo()
     --composer.gotoScene( "forTutorial", { effect="crossFade", time=500 } )
 end
+
+function list(event)
+    if event.phase == "began" then 
+        checkAnswer(event.target.button.index, event.target.button.question, event.target.button.sceneGroup)
+    end
+end
+
+function addEventListeners(question)
+    for i, button in pairs(question:getButtons()) do
+        button.question = question
+        button.sceneGroup = question.sceneGroup
+        button:getAssetForeground():addEventListener("touch", list)
+    end
+end
+function removeAllAssets(question, sceneGroup)
+    for i, assets in pairs(question:getAssetsAll()) do
+            sceneGroup:remove(assets)
+            assets = nil
+    end
+    for i, buttons in pairs(question:getButtons()) do
+            buttons:getAssetForeground():removeEventListener("touch", list)
+            buttons = nil
+    end
+    question = nil
+end 
+
+allowCheck = false
+function checkAnswer(Index, Question, sceneGroup)
+    if(allowCheck) then
+        if Index == Questions[QuestionIndex][4][1] then
+            removeAllAssets(Question,sceneGroup)
+            QuestionIndex = QuestionIndex + 1
+            loadQuestion(sceneGroup)
+            allowCheck = false
+        elseif 0 == Questions[QuestionIndex][4][1] then
+            removeAllAssets(Question,sceneGroup)
+            QuestionIndex = QuestionIndex + 1
+            loadQuestion(sceneGroup)
+            allowCheck = false
+        else
+            native.showAlert("Information",Questions[QuestionIndex][5][Index] )
+            print(Questions[QuestionIndex][5][Index])
+        end
+    else
+        print("attempted to double fire")
+    end
+end
+       
+    function loadQuestion(sceneGroup)
+    
+        timer.performWithDelay(1200, function () allowCheck = true end)
+
+        if Questions[QuestionIndex] then
+            local q1 = Question:new()
+            local s1 = Speech:new(false)
+
+            s1:setMessage(Questions[QuestionIndex][1])
+            s1:setX(display.contentCenterX)
+            s1:setY(display.contentCenterY - 190)
+            s1:setHeight(140)
+            s1:setWidth(display.contentWidth + 15)
+            q1:setSpeech(s1)
+            sceneGroup:insert(s1:getAssetSpeech())
+            sceneGroup:insert(s1:getAssetMessage())
+
+            if(Questions[QuestionIndex][2]) then
+                local sTutorial = Speech:new(true)
+                sTutorial:setX(display.contentCenterX)
+                sTutorial:setY(display.contentCenterY+120)
+                sTutorial:setHeight(150)
+                sTutorial:setWidth(display.contentWidth-display.contentWidth/4)
+                sTutorial:setMessage(Questions[QuestionIndex][2])
+                q1:setSpeechTutorial(sTutorial)
+                sceneGroup:insert(sTutorial:getAssetSpeech())
+                sceneGroup:insert(sTutorial:getAssetMessage())
+            end
+
+            --Add the buttons
+            local positions = {-100, -60, -20, 20}
+            for i = 1, 4 do
+                if Questions[QuestionIndex][3][i] then
+                    local btn1Q1 = Button:new()
+                    btn1Q1:setX(display.contentCenterX)
+                    btn1Q1:setY(display.contentCenterY + positions[i])
+                    btn1Q1:setLabel(Questions[QuestionIndex][3][i])
+                    btn1Q1:setWidth(buttonWidth)
+                    btn1Q1:setIndex(i)
+                    btn1Q1.index = i
+                    q1.sceneGroup = sceneGroup
+                    q1:addBtn(btn1Q1)
+                    addEventListeners(q1)
+                    sceneGroup:insert(btn1Q1:getAssetBackground())
+                    sceneGroup:insert(btn1Q1:getAssetForeground())
+                end
+
+            end
+        else
+            loadNext()
+        end
+    end
+
+
 --
 -- This function gets called when composer.gotoScene() gets called an either:
 --    a) the scene has never been visited before or
@@ -42,7 +150,6 @@ function scene:create(event)
     -- Composer to manage for you.
     local sceneGroup = self.view
 
-    backgrounds = Backgrounds:new()
     sceneGroup:insert(backgrounds:getLayer1())
     sceneGroup:insert(backgrounds:getLayer2())
     sceneGroup:insert(backgrounds:getLayer3())
@@ -54,80 +161,6 @@ function scene:create(event)
     tutorialSpeaker:setWidthHeight(80,80)
     tutorialSpeaker:toFront()
     sceneGroup:insert(tutorialSpeaker:getAsset())
-
-    local buttonWidth = display.contentWidth - display.contentWidth/4
-
-
-    --Question 1 Section
-
-    local q1 = Question:new()
-    local s1 = Speech:new(false)
-
-    s1:setMessage("for(int i = 0; i < 9001; i ++){ \n    doWizardStuff(); \n}")
-    s1:setX(display.contentCenterX)
-    s1:setY(display.contentCenterY - 150)
-    s1:setHeight(120)
-    s1:setWidth(display.contentWidth)
-    q1:setSpeech(s1)
-
-    local sTutorial = Speech:new(true)
-    sTutorial:setX(display.contentCenterX+30)
-    sTutorial:setY(display.contentCenterY+150)
-    sTutorial:setHeight(100)
-    sTutorial:setHeight(100)
-    sTutorial:setWidth(display.contentWidth-display.contentWidth/4)
-    sTutorial:setMessage("Alright, well for loops are a great way \n to repeat a section of code a specific number of times. \n They are a crucial part of control flow. \n The top of your screen shows a for loop! ")
-    q1:setSpeechTutorial(sTutorial)
-
-
-
-    local btn1Q1 = Button:new()
-    btn1Q1:setX(display.contentCenterX)
-    btn1Q1:setY(display.contentCenterY - 20)
-    btn1Q1:setLabel("That looks scary...")
-    btn1Q1:setWidth(buttonWidth)
-    btn1Q1:setIndex(1)
-    q1:addBtn(btn1Q1)
-
-    local btn2Q1 = Button:new()
-    btn2Q1:setX(display.contentCenterX)
-    btn2Q1:setY(display.contentCenterY + 20)
-    btn2Q1:setLabel("Very cool!")
-    btn2Q1:setWidth(buttonWidth)
-    btn2Q1:setIndex(2)
-    q1:addBtn(btn2Q1)
-
-    --Question 2 Section
-    local q2 = Question:new()
-    local s2Q2 = Speech:new(false)
-
-    s2Q2:setX(display.contentCenterX)
-    s2Q2:setY(display.contentCenterY - 150)
-    s2Q2:setHeight(120)
-    s2Q2:setWidth(display.contentWidth)
-    s2Q2:setMessage("Test Test")
-    q2:setSpeech(s2Q2)
-
-    local sTutorialQ2 = Speech:new(true)
-    sTutorialQ2:setX(display.contentCenterX+30)
-    sTutorialQ2:setY(display.contentCenterY+150)
-    sTutorialQ2:setHeight(100)
-    sTutorialQ2:setHeight(100)
-    sTutorialQ2:setWidth(display.contentWidth-display.contentWidth/4)
-    sTutorialQ2:setMessage("#2")
-    q2:setSpeechTutorial(sTutorialQ2)
-
-    local btn1Q2 = Button:new()
-    btn1Q2:setX(display.contentCenterX)
-    btn1Q2:setY(display.contentCenterY - 20)
-    btn1Q2:setLabel("#1")
-    btn1Q2:setWidth(buttonWidth)
-    btn1Q2:setIndex(1)
-    q2:addBtn(btn1Q2)
-
-        
-
-
 
 end
 
@@ -141,8 +174,6 @@ function scene:show( event )
     --
     local sceneGroup = self.view
 
-
-
     --
     -- event.phase == "did" happens after the scene has been transitioned on screen.
     -- Here is where you start up things that need to start happening, such as timers,
@@ -153,12 +184,8 @@ function scene:show( event )
     --
     if event.phase == "did" then
 
-
-
-
-
-  -- Create the widget
-
+    loadQuestion(sceneGroup)
+        
     else -- event.phase == "will"
         -- The "will" phase happens before the scene transitions on screen.  This is a great
         -- place to "reset" things that might be reset, i.e. move an object back to its starting
@@ -173,12 +200,6 @@ end
 -- It will get called twice, once before we transition the scene off screen and once again
 -- after the scene is off screen.
 function scene:hide( event )
-    local sceneGroup = self.view
-    display.remove(textBox)
-    textBox = nil
-    sceneGroup:remove(backgroundLayer2)
-    sceneGroup:remove(background)
-    sceneGroup:remove(backgroundLayer3)
 end
 
 --

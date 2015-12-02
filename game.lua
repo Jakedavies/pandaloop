@@ -73,18 +73,11 @@ function scene:create( event )
    -- These pieces of the app only need created.  We won't be accessing them any where else
     -- so it's okay to make it "local" here
     --
-    local backgroundLayer3 = display.newImage("assets/sprites/country-platform-files/country-platform-files/layers/country-platform-back.png", display.contentHeight, display.contentWidth)
-    backgroundLayer3.x = display.contentCenterX
-    backgroundLayer3.y = display.contentCenterY
-    backgroundLayer3.width = display.contentWidth
-    backgroundLayer3.height = display.contentHeight + 200
-    backgroundLayer3:toFront()
 
 
-    --
-    -- Insert it into the scene to be managed by Composer
-    --
-    sceneGroup:insert(backgroundLayer3)
+
+  
+
     --
     -- because we want to access this in multiple functions, we need to forward declare the variable and
     -- then create the object here in scene:create()
@@ -142,6 +135,7 @@ function scene:show( event )
         textBox.height = 20
         textBox:addEventListener( "userInput", inputListener )
         sceneGroup:insert(textBox)
+        
         local paint = { 0.2, 0.2, 0.2 }
         local fill = { 0, 0, 0 }
         circleCenter = {x = display.contentCenterX, y = display.contentCenterY - 60}
@@ -206,6 +200,7 @@ end
 -- after the scene is off screen.
 function scene:hide( event )
     local sceneGroup = self.view
+
     display.remove(textBox)
     display.remove(code)
     display.remove(code2)
@@ -216,6 +211,7 @@ function scene:hide( event )
     display.remove(square)
     display.remove(code7)
     display.remove(square2)
+
 end
 
 --
