@@ -19,19 +19,33 @@ local session
 local questionsStartTime = {}
 local sessionStart
 local attempts = {}
+local inventory = {}
 local credits
+
+local characters
+local allCharacters = require('characters')
+local active = allCharacters[1]
 -- called when the question is
 function loggin.createUser(name, save)
-	parse:createObject("user", { ["credits"] = 100, ["name"] = name }, function(event)
+	parse:createObject("user", { ["credits"] = 100, ["name"] = name, ["active"] = active, ["characters" ] =  allCharacters[1]}, function(event)
 		if not event.error then
 			local uid = event.response.objectId
 			user_id = uid
 			save("user.txt", user_id)
+			syncUser()
 		else
 			print("error starting question")
 		end
 	end
 	)
+end
+function loggin.changeActive(new)
+	active = new
+	parse:updateObject("user", user_id, { ["active"] = new})
+end
+function loggin.addCharacter(character)
+	characters[#characters+1] = character
+	parse:updateObject("user", user_id, { ["characters"] = strjoin(',',characters)})
 end
 function loggin.getUserId()
 	return user_id
@@ -42,6 +56,12 @@ function loggin.getCredits()
 	else
 		return 0
 	end
+end
+function loggin.getCharacters()
+	return characters
+end
+function loggin.getActive()
+	return active
 end
 function loggin.addCredits(num)
 	--optimistic update, do not use this in production
@@ -62,6 +82,8 @@ function syncUser()
 	parse:getObject("user", user_id, function(event)
 		if not event.error then
 			credits = event.response.credits
+			characters = strsplit(',', event.response.characters)
+			active = event.response.active
 		else
 			print('errrrrrr')
 		end
@@ -108,5 +130,36 @@ function loggin.endSession()
 		parse:updateObject("session", session, {["exited"] = true, ["length"] = (system.getTimer() - sessionStart)})
 	end
 end
+
+function strjoin(delimiter, list)
+  local len = #list
+  if len == 0 then 
+    return "" 
+  end
+  local string = list[1]
+  for i = 2, len do 
+    string = string .. delimiter .. list[i] 
+  end
+  return string
+end
+function strsplit(delimiter, text)
+  local list = {}
+  local pos = 1
+  if string.find("", delimiter, 1) then -- this would result in endless loops
+    error("delimiter matches empty string!")
+  end
+  while 1 do
+    local first, last = string.find(text, delimiter, pos)
+    if first then -- found?
+      table.insert(list, string.sub(text, pos, first-1))
+      pos = last+1
+    else
+      table.insert(list, string.sub(text, pos))
+      break
+    end
+  end
+  return list
+end
+
 
 return loggin

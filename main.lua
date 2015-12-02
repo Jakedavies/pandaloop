@@ -10,7 +10,7 @@ local function onSystemEvent( event )
   elseif event.type == "applicationSuspend" then -- log this as end session too because android maintains the app in the background usually
 
   elseif event.type == "applicationResume" then
-
+  	
   end
 end
 
