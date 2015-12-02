@@ -11,6 +11,12 @@ local lives = 3
 local lives_display
 local sentenceManager = require('sentence_manager')
 local wordBank
+local alertShow = true
+
+
+suggest = require('levelManager')
+
+
 function scene:create(event)
     --
     -- self in this case is "scene", the scene object for this level.
@@ -22,6 +28,7 @@ function scene:create(event)
     if(event.params and event.params.level) then
       correctWordOrder = levels[level]["correctWordOrder"]
       wordBank = levels[level]["wordBank"]
+      setWords(wordBank)
     else
       correctWordOrder = levels[1]['correctWordOrder']
       wordBank = levels[1]["wordBank"]
@@ -111,6 +118,8 @@ function wordCollisionListener(self, event)
     self.collision = nil
     print(self.word .. 'was caught')
     if(sentenceManager.tryAddWord(self.word)) then
+            addCorrect()
+            print("added Correct!")
       -- update the senctence displayed
       if(sentenceManager.finished()) then
         -- end the game here
@@ -118,6 +127,21 @@ function wordCollisionListener(self, event)
       end
     else
       -- subtract a life
+      addIncorrect()
+      print("added Incorrect!")
+      addWrongInPosition(getCurrentWordNumber())
+      
+      if giveSuggestion(getCurrentWordNumber(), 4) ~= false and giveSuggestion(getCurrentWordNumber(), 4) ~= nil then
+        local trouble = "It looks like you are having trouble with "
+        
+        if alertShow == true then
+          alertShow = false
+          native.showAlert("Semantic Error", trouble ..giveSuggestion(getCurrentWordNumber(),4)[2] .."\n"  ..giveSuggestion(getCurrentWordNumber(),4)[1])
+          timer.performWithDelay(12000, function() alertShow = true end)
+        end
+      end
+      
+      
       lives = lives -1
       updateLives();
     end

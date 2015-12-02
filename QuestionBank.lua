@@ -32,14 +32,14 @@ Questions = {
     "You're a wizard Garry. You can stop this transdimensional panda by trapping him in a for loop. You do know about those right? They are like, basic wizard stuff...",
     --Multiple Choice Questions
      {
-        false,
-        false,
+        "I hope you don't get sued...",
+        "I want to learn about for loops",
         "Yes. Tell me more..",
-        false
+        "Ah, yes I am familiar with T-Pandas"
 
      },
      --Correct Answer? 0 For Tutorial
-     {3},
+     {0},
      --Question Feedback
      {
         false,
@@ -58,17 +58,18 @@ Questions = {
     "Alright then! So, what you are looking at at the top of your screen is a for loop. Hopefully you have seen one in class, but if not that is totally fine! You really can choose, 'this is boring' go on, do it...",
     --Multiple Choice Questions
      {
-        false,
+        "This is boring",
         "Very cool unknown wizard",
         "This is boring",
-        false
+        "This is boring"
      },
      --Correct Answer? 0 For Tutorial
      {2},
      --Question Feedback
      {
+        "I said you had free choice, not that it was the right answer... this stuff IS cool, deal with it, admit it, and click the right answer...",
         false,
-        false,
+        "I said you had free choice, not that it was the right answer... this stuff IS cool, deal with it, admit it, and click the right answer...",
         "I said you had free choice, not that it was the right answer... this stuff IS cool, deal with it, admit it, and click the right answer..."
      }
     },
@@ -107,10 +108,10 @@ Questions = {
     "All that you have to do to face the panda is to answer some simple questions for me. They really are no big deal. ",
     --Multiple Choice Questions
      {
-        false,
+        "I'm not ready",
         "Okay tiny wizard man, let's do this",
         "I don't want to do this...",
-        false,
+        "Panda?",
      },
      --Correct Answer? 0 For Tutorial
      {2},
@@ -132,10 +133,10 @@ Questions = {
     "Alrighty then, if you are so smart, which one of these is correct? Seriously I need to know, I have wizard homework, and believe me it's hard. It is due like yesterday so chop chop...",
     --Multiple Choice Questions
      {
-        false,
+        "",
         "for[var k : k > 10 : k+]{ \n youMayPass(); \n}",
         "for(int i = 0; i < 10; i ++){ \n doWizardStuff(); \n}",
-        false,
+        "",
      },
      --Correct Answer? 0 For Tutorial
      {3},
@@ -207,10 +208,10 @@ Questions = {
     "Okay, so you have finished all of my wizard homework. I suppose that I will let you face the panda. It was nice knowing you!!.... I mean, I am positive that you have what it takes...",
     --Multiple Choice Questions
      {
-        false,
         "Let's do this!",
-        false,
-        false,
+        "Let's do this!",
+        "I am ready!",
+        "I am ready!",
      },
      --Correct Answer? 0 For Tutorial
      {0},

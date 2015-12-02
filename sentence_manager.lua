@@ -2,6 +2,10 @@ local manager = {}
 local expected
 local currentWordNumber = 1
 
+function getCurrentWordNumber()
+  return currentWordNumber
+end
+
 -- must be called first, expects a table of words in the correct expected order
 function manager.init(expectedWords)
   expected = expectedWords
