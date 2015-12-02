@@ -1,13 +1,13 @@
 
 --Hacky OOP because lua is silly.
-
+logging = require('logging')
 --Question Object
 MainCharacter = {}
 MainCharacter.__index = MainCharacter
 
  --Instantiate to empty we will manually set everything as we need it
  function MainCharacter:new()
-      local knight = display.newImage('assets/sprites/knight.png')
+      local knight = display.newImage(logging.getActive())
       knight.x = display.contentCenterX -500
       knight.y =  display.contentCenterY + 200
       knight.height = 90

@@ -49,19 +49,21 @@ function scene:show( event )
       -- I have no idea why this doesn't update when we go back to the scene but the buttons do? 
       local widget = CreditWidget:new(logging.getCredits())
       widget:play()
-      widget:getNumber().text = logging.getCredits()
+      local credits = logging.getCredits()
+      print('credits')
+      print(credits)
+      widget:getNumber().text = credits
       sceneGroup:insert(widget:getAsset())
       sceneGroup:insert(widget:getNumber())
+      print(widget:getNumber().text)
 
       local count = 1
       local buttons = {}
       for key,val in pairs(characters) do 
-        print "Adding Character"
         local m1 = MainCharacter:new();
         m1:setAsset(val)
         local xpos = (count * ((display.contentWidth/#characters) ))- (display.contentWidth/(#characters * 2))
         m1:setX(xpos)
-        print(xpos)
         m1:setY(display.contentCenterY + 70)
         m1:shrink(0.06)
         sceneGroup:insert(m1:getAsset())

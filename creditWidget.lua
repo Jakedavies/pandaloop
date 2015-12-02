@@ -23,7 +23,7 @@ CreditWidget.__index = CreditWidget
      smoke.x = display.contentCenterX + 120
      smoke.y = 25
 
-     local number = display.newText(credits, display.contentCenterX + 90, 25)
+    local number = display.newText(credits, display.contentCenterX + 90, 25)
     local o = {_asset = smoke, _asset2 = number }
     setmetatable(o, self)
     return o
