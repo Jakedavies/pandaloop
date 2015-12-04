@@ -18,6 +18,7 @@ local textPreview
 
 
 
+
 function scene:create(event)
     --
     -- self in this case is "scene", the scene object for this level.
@@ -51,7 +52,7 @@ function scene:create(event)
         transition.moveTo(player, {x=event.x})
       end
     end
-    b:addEventListener("touch", b)
+
 
     physics.start()
     sceneGroup:insert(b)
@@ -70,6 +71,7 @@ function scene:show( event )
     local sceneGroup = self.view
     textPreview = display.newText('', display.contentCenterX, display.contentHeight + 20, native.systemFont, 16)
     if(event.phase == "will") then
+<<<<<<< HEAD
       player = display.newImage(logging.getActive())
       player.height = 90
       player.width = 50
@@ -86,6 +88,65 @@ function scene:show( event )
       -- spawns words at a set interval
       
       timerListener()
+||||||| parent of 0ec442b (character dragging)
+    player = display.newImage(logging.getActive())
+    player.height = 90
+    player.width = 50
+    player.xScale = -1
+    player.y = display.contentHeight - player.height/2
+    player.x = display.contentCenterX
+
+
+    lives_display = display.newText(lives, display.contentWidth - 10, 10, native.systemFont, 16)
+    sceneGroup:insert(lives_display)
+
+    wordSpawnDelay = 1000
+    physics.addBody( player, "static", { density = 1.0, friction = 0.3, bounce = 0.2 } )
+    -- spawns words at a set interval
+
+    timer.performWithDelay(wordSpawnDelay, timerListener)
+=======
+    player = display.newImage(logging.getActive())
+    player.height = 90
+    player.width = 50
+    player.xScale = -1
+    player.y = display.contentHeight - player.height/2
+    player.x = display.contentCenterX
+    
+    -- touch listener function
+    
+ --Credit where credit is due
+ --https://coronalabs.com/blog/2011/09/24/tutorial-how-to-drag-objects/
+function player:touch( event )
+    if event.phase == "began" then
+	
+        self.markX = self.x    -- store x location of object
+        self.markY = self.y    -- store y location of object
+	
+    elseif event.phase == "moved" then
+	
+        local x = (event.x - event.xStart) + self.markX
+        
+        self.x = x   -- move object based on calculations above
+    end
+    
+    return true
+end
+
+player:addEventListener( "touch", myObject )
+
+
+
+
+    lives_display = display.newText(lives, display.contentWidth - 10, 10, native.systemFont, 16)
+    sceneGroup:insert(lives_display)
+
+    wordSpawnDelay = 1000
+    physics.addBody( player, "static", { density = 1.0, friction = 0.3, bounce = 0.2 } )
+    -- spawns words at a set interval
+
+    timer.performWithDelay(wordSpawnDelay, timerListener)
+>>>>>>> 0ec442b (character dragging)
     end
 end
 
