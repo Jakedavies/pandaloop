@@ -3,20 +3,22 @@ levels = {
   [1] = {
     ["wordBank"] = {
       'for(',
-      'int',
-      'i = %int%;',
-      'int i = 0;',
+      'int ',
+      'i = 5; ',
+      'i >= 0; ',
+      'i--;',
       '){',
-      'stopApplesFromFalling();',
+      'stop();',
       '};'
     },
     ["correctWordOrder"] = {
       'for(',
-      'int',
-      'i = %int%;',
-      'int i = 0;',
+      'int ',
+      'i = 5; ',
+      'i >= 0; ',
+      'i--;',
       '){',
-      'stopApplesFromFalling();',
+      'stop();',
       '};'
     }
   }

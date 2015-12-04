@@ -11,6 +11,7 @@ local correctText =  "9"
 
 -- INIT PARSE
 local logging = require("logging")
+local textPreview
 
 --
 -- define local functions here
