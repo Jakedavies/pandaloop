@@ -6,13 +6,26 @@ local files = require("files")
 local logging = require("logging")
 local characters = require("characters")
 local myCharacters
+require('physics')
+physics.start()
 require("mainCharacter")
 require("CreditWidget")
+
+
+require("backgrounds")
+local background = Backgrounds:new()
+
 
 function scene:create(event)
   local sceneGroup = self.view
   system.setTapDelay( delayTime )
 end
+
+
+
+
+
+
 local allowed = true
 
 function buyAsset(event)
@@ -40,7 +53,11 @@ function buyAsset(event)
 end
 function scene:show( event )
     local sceneGroup = self.view
-    myCharacters = logging.getCharacters()
+
+   
+    
+        myCharacters = logging.getCharacters()
+    
 
     if event.phase == "did" then  -- Create the widget
 
@@ -86,6 +103,18 @@ function scene:show( event )
         sceneGroup:insert(buttons[#buttons]:getAssetForeground())
         buttons[#buttons]:getAssetForeground():addEventListener("touch", buyAsset)
         count = count +1
+      end
+      
+      for i = 1,20 do 
+        
+        x = math.random(0, display.contentWidth)
+        
+        local dollar = display.newImage('assets/DOLLAR_DOLLAR_BILL_YO.png')
+        dollar.x = x
+        dollar.y = display.contentCenterY - display.contentCenterY*2
+        sceneGroup:insert(dollar)
+        physics.addBody(dollar)
+   
       end
 
     end

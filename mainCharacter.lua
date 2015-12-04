@@ -7,7 +7,7 @@ MainCharacter.__index = MainCharacter
 
  --Instantiate to empty we will manually set everything as we need it
  function MainCharacter:new()
-      local knight = display.newImage(logging.getActive())
+      local knight = display.newImage('assets/sprites/knight.png')
       knight.x = display.contentCenterX -500
       knight.y =  display.contentCenterY + 200
       knight.height = 90
@@ -32,6 +32,7 @@ end
 function MainCharacter:getY()
     return self._asset.y
 end
+
 
 function MainCharacter:setX(x)
     self._asset.x = x

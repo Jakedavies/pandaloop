@@ -11,7 +11,7 @@ require("backgrounds")
 local background = Backgrounds:new()
 
 require("mainCharacter")
-local mainCharacter = MainCharacter:new()
+
 
 require("button")
 require("creditWidget")
@@ -48,8 +48,8 @@ function consent()
   local file, errorString = io.open( path, "w" )
 
   if not file then
-      -- Error occurred; output the cause
-      print( "File error: " .. errorString )
+    -- Error occurred; output the cause
+    print( "File error: " .. errorString )
   else
     print("writing file")
     -- Write data to file
@@ -59,14 +59,10 @@ function consent()
   end
 end
 function scene:create(event)
-
     --require backgroud assets
     local sceneGroup = self.view
-    
-
 
     print(logging.getUserId())
-
     -- Order is important on these
     sceneGroup:insert(background:getLayer3())
     sceneGroup:insert(background:getLayer2())
@@ -74,11 +70,7 @@ function scene:create(event)
 
     local title = display.newText("Panda Looper", display.contentCenterX, display.contentCenterY-20, native.systemFontBold, 45)
     sceneGroup:insert(title);
-
     title:setFillColor( 1, 1, 1 )
-
-    
-    sceneGroup:insert(mainCharacter:getAsset())
 
     villian = MainCharacter:new()
     villian:setAsset('mikos-walk.gif')
@@ -121,6 +113,14 @@ function scene:show( event )
     -- Make a local reference to the scene's view for scene:show()
     --
     local sceneGroup = self.view
+    
+    mainCharacter = display.newImage(logging.getActive())
+    mainCharacter.height = 90
+    mainCharacter.width = 50
+    mainCharacter.xScale = -1
+    mainCharacter.y = display.contentHeight - mainCharacter.height/2
+    mainCharacter.x = display.contentCenterX-300
+    sceneGroup:insert(mainCharacter)
 
     --
     -- event.phase == "did" happens after the scene has been transitioned on screen.
@@ -134,7 +134,6 @@ function scene:show( event )
         sfx = audio.loadSound( "assets/music/relax_background1.ogg" )
         audio.play(sfx)
     local i = 0
-
 
     widget = CreditWidget:new(logging.getCredits())
     widget:play()
@@ -176,13 +175,12 @@ function scene:show( event )
     sceneGroup:insert(btn4:getAssetBackground())
     sceneGroup:insert(btn4:getAssetForeground())
     --Chase the panda!
-    while px < display.contentWidth +150 do
-            px = px + 1
-            transition.to( villian:getAsset(), { time=5000, x=(px), y=(villian:getY())})
-            kx = kx + 1
-            transition.to( mainCharacter:getAsset(), { time=5000, x=(kx), y=(mainCharacter:getY())})
-    end
-
+      while px < display.contentWidth +150 do
+        px = px + 2
+        transition.to( villian:getAsset(), { time=5000, x=(px), y=(villian:getY())})
+        kx = kx + 2
+        transition.to(mainCharacter, { time=5000, x=(kx), y=(mainCharacter.y)})
+      end
     else
         audio.stop(1)
     end
