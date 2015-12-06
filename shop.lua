@@ -14,7 +14,7 @@ require("CreditWidget")
 
 require("backgrounds")
 local background = Backgrounds:new()
-
+composer.recycleOnSceneChange = true
 
 function scene:create(event)
   local sceneGroup = self.view

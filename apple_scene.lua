@@ -15,8 +15,19 @@ local logging = require('logging')
 local alertShow = true
 suggest = require('levelManager')
 local textPreview
+<<<<<<< HEAD
 
 
+||||||| parent of b3ed691 (corona just wasted 6 hours of my lif)
+local player
+
+
+=======
+local player
+local sceneGroup
+local started
+composer.recycleOnSceneChange = true
+>>>>>>> b3ed691 (corona just wasted 6 hours of my lif)
 
 
 function scene:create(event)
@@ -26,16 +37,7 @@ function scene:create(event)
     -- This is where you must insert everything (display.* objects only) that you want
     -- Composer to manage for you.
 
-    local correctWordOrder
-    if(event.params and event.params.level) then
-      correctWordOrder = levels[level]["correctWordOrder"]
-      wordBank = levels[level]["wordBank"]
-      setWords(wordBank)
-    else
-      correctWordOrder = levels[1]['correctWordOrder']
-      wordBank = levels[1]["wordBank"]
-    end
-    sentenceManager.init(correctWordOrder)
+    started = false
 
     local sceneGroup = self.view
 
@@ -71,6 +73,7 @@ function timerListener(event)
   timer.performWithDelay(wordSpawnDelay, timerListener)
 end
 function scene:show( event )
+<<<<<<< HEAD
     sceneGroup = self.view
     textPreview = display.newText('', display.contentCenterX, display.contentHeight + 20, native.systemFont, 16)
     if(event.phase == "will") then
@@ -78,6 +81,28 @@ function scene:show( event )
 <<<<<<< HEAD
 ||||||| parent of 3b126f0 (apple scene so gay)
 =======
+||||||| parent of b3ed691 (corona just wasted 6 hours of my lif)
+    sceneGroup = self.view
+    textPreview = display.newText('', display.contentCenterX, display.contentHeight + 20, native.systemFont, 16)
+    if(event.phase == "will") then
+=======
+
+    if(event.phase == "will" and started == false) then
+      started = true
+      local correctWordOrder
+      if(event.params and event.params.level) then
+        correctWordOrder = levels[level]["correctWordOrder"]
+        wordBank = levels[level]["wordBank"]
+        setWords(wordBank)
+      else
+        correctWordOrder = levels[1]['correctWordOrder']
+        wordBank = levels[1]["wordBank"]
+      end
+      sentenceManager.init(correctWordOrder)
+      sceneGroup = self.view
+      textPreview = display.newText('', display.contentCenterX, display.contentHeight + 20, native.systemFont, 16)
+      sceneGroup:insert(textPreview)
+>>>>>>> b3ed691 (corona just wasted 6 hours of my lif)
       lives = 5
 >>>>>>> 3b126f0 (apple scene so gay)
       player = display.newImage(logging.getActive())
@@ -86,7 +111,7 @@ function scene:show( event )
       player.xScale = -1
       player.y = display.contentHeight - player.height/2
       player.x = display.contentCenterX
-  
+      sceneGroup:insert(player)
   
       lives_display = display.newText(lives, display.contentWidth - 10, 10, native.systemFont, 16)
       sceneGroup:insert(lives_display)
@@ -176,6 +201,7 @@ end
 -- after the scene is off screen.
 function scene:hide( event )
     local sceneGroup = self.view
+    sceneGroup = nil
 end
 function updateLives()
   lives_display.text = lives
@@ -198,11 +224,11 @@ local function onComplete( event )
 end
 local function pause()
   print("setting physics to 0")
-  physics.setGravity( 0, 0 )
+  physics.pause()
   paused = true
 end
 local function unpause()
-  physics.setGravity( 0, 9.8 )
+  physics.start()
   paused = false
 end
 local function doneSuggeston( event )
@@ -262,7 +288,7 @@ local function wordCollisionListener(self, event)
 end
 
 
-function createFallingWord(sceneGroup)
+function createFallingWord()
   local randomWord = wordBank[math.random(1, #wordBank)]
   local width = display.contentWidth
   local randomx = math.random(1, width)

@@ -13,9 +13,9 @@ local function onSystemEvent( event )
   	
   end
 end
-
+audio.setVolume(0)
 Runtime:addEventListener( "system", onSystemEvent )
 
 
-composer.gotoScene( "apple_scene", { effect="crossFade", time=500 } )
+composer.gotoScene( "new_user", { effect="crossFade", time=500 } )
 

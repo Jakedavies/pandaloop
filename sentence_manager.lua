@@ -8,6 +8,7 @@ end
 
 -- must be called first, expects a table of words in the correct expected order
 function manager.init(expectedWords)
+currentWordNumber = 1
   expected = expectedWords
 end
 

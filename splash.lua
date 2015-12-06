@@ -15,7 +15,7 @@ require("mainCharacter")
 
 require("button")
 require("creditWidget")
-
+composer.recycleOnSceneChange = true
 
 function loadNext()
     composer.gotoScene( "apple_scene", { effect="crossFade", time=500 } )
@@ -113,76 +113,80 @@ function scene:show( event )
     -- Make a local reference to the scene's view for scene:show()
     --
     local sceneGroup = self.view
-    
-    mainCharacter = display.newImage(logging.getActive())
-    mainCharacter.height = 90
-    mainCharacter.width = 50
-    mainCharacter.xScale = -1
-    mainCharacter.y = display.contentHeight - mainCharacter.height/2
-    mainCharacter.x = display.contentCenterX-300
-    sceneGroup:insert(mainCharacter)
-
-    --
-    -- event.phase == "did" happens after the scene has been transitioned on screen.
-    -- Here is where you start up things that need to start happening, such as timers,
-    -- tranistions, physics, music playing, etc.
-    -- In this case, resume physics by calling physics.start()
-    -- Fade out the levelText (i.e start a transition)
-    -- Start up the enemy spawning engine after the levelText fades
-    --
-    if event.phase == "did" then
-        sfx = audio.loadSound( "assets/music/relax_background1.ogg" )
-        audio.play(sfx)
-    local i = 0
-
-    widget = CreditWidget:new(logging.getCredits())
-    widget:play()
-    sceneGroup:insert(widget:getAsset())
-    sceneGroup:insert(widget:getNumber())
-
-    --We will leave this section alone, just because it's only bad once ;)
-    btn1 = Button:new()
-    btn1:setX(display.contentCenterX)
-    btn1:setY(display.contentCenterY + 60)
-    btn1:setLabel("play")
-    btn1:getAssetForeground():addEventListener("tap", loadNext)
-    sceneGroup:insert(btn1:getAssetBackground())
-    sceneGroup:insert(btn1:getAssetForeground())
-
-    btn2 = Button:new()
-    btn2:setX(display.contentCenterX)
-    btn2:setY(display.contentCenterY + 100)
-    btn2:setLabel("credits")
-    btn2:getAssetForeground():addEventListener("tap", loadCredits)
-    sceneGroup:insert(btn2:getAssetBackground())
-    sceneGroup:insert(btn2:getAssetForeground())
-
-
-    btn3 = Button:new()
-    btn3:setX(display.contentCenterX)
-    btn3:setY(display.contentCenterY + 140)
-    btn3:setLabel("tutorial")
-    btn3:getAssetForeground():addEventListener("tap", loadTutorial)
-    sceneGroup:insert(btn3:getAssetBackground())
-    sceneGroup:insert(btn3:getAssetForeground())
-
-
-    btn4 = Button:new()
-    btn4:setX(display.contentCenterX)
-    btn4:setY(display.contentCenterY + 180)
-    btn4:setLabel("store")
-    btn4:getAssetForeground():addEventListener("tap", loadStore)
-    sceneGroup:insert(btn4:getAssetBackground())
-    sceneGroup:insert(btn4:getAssetForeground())
-    --Chase the panda!
-      while px < display.contentWidth +150 do
-        px = px + 2
-        transition.to( villian:getAsset(), { time=5000, x=(px), y=(villian:getY())})
-        kx = kx + 2
-        transition.to(mainCharacter, { time=5000, x=(kx), y=(mainCharacter.y)})
+    if(event.phase == "did") then
+      composer.removeScene( "apple_scene" )
+      composer.removeScene( "new_user" )
+      
+      mainCharacter = display.newImage(logging.getActive())
+      mainCharacter.height = 90
+      mainCharacter.width = 50
+      mainCharacter.xScale = -1
+      mainCharacter.y = display.contentHeight - mainCharacter.height/2
+      mainCharacter.x = display.contentCenterX-300
+      sceneGroup:insert(mainCharacter)
+  
+      --
+      -- event.phase == "did" happens after the scene has been transitioned on screen.
+      -- Here is where you start up things that need to start happening, such as timers,
+      -- tranistions, physics, music playing, etc.
+      -- In this case, resume physics by calling physics.start()
+      -- Fade out the levelText (i.e start a transition)
+      -- Start up the enemy spawning engine after the levelText fades
+      --
+      if event.phase == "did" then
+          sfx = audio.loadSound( "assets/music/relax_background1.ogg" )
+          audio.play(sfx)
+      local i = 0
+  
+      widget = CreditWidget:new(logging.getCredits())
+      widget:play()
+      sceneGroup:insert(widget:getAsset())
+      sceneGroup:insert(widget:getNumber())
+  
+      --We will leave this section alone, just because it's only bad once ;)
+      btn1 = Button:new()
+      btn1:setX(display.contentCenterX)
+      btn1:setY(display.contentCenterY + 60)
+      btn1:setLabel("play")
+      btn1:getAssetForeground():addEventListener("tap", loadNext)
+      sceneGroup:insert(btn1:getAssetBackground())
+      sceneGroup:insert(btn1:getAssetForeground())
+  
+      btn2 = Button:new()
+      btn2:setX(display.contentCenterX)
+      btn2:setY(display.contentCenterY + 100)
+      btn2:setLabel("credits")
+      btn2:getAssetForeground():addEventListener("tap", loadCredits)
+      sceneGroup:insert(btn2:getAssetBackground())
+      sceneGroup:insert(btn2:getAssetForeground())
+  
+  
+      btn3 = Button:new()
+      btn3:setX(display.contentCenterX)
+      btn3:setY(display.contentCenterY + 140)
+      btn3:setLabel("tutorial")
+      btn3:getAssetForeground():addEventListener("tap", loadTutorial)
+      sceneGroup:insert(btn3:getAssetBackground())
+      sceneGroup:insert(btn3:getAssetForeground())
+  
+  
+      btn4 = Button:new()
+      btn4:setX(display.contentCenterX)
+      btn4:setY(display.contentCenterY + 180)
+      btn4:setLabel("store")
+      btn4:getAssetForeground():addEventListener("tap", loadStore)
+      sceneGroup:insert(btn4:getAssetBackground())
+      sceneGroup:insert(btn4:getAssetForeground())
+      --Chase the panda!
+        while px < display.contentWidth +150 do
+          px = px + 2
+          transition.to( villian:getAsset(), { time=5000, x=(px), y=(villian:getY())})
+          kx = kx + 2
+          transition.to(mainCharacter, { time=5000, x=(kx), y=(mainCharacter.y)})
+        end
+      else
+          audio.stop(1)
       end
-    else
-        audio.stop(1)
     end
 end
 
