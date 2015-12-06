@@ -62,16 +62,24 @@ end
 -- This gets called twice, once before the scene is moved on screen and again once
 -- afterwards as a result of calling composer.gotoScene()
 --
+local paused = false
 function timerListener(event)
-  createFallingWord()
-  print('falling')
+  if not paused then
+    createFallingWord()
+    print('falling')
+  end
   timer.performWithDelay(wordSpawnDelay, timerListener)
 end
 function scene:show( event )
-    local sceneGroup = self.view
+    sceneGroup = self.view
     textPreview = display.newText('', display.contentCenterX, display.contentHeight + 20, native.systemFont, 16)
     if(event.phase == "will") then
 <<<<<<< HEAD
+<<<<<<< HEAD
+||||||| parent of 3b126f0 (apple scene so gay)
+=======
+      lives = 5
+>>>>>>> 3b126f0 (apple scene so gay)
       player = display.newImage(logging.getActive())
       player.height = 90
       player.width = 50
@@ -84,10 +92,12 @@ function scene:show( event )
       sceneGroup:insert(lives_display)
   
       wordSpawnDelay = 500
+      sceneGroup:insert(player)
       physics.addBody( player, "static", { density = 1.0, friction = 0.3, bounce = 0.2 } )
       -- spawns words at a set interval
       
       timerListener()
+<<<<<<< HEAD
 ||||||| parent of 0ec442b (character dragging)
     player = display.newImage(logging.getActive())
     player.height = 90
@@ -112,6 +122,16 @@ function scene:show( event )
     player.xScale = -1
     player.y = display.contentHeight - player.height/2
     player.x = display.contentCenterX
+||||||| parent of 3b126f0 (apple scene so gay)
+      player:addEventListener( "touch", myObject)
+    end
+end
+=======
+      
+      player:addEventListener( "touch", myObject)
+    end
+end
+>>>>>>> 3b126f0 (apple scene so gay)
     
     -- touch listener function
     
@@ -171,12 +191,32 @@ end
 function scene:destroy( event )
     local sceneGroup = self.view
 end
-
+local function onComplete( event )
+   if event.action == "clicked" then
+        composer.gotoScene('splash')
+    end
+end
+local function pause()
+  print("setting physics to 0")
+  physics.setGravity( 0, 0 )
+  paused = true
+end
+local function unpause()
+  physics.setGravity( 0, 9.8 )
+  paused = false
+end
+local function doneSuggeston( event )
+  print('done suggestion general event')
+   if event.action == "clicked" then
+        print('done suggestion')
+        unpause()
+    end
+end
 ---------------------------------------------------------------------------------
 -- Custom functions
 ---------------------------------------------------------------------------------
-function wordCollisionListener(self, event)
-  if(event.phase == "began") then
+local function wordCollisionListener(self, event)
+  if(event.phase == "began" and paused == false) then
     -- remove the collision listener from the object after something has collided
     self.collision = nil
     print(self.word .. 'was caught')
@@ -188,6 +228,8 @@ function wordCollisionListener(self, event)
       if(sentenceManager.finished()) then
         -- end the game here
         -- the user has won
+        pause()
+        native.showAlert("wOOOOO","You won!", {"Okay"}, onComplete )
       end
     else
       -- subtract a life
@@ -200,7 +242,8 @@ function wordCollisionListener(self, event)
         
         if alertShow == true then
           alertShow = false
-          native.showAlert("Semantic Error", trouble ..giveSuggestion(getCurrentWordNumber(),4)[2] .."\n"  ..giveSuggestion(getCurrentWordNumber(),4)[1])
+          pause()
+          native.showAlert("Semantic Error", trouble ..giveSuggestion(getCurrentWordNumber(),4)[2] .."\n"  ..giveSuggestion(getCurrentWordNumber(),4)[1], {"okay"}, doneSuggeston)
           timer.performWithDelay(12000, function() alertShow = true end)
         end
       end
@@ -208,19 +251,26 @@ function wordCollisionListener(self, event)
       
       lives = lives -1
       updateLives();
+      if(lives < 0) then
+        print('lives are negative')
+        pause()
+        native.showAlert(":(","You lose", {"Okay"}, onComplete)
+      end
     end
     self:removeSelf()
   end
 end
 
-function createFallingWord()
+
+function createFallingWord(sceneGroup)
   local randomWord = wordBank[math.random(1, #wordBank)]
   local width = display.contentWidth
   local randomx = math.random(1, width)
   local newFallingWord = display.newText( randomWord, randomx, 0, #randomWord *10,16)
   local body = physics.addBody(newFallingWord, {density=0.9, friction =0.3, bounce=0.0})
+  
   newFallingWord.word = randomWord
-
+  sceneGroup:insert(newFallingWord)
   newFallingWord.collision = wordCollisionListener
   newFallingWord:addEventListener("collision", newFallingWord)
 end
