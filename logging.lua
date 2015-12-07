@@ -21,13 +21,16 @@ local sessionStart
 local attempts = {}
 local inventory = {}
 local credits
+local lives
+local contrast
+local slow
 
 local characters
 local allCharacters = require('characters')
 local active = allCharacters[1]
 -- called when the question is
 function loggin.createUser(name, save)
-	parse:createObject("user", { ["credits"] = 100, ["name"] = name, ["active"] = active, ["characters" ] =  allCharacters[1]}, function(event)
+	parse:createObject("user", { ["slow"] = false, ["contrast"] = false, ["lives"] = false,["credits"] = 100, ["name"] = name, ["active"] = active, ["characters" ] =  allCharacters[1]}, function(event)
 		if not event.error then
 			local uid = event.response.objectId
 			user_id = uid
@@ -68,6 +71,56 @@ function loggin.addCredits(num)
 	credits = credits + num
 	parse:updateObject("user", user_id, { ["credits"] = credits})
 end
+function loggin.buySlow()
+	--optimistic update, do not use this in production
+	slow = true
+  credits = credits - 100
+	parse:updateObject("user", user_id, { ["slow"] = true, ["credits"] = credits})
+end
+function loggin.getSlow()
+	--optimistic update, do not use this in production
+	return slow
+end
+function loggin.useSlow()
+	--optimistic update, do not use this in production
+  parse:updateObject("user", user_id, { ["slow"] = false})
+  syncUser()
+end
+
+function loggin.buyContrast()
+	--optimistic update, do not use this in production
+	contrast = true
+  credits = credits - 100
+	parse:updateObject("user", user_id, { ["contrast"] = true, ["credits"] = credits})
+end
+function loggin.getContrast()
+	--optimistic update, do not use this in production
+	return contrast
+end
+function loggin.useContrast()
+	--optimistic update, do not use this in production
+  parse:updateObject("user", user_id, { ["contrast"] = false})
+  syncUser()
+end
+
+
+function loggin.buyLives()
+	--optimistic update, do not use this in production
+	lives = true
+  credits = credits -100
+	parse:updateObject("user", user_id, { ["lives"] = true, ["credits"] = credits})
+end
+function loggin.getLives()
+	--optimistic update, do not use this in production
+	return lives
+end
+function loggin.useLives()
+	--optimistic update, do not use this in production
+  parse:updateObject("user", user_id, { ["lives"] = false})
+  syncUser()
+end
+
+
 function loggin.removeCredits(num)
 	--optimistic update, do not use this in production
 	credits = credits - num
@@ -84,6 +137,9 @@ function syncUser()
 			credits = event.response.credits
 			characters = strsplit(',', event.response.characters)
 			active = event.response.active
+      lives = event.response.lives
+      contrast  = event.response.contrast
+      slow = event.response.slow
 		else
 			print('errrrrrr')
 		end

@@ -41,8 +41,14 @@ composer.recycleOnSceneChange = true
 local constrast
 local fallenwords = {}
 local paused = true
+<<<<<<< HEAD
 wordSpawnDelay = 500
 >>>>>>> 2963bb6 (please dont make me lua ever again)
+||||||| parent of f5268d8 (never touching this again)
+wordSpawnDelay = 500
+=======
+wordSpawnDelay = 500  
+>>>>>>> f5268d8 (never touching this again)
 
 function scene:create(event)
     --
@@ -338,7 +344,9 @@ local function wordCollisionListener(self, event)
         -- end the game here
         -- the user has won
         pause()
-        native.showAlert("wOOOOO","You won!", {"Okay"}, onComplete )
+        
+        logging.addCredits(100)
+        native.showAlert("wOOOOO","You won! You have been awarded 100 credits for your efforts", {"Okay"}, onComplete )
       end
     else
       -- subtract a life
@@ -377,9 +385,9 @@ function createFallingWord()
   local randomx = math.random(1, width)
   local newFallingWord = display.newText( randomWord, randomx, 0, #randomWord *10,16)
   if(constrast) then
-    newFallingWord.setFillColor(0,0,0)
+    newFallingWord:setFillColor(0,0,0)
   else
-    newFallingWord.setFillColor(1,1,1)
+    newFallingWord:setFillColor(1,1,1)
   end
   local body = physics.addBody(newFallingWord, {density=0.9, friction =0.3, bounce=0.0})
   

@@ -52,16 +52,21 @@ function buyAsset(event)
 end
 function buyPowerUp(event)
     if(allowed) then
-      if(not loggin.hasPowerUp(event.target.assetPath)) then
-        print('buying asset');
-        if(logging.getCredits() >= 100) then
-          logging.buyPowerUp(event.target.assetPath)
-          logging.removeCredits(100)
-          composer.gotoScene('shop')
-        else
-          native.showAlert('Not enough monies','You dont have enough credits for that!')
-        end 
-      end    
+      print('buying asset');
+      if(logging.getCredits() >= 100) then
+        if(event.target.name == "slow") then
+          logging.buySlow()
+        end
+        if(event.target.name == "contrast") then
+          logging.buyContrast()
+        end
+        if(event.target.name == "lives") then
+          logging.buyLives()
+        end
+        composer.gotoScene('shop')
+      else
+        native.showAlert('Not enough monies','You dont have enough credits for that!')
+      end 
       allowed  = false
       timer.performWithDelay( 200, function()
       allowed = true
@@ -143,12 +148,16 @@ function scene:show( event )
       p1 = Button:new()
       p1:setX(xpos)
       p1:setY(display.contentCenterY + 0)
-      p1:setLabel("BUY")
       p1:shrinkX()
-      p1:getAssetForeground().assetPath = val
+      p1:getAssetForeground().name = 'contrast'
       sceneGroup:insert(p1:getAssetBackground())
       sceneGroup:insert(p1:getAssetForeground())
-      p1:getAssetForeground():addEventListener("touch", buyAsset)
+      p1:setLabel("BUY")
+      if(logging.getContrast()) then
+      p1:setLabel("OWNED")
+      else
+      p1:getAssetForeground():addEventListener("touch", buyPowerUp)
+      end
       
       local m2 = MainCharacter:new();
       m2:setAsset("assets/sprites/powerups/lives.png")
@@ -164,10 +173,14 @@ function scene:show( event )
       p2:setY(display.contentCenterY + 0)
       p2:setLabel("BUY")
       p2:shrinkX()
-      p2:getAssetForeground().assetPath = val
+      p2:getAssetForeground().name = 'lives'
       sceneGroup:insert(p2:getAssetBackground())
       sceneGroup:insert(p2:getAssetForeground())
-      p2:getAssetForeground():addEventListener("touch", buyAsset)
+      if(logging.getLives()) then
+        p2:setLabel("OWNED")
+      else
+        p2:getAssetForeground():addEventListener("touch", buyPowerUp)
+      end
       
       
       local m3 = MainCharacter:new();
@@ -184,10 +197,14 @@ function scene:show( event )
       p3:setY(display.contentCenterY + 0)
       p3:setLabel("BUY")
       p3:shrinkX()
-      p3:getAssetForeground().assetPath = val
+      p3:getAssetForeground().name = 'slow'
       sceneGroup:insert(p3:getAssetBackground())
       sceneGroup:insert(p3:getAssetForeground())
-      p3:getAssetForeground():addEventListener("touch", buyAsset)
+      if(logging.getSlow()) then
+      p3:setLabel("OWNED")
+      else
+      p3:getAssetForeground():addEventListener("touch", buyPowerUp)
+      end
         
       for i = 1,20 do 
         
@@ -201,7 +218,6 @@ function scene:show( event )
         physics.addBody(dollar)
    
       end
-      
        --We will leave this section alone, just because it's only bad once ;)
       back = Button:new()
       back:setX(xpos+ 20)

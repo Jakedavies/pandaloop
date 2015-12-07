@@ -27,11 +27,21 @@ local allowed = true
 function goToGame(event)
     if(allowed) then
       -- go to scene here
+      if(event.target.name == "slow") then
+        logging.useSlow()
+      end
+      if(event.target.name == "lives") then
+        logging.useLives()
+      end
+      if(event.target.name == "contrast") then
+        logging.useContrast()
+      end
       
       allowed  = false
       timer.performWithDelay( 200, function()
       allowed = true
        end )
+      composer.gotoScene("apple_scene", {params = {powerup = event.target.name}})
     end
 end
 function backToSplash(event)
@@ -58,71 +68,76 @@ function scene:show( event )
 
       local title = display.newText("Do you want to \nuse a power up?", display.contentCenterX, display.contentCenterY-200, native.systemFontBold, 30)
       sceneGroup:insert(title)
-      local m1 = MainCharacter:new();
-      m1:setAsset("assets/sprites/powerups/constrast.png")
-      local xpos = display.contentWidth/4
-      m1:setX(xpos)
-      m1:setY(display.contentCenterY - 60)
-      m1:shrink(0.65)
-      sceneGroup:insert(m1:getAsset())
-
-      --We will leave this section alone, just because it's only bad once ;)
-      p1 = Button:new()
-      p1:setX(xpos)
-      p1:setY(display.contentCenterY + 0)
-      p1:setLabel("BUY")
-      p1:shrinkX()
-      p1:getAssetForeground().assetPath = val
-      sceneGroup:insert(p1:getAssetBackground())
-      sceneGroup:insert(p1:getAssetForeground())
-      p1:getAssetForeground():addEventListener("touch", goToGame)
+      if(logging.getContrast()) then
+        local m1 = MainCharacter:new();
+        m1:setAsset("assets/sprites/powerups/constrast.png")
+        local xpos = display.contentWidth/4
+        m1:setX(xpos)
+        m1:setY(display.contentCenterY - 60)
+        m1:shrink(0.65)
+        sceneGroup:insert(m1:getAsset())
+  
+        --We will leave this section alone, just because it's only bad once ;)
+        p1 = Button:new()
+        p1:setX(xpos)
+        p1:setY(display.contentCenterY + 0)
+        p1:setLabel("USE")
+        p1:shrinkX()
+        p1:getAssetForeground().name = "contrast"
+        sceneGroup:insert(p1:getAssetBackground())
+        sceneGroup:insert(p1:getAssetForeground())
+        p1:getAssetForeground():addEventListener("touch", goToGame)
+      end
       
-      local m2 = MainCharacter:new();
-      m2:setAsset("assets/sprites/powerups/lives.png")
-      local xpos = display.contentWidth/2
-      m2:setX(xpos)
-      m2:setY(display.contentCenterY - 60)
-      m2:shrink(0.5)
-      sceneGroup:insert(m2:getAsset())
-
-      --We will leave this section alone, just because it's only bad once ;)
-      p2 = Button:new()
-      p2:setX(xpos)
-      p2:setY(display.contentCenterY + 0)
-      p2:setLabel("BUY")
-      p2:shrinkX()
-      p2:getAssetForeground().assetPath = val
-      sceneGroup:insert(p2:getAssetBackground())
-      sceneGroup:insert(p2:getAssetForeground())
-      p2:getAssetForeground():addEventListener("touch", goToGame)
+      if(logging.getLives()) then
+        local m2 = MainCharacter:new();
+        m2:setAsset("assets/sprites/powerups/lives.png")
+        local xpos = display.contentWidth/2
+        m2:setX(xpos)
+        m2:setY(display.contentCenterY - 60)
+        m2:shrink(0.5)
+        sceneGroup:insert(m2:getAsset())
+  
+        --We will leave this section alone, just because it's only bad once ;)
+        p2 = Button:new()
+        p2:setX(xpos)
+        p2:setY(display.contentCenterY + 0)
+        p2:setLabel("USE")
+        p2:shrinkX()
+        p2:getAssetForeground().name = "lives"
+        sceneGroup:insert(p2:getAssetBackground())
+        sceneGroup:insert(p2:getAssetForeground())
+        p2:getAssetForeground():addEventListener("touch", goToGame)
+      end
       
-      
-      local m3 = MainCharacter:new();
-      m3:setAsset("assets/sprites/powerups/slow.png")
-      local xpos = 3* display.contentWidth/4
-      m3:setX(xpos)
-      m3:setY(display.contentCenterY - 60)
-      m3:shrink(0.5)
-      sceneGroup:insert(m3:getAsset())
-
-      --We will leave this section alone, just because it's only bad once ;)
-      p3 = Button:new()
-      p3:setX(xpos)
-      p3:setY(display.contentCenterY + 0)
-      p3:setLabel("BUY")
-      p3:shrinkX()
-      p3:getAssetForeground().assetPath = val
-      sceneGroup:insert(p3:getAssetBackground())
-      sceneGroup:insert(p3:getAssetForeground())
-      p3:getAssetForeground():addEventListener("touch", goToGame)
-        
+      if(logging.getSlow()) then
+        local m3 = MainCharacter:new();
+        m3:setAsset("assets/sprites/powerups/slow.png")
+        local xpos = 3* display.contentWidth/4
+        m3:setX(xpos)
+        m3:setY(display.contentCenterY - 60)
+        m3:shrink(0.5)
+        sceneGroup:insert(m3:getAsset())
+  
+        --We will leave this section alone, just because it's only bad once ;)
+        p3 = Button:new()
+        p3:setX(xpos)
+        p3:setY(display.contentCenterY + 0)
+        p3:setLabel("USE")
+        p3:shrinkX()
+        p3:getAssetForeground().name = "slow"
+        sceneGroup:insert(p3:getAssetBackground())
+        sceneGroup:insert(p3:getAssetForeground())
+        p3:getAssetForeground():addEventListener("touch", goToGame)
+      end
       
        --We will leave this section alone, just because it's only bad once ;)
       back = Button:new()
-      back:setX(xpos+ 20)
-      back:setY(display.contentCenterY + 250)
+      back:setX(display.contentCenterX)
+      back:setY(display.contentCenterY + 200)
       back:setLabel("None")
       sceneGroup:insert(back:getAssetBackground())
+      back:getAssetForeground().name = "none"
       sceneGroup:insert(back:getAssetForeground())
       back:getAssetForeground():addEventListener("touch", goToGame)
 
