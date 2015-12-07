@@ -14,10 +14,10 @@ local textbox
 --       scene.  It's possible (and desirable in many cases) to call this once, but
 --       show it multiple times.
 --
+
 function createUser(name)
   local user_id = logging.createUser(name, files.write)
 end
-
 
 function scene:create(event)
   if(files.exists('user.txt')) then

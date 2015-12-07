@@ -7,28 +7,59 @@ local input = ''
 local textBox
 local logging = require('logging')
 
-require("backgrounds")
-local background = Backgrounds:new()
+
+
 
 require("mainCharacter")
-
-
+require("backgrounds")
+background = Backgrounds:new()
 require("button")
 require("creditWidget")
+local allowed = true
+
 
 function loadNext()
-    composer.gotoScene( "apple_scene", { effect="crossFade", time=500 } )
+    if(allowed) then
+      print('going to apple')
+      composer.gotoScene( "apple_scene", { effect="crossFade", time=500 } )
+      allowed  = false
+      timer.performWithDelay( 200, function()
+      allowed = true
+        end )
+    end
+    
 end
 function loadTutorial()
+ if(allowed) then
+      print('going to apple')
     composer.gotoScene( "tutorialSection", { effect="crossFade", time=500 } )
+    allowed  = false
+      timer.performWithDelay( 200, function()
+      allowed = true
+        end )
+    end
 end
 function loadCredits()
+    if(allowed) then
+      print('going to apple')
         audio.stop(1)
     composer.gotoScene( "credits", { effect="crossFade", time=500 } )
+    allowed  = false
+      timer.performWithDelay( 200, function()
+      allowed = true
+        end )
+    end
 end
 function loadStore()
+ if(allowed) then
+      print('going to apple')
   audio.stop(1)
   composer.gotoScene( "shop", { effect="crossFade", time=500})
+  allowed  = false
+      timer.performWithDelay( 200, function()
+      allowed = true
+        end )
+    end
 end
 --
 -- This function gets called when composer.gotoScene() gets called an either:
@@ -63,6 +94,7 @@ function scene:create(event)
 
     print(logging.getUserId())
     -- Order is important on these
+    
     sceneGroup:insert(background:getLayer3())
     sceneGroup:insert(background:getLayer2())
     sceneGroup:insert(background:getLayer1())

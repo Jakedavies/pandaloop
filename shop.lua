@@ -14,7 +14,6 @@ require("CreditWidget")
 
 require("backgrounds")
 local background = Backgrounds:new()
-composer.recycleOnSceneChange = true
 
 function scene:create(event)
   local sceneGroup = self.view
@@ -51,6 +50,33 @@ function buyAsset(event)
        end )
     end
 end
+function buyPowerUp(event)
+    if(allowed) then
+      if(not loggin.hasPowerUp(event.target.assetPath)) then
+        print('buying asset');
+        if(logging.getCredits() >= 100) then
+          logging.buyPowerUp(event.target.assetPath)
+          logging.removeCredits(100)
+          composer.gotoScene('shop')
+        else
+          native.showAlert('Not enough monies','You dont have enough credits for that!')
+        end 
+      end    
+      allowed  = false
+      timer.performWithDelay( 200, function()
+      allowed = true
+       end )
+    end
+end
+function backToSplash(event)
+    if(allowed) then
+      composer.gotoScene('splash')
+      allowed  = false
+      timer.performWithDelay( 200, function()
+      allowed = true
+       end )
+    end
+end
 function scene:show( event )
     local sceneGroup = self.view
 
@@ -81,14 +107,14 @@ function scene:show( event )
         m1:setAsset(val)
         local xpos = (count * ((display.contentWidth/#characters) ))- (display.contentWidth/(#characters * 2))
         m1:setX(xpos)
-        m1:setY(display.contentCenterY + 70)
+        m1:setY(display.contentCenterY + 90)
         m1:shrink(0.06)
         sceneGroup:insert(m1:getAsset())
   
         --We will leave this section alone, just because it's only bad once ;)
         buttons[#buttons+1] = Button:new()
         buttons[#buttons]:setX(xpos)
-        buttons[#buttons]:setY(display.contentCenterY + 130)
+        buttons[#buttons]:setY(display.contentCenterY + 150)
         buttons[#buttons]:setLabel("BUY")
         if(contains(myCharacters, val)) then
           if(val == logging.getActive()) then
@@ -105,6 +131,64 @@ function scene:show( event )
         count = count +1
       end
       
+      local m1 = MainCharacter:new();
+      m1:setAsset("assets/sprites/powerups/constrast.png")
+      local xpos = display.contentWidth/4
+      m1:setX(xpos)
+      m1:setY(display.contentCenterY - 60)
+      m1:shrink(0.65)
+      sceneGroup:insert(m1:getAsset())
+
+      --We will leave this section alone, just because it's only bad once ;)
+      p1 = Button:new()
+      p1:setX(xpos)
+      p1:setY(display.contentCenterY + 0)
+      p1:setLabel("BUY")
+      p1:shrinkX()
+      p1:getAssetForeground().assetPath = val
+      sceneGroup:insert(p1:getAssetBackground())
+      sceneGroup:insert(p1:getAssetForeground())
+      p1:getAssetForeground():addEventListener("touch", buyAsset)
+      
+      local m2 = MainCharacter:new();
+      m2:setAsset("assets/sprites/powerups/lives.png")
+      local xpos = display.contentWidth/2
+      m2:setX(xpos)
+      m2:setY(display.contentCenterY - 60)
+      m2:shrink(0.5)
+      sceneGroup:insert(m2:getAsset())
+
+      --We will leave this section alone, just because it's only bad once ;)
+      p2 = Button:new()
+      p2:setX(xpos)
+      p2:setY(display.contentCenterY + 0)
+      p2:setLabel("BUY")
+      p2:shrinkX()
+      p2:getAssetForeground().assetPath = val
+      sceneGroup:insert(p2:getAssetBackground())
+      sceneGroup:insert(p2:getAssetForeground())
+      p2:getAssetForeground():addEventListener("touch", buyAsset)
+      
+      
+      local m3 = MainCharacter:new();
+      m3:setAsset("assets/sprites/powerups/slow.png")
+      local xpos = 3* display.contentWidth/4
+      m3:setX(xpos)
+      m3:setY(display.contentCenterY - 60)
+      m3:shrink(0.5)
+      sceneGroup:insert(m3:getAsset())
+
+      --We will leave this section alone, just because it's only bad once ;)
+      p3 = Button:new()
+      p3:setX(xpos)
+      p3:setY(display.contentCenterY + 0)
+      p3:setLabel("BUY")
+      p3:shrinkX()
+      p3:getAssetForeground().assetPath = val
+      sceneGroup:insert(p3:getAssetBackground())
+      sceneGroup:insert(p3:getAssetForeground())
+      p3:getAssetForeground():addEventListener("touch", buyAsset)
+        
       for i = 1,20 do 
         
         x = math.random(0, display.contentWidth)
@@ -112,10 +196,20 @@ function scene:show( event )
         local dollar = display.newImage('assets/DOLLAR_DOLLAR_BILL_YO.png')
         dollar.x = x
         dollar.y = display.contentCenterY - display.contentCenterY*2
+        dollar:toBack()
         sceneGroup:insert(dollar)
         physics.addBody(dollar)
    
       end
+      
+       --We will leave this section alone, just because it's only bad once ;)
+      back = Button:new()
+      back:setX(xpos+ 20)
+      back:setY(display.contentCenterY + 250)
+      back:setLabel("BACK")
+      sceneGroup:insert(back:getAssetBackground())
+      sceneGroup:insert(back:getAssetForeground())
+      back:getAssetForeground():addEventListener("touch", backToSplash)
 
     end
 end
