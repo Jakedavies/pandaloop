@@ -15,7 +15,6 @@ require("mainCharacter")
 
 require("button")
 require("creditWidget")
-composer.recycleOnSceneChange = true
 
 function loadNext()
     composer.gotoScene( "apple_scene", { effect="crossFade", time=500 } )
@@ -114,8 +113,6 @@ function scene:show( event )
     --
     local sceneGroup = self.view
     if(event.phase == "did") then
-      composer.removeScene( "apple_scene" )
-      composer.removeScene( "new_user" )
       
       mainCharacter = display.newImage(logging.getActive())
       mainCharacter.height = 90

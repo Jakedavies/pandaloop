@@ -14,7 +14,6 @@ local textbox
 --       scene.  It's possible (and desirable in many cases) to call this once, but
 --       show it multiple times.
 --
-composer.recycleOnSceneChange = true
 function createUser(name)
   local user_id = logging.createUser(name, files.write)
 end

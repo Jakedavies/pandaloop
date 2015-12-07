@@ -26,8 +26,13 @@ local player
 local player
 local sceneGroup
 local started
+<<<<<<< HEAD
 composer.recycleOnSceneChange = true
 >>>>>>> b3ed691 (corona just wasted 6 hours of my lif)
+||||||| parent of b1226dd (idk halp)
+composer.recycleOnSceneChange = true
+=======
+>>>>>>> b1226dd (idk halp)
 
 
 function scene:create(event)
