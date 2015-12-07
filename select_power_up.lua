@@ -22,46 +22,12 @@ end
 
 
 
-
-
-
 local allowed = true
 
-function buyAsset(event)
+function goToGame(event)
     if(allowed) then
-      if(not contains(myCharacters, event.target.assetPath)) then
-        print('buying asset');
-        if(logging.getCredits() >= 100) then
-          logging.addCharacter(event.target.assetPath)
-          logging.removeCredits(100)
-          composer.gotoScene('shop')
-        else
-          native.showAlert('Not enough monies','You dont have enough credits for that!')
-        end
-        
-      else
-        print('switching character')
-        logging.changeActive(event.target.assetPath)
-        composer.gotoScene('shop')
-      end
-      allowed  = false
-      timer.performWithDelay( 200, function()
-      allowed = true
-       end )
-    end
-end
-function buyPowerUp(event)
-    if(allowed) then
-      if(not loggin.hasPowerUp(event.target.assetPath)) then
-        print('buying asset');
-        if(logging.getCredits() >= 100) then
-          logging.buyPowerUp(event.target.assetPath)
-          logging.removeCredits(100)
-          composer.gotoScene('shop')
-        else
-          native.showAlert('Not enough monies','You dont have enough credits for that!')
-        end 
-      end    
+      -- go to scene here
+      
       allowed  = false
       timer.performWithDelay( 200, function()
       allowed = true
@@ -89,6 +55,9 @@ function scene:show( event )
 
     else -- event.phase == "will"
 
+
+      local title = display.newText("Do you want to \nuse a power up?", display.contentCenterX, display.contentCenterY-200, native.systemFontBold, 30)
+      sceneGroup:insert(title)
       local m1 = MainCharacter:new();
       m1:setAsset("assets/sprites/powerups/constrast.png")
       local xpos = display.contentWidth/4
@@ -106,7 +75,7 @@ function scene:show( event )
       p1:getAssetForeground().assetPath = val
       sceneGroup:insert(p1:getAssetBackground())
       sceneGroup:insert(p1:getAssetForeground())
-      p1:getAssetForeground():addEventListener("touch", buyAsset)
+      p1:getAssetForeground():addEventListener("touch", goToGame)
       
       local m2 = MainCharacter:new();
       m2:setAsset("assets/sprites/powerups/lives.png")
@@ -125,7 +94,7 @@ function scene:show( event )
       p2:getAssetForeground().assetPath = val
       sceneGroup:insert(p2:getAssetBackground())
       sceneGroup:insert(p2:getAssetForeground())
-      p2:getAssetForeground():addEventListener("touch", buyAsset)
+      p2:getAssetForeground():addEventListener("touch", goToGame)
       
       
       local m3 = MainCharacter:new();
@@ -145,7 +114,7 @@ function scene:show( event )
       p3:getAssetForeground().assetPath = val
       sceneGroup:insert(p3:getAssetBackground())
       sceneGroup:insert(p3:getAssetForeground())
-      p3:getAssetForeground():addEventListener("touch", buyAsset)
+      p3:getAssetForeground():addEventListener("touch", goToGame)
         
       
        --We will leave this section alone, just because it's only bad once ;)
@@ -155,7 +124,7 @@ function scene:show( event )
       back:setLabel("None")
       sceneGroup:insert(back:getAssetBackground())
       sceneGroup:insert(back:getAssetForeground())
-      back:getAssetForeground():addEventListener("touch", backToSplash)
+      back:getAssetForeground():addEventListener("touch", goToGame)
 
     end
 end

@@ -21,7 +21,7 @@ local allowed = true
 function loadNext()
     if(allowed) then
       print('going to apple')
-      composer.gotoScene( "apple_scene", { effect="crossFade", time=500 } )
+      composer.gotoScene( "select_power_up", { effect="crossFade", time=500 } )
       allowed  = false
       timer.performWithDelay( 200, function()
       allowed = true
