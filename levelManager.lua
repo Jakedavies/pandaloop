@@ -4,10 +4,12 @@ local INCORRECT_QUESTIONS = 2
 local SYNTAX_ERROR = 3
 local SEMANTIC_ERROR = 4
 
-local EASY_LEVEL_THRESH = 0.6
-local MEDIUM_LEVEL_THRESH = 0.75
-local HARD_LEVEL_THRESH = 0.8
+local EASY_LEVEL_THRESH = 0.5
+local MEDIUM_LEVEL_THRESH = 0.6
+local HARD_LEVEL_THRESH = 0.9
 
+
+--Corresponds to the position in the foor loop that questions are correct or incorrect. 
 -- 1   2          3       4      5
 --for(int i = 0; i < 10; i ++){dostuffs();};
 positionInLoop = {0,0,0,0,0}
@@ -23,7 +25,8 @@ local wordBank = {
       '){',
       'stopApplesFromFalling();',
       '};'
-    }
+ }
+ 
 local currentWordNum = 1
 
 function getCurrWord()
@@ -37,15 +40,16 @@ local questionTracker = {
 	0
 }
 
-
-
 function addWrongInPosition(pos)
 		positionInLoop[getLookup(pos)] = positionInLoop[getLookup(pos)] + 1
 		print(positionInLoop[getLookup(pos)])
 end
 
-
 function giveSuggestion(pos, errorType)
+
+	if calculateLevel() == 2 or calculateLevel() == -1 then
+		return false --This user has over 80% correct or this is one of the first catches wrong...
+	end
 
 	if getProbableMisunderstanding(pos) then 
 		return getErrorMessage(pos)
@@ -54,8 +58,6 @@ function giveSuggestion(pos, errorType)
 	end
 end
 
-
---Todo, connect this to error skew fxn so that we can skew the suggestions towards syntax vs semantic errors.
 function getErrorMessage(pos)
 
 	if questionToggle == 0 then 
@@ -69,9 +71,8 @@ function getErrorMessage(pos)
 	local three = {"Remember, we need to check something here so that the loop knows when to terminate","The middle position is where a check should be in place to know when the loop should terminate...", "the for loops conditional statement"}
 	local four = {"At the end of each loop, the third position executes, here we want to modify our variable. ","We have a variable, what needs to happen here?", "modifying the variable"}
 	local five = {"Remember, here is where we do stuff! But DO NOT modify your variable here...","In the inner brackets, we want to do stuff.", "what to do in the for loop"}
+
 	
-	--Semantic Errors Tips
-	--TODO: Write semantic error tips
 	
 	local tips = {one,two,three,four,five}
 	
@@ -87,7 +88,7 @@ function getErrorMessage(pos)
 
 end
 
-
+--Find where to lookup the suggestion in the table. 
 function getLookup(pos)
 	local size = table.getn(wordBank)
 		if pos == nil then 
@@ -120,7 +121,7 @@ function getProbableMisunderstanding(pos)
 
 		if questionTracker[INCORRECT_QUESTIONS] == 0 then
 			return false
-		elseif positionInLoop[getLookup(pos)]/questionTracker[INCORRECT_QUESTIONS] >= .6 then
+		elseif positionInLoop[getLookup(pos)]/questionTracker[INCORRECT_QUESTIONS] >= .8 then
 			return true
 		end
 end
@@ -137,7 +138,6 @@ function setWords(wBank)
     }
 
 end
-
 function addCorrect()
 	questionTracker[CORRECT_QUESTIONS] = questionTracker[CORRECT_QUESTIONS]+ 1
 	currentWordNum = currentWordNum +1
@@ -154,6 +154,8 @@ end
 
 
 --Returns 0 if same number of syntax as semantic errors
+-- May not actually use this if the syntactic errors do not make sense. 
+-- Our error types are conceptual to the errors, so they would be defined as they are on line 12
 function getErrorSkew()
 	if questionTracker[CORRECT_QUESTIONS]+questionTracker[INCORRECT_QUESTIONS] > 0 then
 		if questionTracker[SYNTAX_ERROR]/questionTracker[INCORRECT_QUESTIONS] > questionTracker[SEMANTIC_ERROR]/questionTracker[SEMANTIC_ERROR] then
@@ -168,8 +170,14 @@ end
 
 
 function calculateLevel()
+	if questionTracker[INCORRECT_QUESTIONS] == 1 then
+		--This user has caught their first wrong skip
+		return -1
+	end
+
 	if questionTracker[CORRECT_QUESTIONS]+questionTracker[INCORRECT_QUESTIONS] > 0 then
 		local thresh = questionTracker[CORRECT_QUESTIONS]/(questionTracker[CORRECT_QUESTIONS]+questionTracker[INCORRECT_QUESTIONS])
+
 		if thresh > HARD_LEVEL_THRESH then 
 			return 2
 		elseif thresh > MEDIUM_LEVEL_THRESH then 

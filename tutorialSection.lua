@@ -9,16 +9,13 @@ local buttonWidth = display.contentWidth + 50
 
 
 require('question')
-require('backgrounds')
 require('mainCharacter')
 require('button')
 require('speech')
 require('QuestionBank')
+require('backgrounds')
 
-
-      
 --FXNS
-local backgrounds = Backgrounds:new()
 local isPaused = true
 
 
@@ -27,7 +24,7 @@ function sleep()
 end
 function loadNext()
     audio.stop(1)
-    composer.gotoScene( "apple_scene", { effect="crossFade", time=500 } )
+    composer.gotoScene( "splash", { effect="crossFade", time=500 } )
 end
 
 function loadNo()
@@ -150,9 +147,11 @@ function scene:create(event)
     -- Composer to manage for you.
     local sceneGroup = self.view
 
-    sceneGroup:insert(backgrounds:getLayer1())
-    sceneGroup:insert(backgrounds:getLayer2())
-    sceneGroup:insert(backgrounds:getLayer3())
+
+    local background = Backgrounds:new()
+    sceneGroup:insert(background:getLayer3())
+    sceneGroup:insert(background:getLayer2())
+    
 
     tutorialSpeaker = MainCharacter:new()
     tutorialSpeaker:setAsset('assets/sprites/wizard_0.png')

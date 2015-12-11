@@ -20,11 +20,6 @@ function scene:create(event)
   system.setTapDelay( delayTime )
 end
 
-
-
-
-
-
 local allowed = true
 
 function buyAsset(event)

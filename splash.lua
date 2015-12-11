@@ -12,7 +12,6 @@ local logging = require('logging')
 
 require("mainCharacter")
 require("backgrounds")
-background = Backgrounds:new()
 require("button")
 require("creditWidget")
 local allowed = true
@@ -95,6 +94,7 @@ function scene:create(event)
     print(logging.getUserId())
     -- Order is important on these
     
+    local background = Backgrounds:new()
     sceneGroup:insert(background:getLayer3())
     sceneGroup:insert(background:getLayer2())
     sceneGroup:insert(background:getLayer1())
